@@ -1,0 +1,673 @@
+[
+  {
+    "id": "new-orleans",
+    "city": "New Orleans",
+    "region": "Louisiana, USA",
+    "archetype": "city",
+    "travelMode": "fly",
+    "art": { "sky": "#2A1B3D", "accent": "#E8B44A", "motif": "brass" },
+    "tags": {
+      "food": 5, "nightlife": 5, "nature": 0, "culture": 4, "beach": 0,
+      "relaxation": 2, "activity": 4, "familyFriendly": 1, "budgetFriendly": 3
+    },
+    "idealStay": [3, 4],
+    "groupFriendly": true,
+    "recommendedGroupSize": 4,
+    "currency": "USD",
+    "cost": {
+      "airfare": 280,
+      "lodgingPerNight": 180,
+      "foodPerDay": 55,
+      "localTransit": 40,
+      "fees": 35
+    },
+    "assumptions": {
+      "baggage": "Carry-on only. A checked bag adds about $70 round trip.",
+      "airportTransfer": "MSY to the Quarter is a $38 rideshare, or $1.25 on the 202 bus in 50 minutes.",
+      "transitHours": 0.7
+    },
+    "tripBio": "A charismatic long-weekend match. Brass bands that start before dinner, food that costs less than it has any right to, and neighborhoods you can walk end to end. Keeps the group chat alive. Claims to love a loose plan, then insists on one slow morning with chicory coffee.",
+    "hacks": [
+      {
+        "id": "nola-tuesday",
+        "title": "Fly Tuesday instead of Friday",
+        "description": "Shift departure and return by two days to step off the weekend fare peak.",
+        "type": "dateFlex",
+        "savingsAmount": 85,
+        "appliesPerPerson": true,
+        "tradeoff": "Burns two weekdays of PTO, and Tuesday nights are noticeably quieter on Frenchmen Street.",
+        "risk": "requires flexible dates",
+        "requires": { "flexibleDates": true }
+      },
+      {
+        "id": "nola-marigny",
+        "title": "Stay in Marigny, not the French Quarter",
+        "description": "One neighborhood over drops the nightly rate by roughly a third.",
+        "type": "altLodgingArea",
+        "savingsAmount": 55,
+        "appliesPerPerson": false,
+        "tradeoff": "A 15-minute streetcar ride each way at about $3 a trip, and you will take it often.",
+        "risk": "adds transit time",
+        "requires": {}
+      },
+      {
+        "id": "nola-split-2br",
+        "title": "Split a two-bedroom rental",
+        "description": "Swap two hotel rooms for one rental and divide it across the group.",
+        "type": "groupSplit",
+        "savingsAmount": 70,
+        "appliesPerPerson": true,
+        "tradeoff": "Someone is taking the pull-out couch. Decide who before you book, not after.",
+        "risk": "needs 3+ travelers",
+        "requires": { "minTravelers": 3 }
+      },
+      {
+        "id": "nola-carryon",
+        "title": "Pack carry-on only",
+        "description": "Skip the checked-bag fee in both directions.",
+        "type": "packing",
+        "savingsAmount": 70,
+        "appliesPerPerson": true,
+        "tradeoff": "Three days of Gulf humidity out of one bag. Doable, but you are re-wearing something.",
+        "risk": "carry-on only",
+        "requires": {}
+      }
+    ]
+  },
+
+  {
+    "id": "mexico-city",
+    "city": "Mexico City",
+    "region": "Mexico",
+    "archetype": "city",
+    "travelMode": "fly",
+    "art": { "sky": "#1E3A5F", "accent": "#F2784B", "motif": "mural" },
+    "tags": {
+      "food": 5, "nightlife": 4, "nature": 1, "culture": 5, "beach": 0,
+      "relaxation": 1, "activity": 5, "familyFriendly": 1, "budgetFriendly": 5
+    },
+    "idealStay": [4, 5],
+    "groupFriendly": true,
+    "recommendedGroupSize": 3,
+    "currency": "USD",
+    "cost": {
+      "airfare": 390,
+      "lodgingPerNight": 120,
+      "foodPerDay": 35,
+      "localTransit": 30,
+      "fees": 25
+    },
+    "assumptions": {
+      "baggage": "One carry-on. Checked bags run about $60 round trip on the budget carriers.",
+      "airportTransfer": "MEX to Roma Norte is a $16 authorized taxi, or $0.30 on the Metro if you are travelling light.",
+      "transitHours": 1.0
+    },
+    "tripBio": "Enormous, overstimulating, and somehow still cheap. Will feed you the best meal of your life from a cart, then take you to a mezcal bar in a converted mansion. Does not do slow. Will wear you out completely, and you will thank it.",
+    "hacks": [
+      {
+        "id": "cdmx-shoulder",
+        "title": "Go in September instead of March",
+        "description": "Rainy-season fares and rates run well below the spring peak.",
+        "type": "offSeason",
+        "savingsAmount": 120,
+        "appliesPerPerson": true,
+        "tradeoff": "Afternoons flood on a schedule. Plan indoor things after 4pm and carry a real jacket.",
+        "risk": "shoulder-season weather",
+        "requires": { "flexibleDates": true }
+      },
+      {
+        "id": "cdmx-metro",
+        "title": "Ride the Metro instead of rideshares",
+        "description": "Five pesos a ride versus $6–10 per hop across a very large city.",
+        "type": "transportChoice",
+        "savingsAmount": 45,
+        "appliesPerPerson": true,
+        "tradeoff": "Packed at rush hour and genuinely difficult with luggage or small kids.",
+        "risk": "adds transit time",
+        "requires": {}
+      },
+      {
+        "id": "cdmx-juarez",
+        "title": "Stay in Juárez instead of Condesa",
+        "description": "One neighborhood east, same Metro line, noticeably cheaper.",
+        "type": "altLodgingArea",
+        "savingsAmount": 50,
+        "appliesPerPerson": false,
+        "tradeoff": "Less leafy, fewer cafés on your block, a 20-minute walk to the good parks.",
+        "risk": "adds transit time",
+        "requires": {}
+      }
+    ]
+  },
+
+  {
+    "id": "montreal",
+    "city": "Montréal",
+    "region": "Québec, Canada",
+    "archetype": "city",
+    "travelMode": "fly",
+    "art": { "sky": "#2B3A55", "accent": "#D96C6C", "motif": "rowhouse" },
+    "tags": {
+      "food": 4, "nightlife": 3, "nature": 2, "culture": 4, "beach": 0,
+      "relaxation": 3, "activity": 3, "familyFriendly": 3, "budgetFriendly": 3
+    },
+    "idealStay": [3, 4],
+    "groupFriendly": true,
+    "recommendedGroupSize": 2,
+    "currency": "USD",
+    "cost": {
+      "airfare": 340,
+      "lodgingPerNight": 165,
+      "foodPerDay": 50,
+      "localTransit": 35,
+      "fees": 40
+    },
+    "assumptions": {
+      "baggage": "Carry-on only. In winter that one bag is mostly coat.",
+      "airportTransfer": "YUL to downtown is the 747 bus, about $11 and 45 minutes, running around the clock.",
+      "transitHours": 0.8
+    },
+    "tripBio": "Europe without the airfare. Spiral staircases, bagels at 2am, and a bilingual shrug about everything. The rare match that is equally good at a long dinner and a long walk with no destination. Gets genuinely cold and does not apologize for it.",
+    "hacks": [
+      {
+        "id": "mtl-shoulder",
+        "title": "Go in late October, not July",
+        "description": "Autumn rates sit well under peak-summer terrasse season.",
+        "type": "offSeason",
+        "savingsAmount": 95,
+        "appliesPerPerson": true,
+        "tradeoff": "Highs around 50°F and a real chance of rain. Terrasse season is over.",
+        "risk": "shoulder-season weather",
+        "requires": { "flexibleDates": true }
+      },
+      {
+        "id": "mtl-plateau",
+        "title": "Rent in the Plateau instead of Vieux-Montréal",
+        "description": "Residential rates a 20-minute walk from the tourist core.",
+        "type": "altLodgingArea",
+        "savingsAmount": 45,
+        "appliesPerPerson": false,
+        "tradeoff": "You trade cobblestones for a walk-up apartment and three flights of stairs.",
+        "risk": "adds transit time",
+        "requires": {}
+      },
+      {
+        "id": "mtl-transit-pass",
+        "title": "Buy the weekend transit pass on arrival",
+        "description": "Unlimited Metro and bus for a flat weekend rate.",
+        "type": "transportChoice",
+        "savingsAmount": 22,
+        "appliesPerPerson": true,
+        "tradeoff": "Only pays off if you actually leave your neighborhood twice a day.",
+        "risk": "only worth it if you move around",
+        "requires": {}
+      }
+    ]
+  },
+
+  {
+    "id": "chicago",
+    "city": "Chicago",
+    "region": "Illinois, USA",
+    "archetype": "city",
+    "travelMode": "fly",
+    "art": { "sky": "#16324F", "accent": "#5FB3C4", "motif": "skyline" },
+    "tags": {
+      "food": 4, "nightlife": 4, "nature": 2, "culture": 5, "beach": 1,
+      "relaxation": 2, "activity": 4, "familyFriendly": 3, "budgetFriendly": 3
+    },
+    "idealStay": [2, 3],
+    "groupFriendly": true,
+    "recommendedGroupSize": 4,
+    "currency": "USD",
+    "cost": {
+      "airfare": 240,
+      "lodgingPerNight": 190,
+      "foodPerDay": 60,
+      "localTransit": 30,
+      "fees": 45
+    },
+    "assumptions": {
+      "baggage": "Carry-on only. Most CLT–ORD fares price the first checked bag at about $70 round trip.",
+      "airportTransfer": "The Blue Line runs O'Hare to the Loop for $5 in 45 minutes. A rideshare is $45 and often slower.",
+      "transitHours": 0.75
+    },
+    "tripBio": "A big-shouldered weekend that punches above its price. World-class museums, a lakefront you can bike for hours, and neighborhood food that beats the famous stuff. Best between May and October. Outside that window it is genuinely, memorably cold.",
+    "hacks": [
+      {
+        "id": "chi-blue-line",
+        "title": "Take the Blue Line from O'Hare",
+        "description": "$5 a head instead of a $45 rideshare, and usually faster at rush hour.",
+        "type": "transportChoice",
+        "savingsAmount": 40,
+        "appliesPerPerson": true,
+        "tradeoff": "45 minutes with your bag on your lap. Awkward at rush hour, fine otherwise.",
+        "risk": "adds transit time",
+        "requires": {}
+      },
+      {
+        "id": "chi-mdw",
+        "title": "Fly into Midway instead of O'Hare",
+        "description": "The second airport often prices $50–80 lower on the same dates.",
+        "type": "altAirport",
+        "savingsAmount": 65,
+        "appliesPerPerson": true,
+        "tradeoff": "Fewer flights a day, so a cancellation leaves you with fewer rebooking options.",
+        "risk": "nearby airport, thinner schedule",
+        "requires": {}
+      },
+      {
+        "id": "chi-logan",
+        "title": "Stay in Logan Square instead of River North",
+        "description": "Neighborhood rental rates a straight shot down the Blue Line.",
+        "type": "altLodgingArea",
+        "savingsAmount": 70,
+        "appliesPerPerson": false,
+        "tradeoff": "25 minutes on the Blue Line to downtown, each way, every day.",
+        "risk": "adds transit time",
+        "requires": {}
+      },
+      {
+        "id": "chi-split",
+        "title": "Split a two-bedroom instead of two hotel rooms",
+        "description": "One rental across the group beats per-room hotel pricing.",
+        "type": "groupSplit",
+        "savingsAmount": 85,
+        "appliesPerPerson": true,
+        "tradeoff": "One bathroom for four people on a museum-day morning.",
+        "risk": "needs 3+ travelers",
+        "requires": { "minTravelers": 3 }
+      }
+    ]
+  },
+
+  {
+    "id": "savannah",
+    "city": "Savannah",
+    "region": "Georgia, USA",
+    "archetype": "city",
+    "travelMode": "drive",
+    "art": { "sky": "#2F4A3C", "accent": "#E3C08D", "motif": "oak" },
+    "tags": {
+      "food": 3, "nightlife": 2, "nature": 2, "culture": 4, "beach": 1,
+      "relaxation": 4, "activity": 2, "familyFriendly": 4, "budgetFriendly": 5
+    },
+    "idealStay": [2, 3],
+    "groupFriendly": true,
+    "recommendedGroupSize": 2,
+    "currency": "USD",
+    "cost": {
+      "airfare": 55,
+      "lodgingPerNight": 170,
+      "foodPerDay": 50,
+      "localTransit": 10,
+      "fees": 30
+    },
+    "assumptions": {
+      "baggage": "You are driving. Pack whatever you want.",
+      "airportTransfer": "No transfer. It is a four-hour drive from Charlotte and you keep the car.",
+      "transitHours": 4.0
+    },
+    "tripBio": "The cheapest yes on this list, because you can drive to it. Twenty-two squares of live oak and Spanish moss, a historic district you can cross on foot in 25 minutes, and absolutely no pressure to do anything. Slow on purpose.",
+    "hacks": [
+      {
+        "id": "sav-drive-split",
+        "title": "Split gas and tolls across the car",
+        "description": "One vehicle, four ways, instead of four sets of airfare.",
+        "type": "groupSplit",
+        "savingsAmount": 35,
+        "appliesPerPerson": true,
+        "tradeoff": "Everyone leaves at the same time from the same place. No independent arrivals.",
+        "risk": "needs 3+ travelers",
+        "requires": { "minTravelers": 3 }
+      },
+      {
+        "id": "sav-midtown",
+        "title": "Stay just south of Forsyth Park",
+        "description": "Still walkable, a third off the historic-district nightly rate.",
+        "type": "altLodgingArea",
+        "savingsAmount": 40,
+        "appliesPerPerson": false,
+        "tradeoff": "A 20-minute walk to River Street, pleasant going and long coming back.",
+        "risk": "adds transit time",
+        "requires": {}
+      },
+      {
+        "id": "sav-weeknight",
+        "title": "Come Sunday through Tuesday",
+        "description": "Midweek rates in a weekend-driven market drop sharply.",
+        "type": "dateFlex",
+        "savingsAmount": 60,
+        "appliesPerPerson": true,
+        "tradeoff": "Some of the best restaurants close Monday. Check before you build a day around one.",
+        "risk": "requires flexible dates",
+        "requires": { "flexibleDates": true }
+      }
+    ]
+  },
+
+  {
+    "id": "san-juan",
+    "city": "San Juan",
+    "region": "Puerto Rico",
+    "archetype": "beach",
+    "travelMode": "fly",
+    "art": { "sky": "#1B6B8C", "accent": "#F2B441", "motif": "waves" },
+    "tags": {
+      "food": 4, "nightlife": 4, "nature": 3, "culture": 4, "beach": 5,
+      "relaxation": 4, "activity": 3, "familyFriendly": 4, "budgetFriendly": 3
+    },
+    "idealStay": [4, 5],
+    "groupFriendly": true,
+    "recommendedGroupSize": 4,
+    "currency": "USD",
+    "cost": {
+      "airfare": 320,
+      "lodgingPerNight": 210,
+      "foodPerDay": 55,
+      "localTransit": 45,
+      "fees": 50
+    },
+    "assumptions": {
+      "baggage": "Carry-on only. No passport needed, which removes half the friction.",
+      "airportTransfer": "SJU to Condado is a $20 taxi in 15 minutes. Old San Juan is about $25.",
+      "transitHours": 0.4
+    },
+    "tripBio": "The beach match that still has a city attached. Five-hundred-year-old blue cobblestones in the morning, swimmable water by noon, and a bar scene that does not wind down early. No passport, US dollars, direct flight. Low-friction in every way that matters.",
+    "hacks": [
+      {
+        "id": "sju-santurce",
+        "title": "Stay in Santurce instead of Condado",
+        "description": "The arts district prices well below the beachfront strip.",
+        "type": "altLodgingArea",
+        "savingsAmount": 75,
+        "appliesPerPerson": false,
+        "tradeoff": "Not beachfront. A 12-minute walk or a $7 ride to sand, every single time.",
+        "risk": "adds transit time",
+        "requires": {}
+      },
+      {
+        "id": "sju-midweek",
+        "title": "Tuesday-to-Saturday instead of Thursday-to-Monday",
+        "description": "Shifting the whole window off the weekend cuts the fare meaningfully.",
+        "type": "dateFlex",
+        "savingsAmount": 110,
+        "appliesPerPerson": true,
+        "tradeoff": "Costs two weekdays, and you miss the Sunday scene at La Placita.",
+        "risk": "requires flexible dates",
+        "requires": { "flexibleDates": true }
+      },
+      {
+        "id": "sju-split-apt",
+        "title": "Split an apartment with a kitchen",
+        "description": "One rental across the group, and breakfast stops being a restaurant meal.",
+        "type": "groupSplit",
+        "savingsAmount": 95,
+        "appliesPerPerson": true,
+        "tradeoff": "Someone cooks breakfast, and it will be the same person all week.",
+        "risk": "needs 3+ travelers",
+        "requires": { "minTravelers": 3 }
+      }
+    ]
+  },
+
+  {
+    "id": "tulum",
+    "city": "Tulum",
+    "region": "Quintana Roo, Mexico",
+    "archetype": "beach",
+    "travelMode": "fly",
+    "art": { "sky": "#0E7C7B", "accent": "#F4E7C3", "motif": "palm" },
+    "tags": {
+      "food": 3, "nightlife": 2, "nature": 4, "culture": 2, "beach": 5,
+      "relaxation": 5, "activity": 2, "familyFriendly": 1, "budgetFriendly": 2
+    },
+    "idealStay": [4, 6],
+    "groupFriendly": false,
+    "recommendedGroupSize": 2,
+    "currency": "USD",
+    "cost": {
+      "airfare": 360,
+      "lodgingPerNight": 195,
+      "foodPerDay": 60,
+      "localTransit": 70,
+      "fees": 55
+    },
+    "assumptions": {
+      "baggage": "Carry-on only. You need four outfits and they are all linen.",
+      "airportTransfer": "Cancún to Tulum is 90 minutes: $30 shared shuttle, $110 private car, or $17 on the ADO bus.",
+      "transitHours": 1.6
+    },
+    "tripBio": "Beautiful and fully aware of it. Cenotes, ruins on a cliff over the water, and a beach road where everything costs Brooklyn prices. Best enjoyed with a plan to escape the beach road. Genuinely restorative if you let it be, and expensive if you do not.",
+    "hacks": [
+      {
+        "id": "tulum-pueblo",
+        "title": "Stay in Tulum Pueblo, not the beach road",
+        "description": "Town rates run less than half the hotel-zone strip.",
+        "type": "altLodgingArea",
+        "savingsAmount": 120,
+        "appliesPerPerson": false,
+        "tradeoff": "The beach is a 15-minute bike ride away, and you will do it twice a day in the heat.",
+        "risk": "adds transit time",
+        "requires": {}
+      },
+      {
+        "id": "tulum-ado",
+        "title": "Take the ADO bus from Cancún",
+        "description": "$17 instead of a $110 private transfer.",
+        "type": "transportChoice",
+        "savingsAmount": 45,
+        "appliesPerPerson": true,
+        "tradeoff": "Two hours instead of 90 minutes, on a fixed schedule that ignores your flight delay.",
+        "risk": "arrives late",
+        "requires": {}
+      },
+      {
+        "id": "tulum-shoulder",
+        "title": "Go in May rather than February",
+        "description": "Post-high-season rates drop across flights and lodging together.",
+        "type": "offSeason",
+        "savingsAmount": 140,
+        "appliesPerPerson": true,
+        "tradeoff": "Hotter, more humid, and sargassum season has started on some beaches.",
+        "risk": "shoulder-season weather",
+        "requires": { "flexibleDates": true }
+      }
+    ]
+  },
+
+  {
+    "id": "gulf-shores",
+    "city": "Gulf Shores",
+    "region": "Alabama, USA",
+    "archetype": "beach",
+    "travelMode": "drive",
+    "art": { "sky": "#3B7EA1", "accent": "#F2D0A4", "motif": "dune" },
+    "tags": {
+      "food": 2, "nightlife": 1, "nature": 3, "culture": 0, "beach": 5,
+      "relaxation": 5, "activity": 1, "familyFriendly": 5, "budgetFriendly": 5
+    },
+    "idealStay": [4, 7],
+    "groupFriendly": true,
+    "recommendedGroupSize": 6,
+    "currency": "USD",
+    "cost": {
+      "airfare": 85,
+      "lodgingPerNight": 230,
+      "foodPerDay": 40,
+      "localTransit": 0,
+      "fees": 60
+    },
+    "assumptions": {
+      "baggage": "Driving, so bring the cooler, the chairs, and the umbrella. Renting those on site runs about $40 a day.",
+      "airportTransfer": "No transfer. An eight-hour drive from Charlotte, with the car you need once you arrive.",
+      "transitHours": 8.0
+    },
+    "tripBio": "White sand, warm water, and no ambition whatsoever. A condo with a kitchen, a beach you walk to barefoot, and a week that costs less than four nights almost anywhere else here. The long drive is the price of admission, and with a group it is worth it.",
+    "hacks": [
+      {
+        "id": "gulf-condo-split",
+        "title": "Split a three-bedroom condo",
+        "description": "Nightly rate divided six ways instead of two.",
+        "type": "groupSplit",
+        "savingsAmount": 120,
+        "appliesPerPerson": true,
+        "tradeoff": "Six people, one kitchen, one week. Assign the dish nights up front.",
+        "risk": "needs 3+ travelers",
+        "requires": { "minTravelers": 3 }
+      },
+      {
+        "id": "gulf-groceries",
+        "title": "Grocery-run on arrival and cook half the meals",
+        "description": "A condo kitchen turns two meals a day into groceries.",
+        "type": "misc",
+        "savingsAmount": 90,
+        "appliesPerPerson": true,
+        "tradeoff": "Two hours of your first afternoon goes to a Publix instead of the beach.",
+        "risk": "costs you an afternoon",
+        "requires": {}
+      },
+      {
+        "id": "gulf-shoulder",
+        "title": "Go the last week of August",
+        "description": "Rates fall once the school year starts, before the autumn rebound.",
+        "type": "offSeason",
+        "savingsAmount": 110,
+        "appliesPerPerson": true,
+        "tradeoff": "Peak heat, and it sits inside hurricane season. Buy the refundable rate.",
+        "risk": "shoulder-season weather",
+        "requires": { "flexibleDates": true }
+      }
+    ]
+  },
+
+  {
+    "id": "isla-mujeres",
+    "city": "Isla Mujeres",
+    "region": "Quintana Roo, Mexico",
+    "archetype": "beach",
+    "travelMode": "fly",
+    "art": { "sky": "#0F8B9E", "accent": "#FFD98E", "motif": "ferry" },
+    "tags": {
+      "food": 3, "nightlife": 1, "nature": 4, "culture": 1, "beach": 5,
+      "relaxation": 5, "activity": 1, "familyFriendly": 4, "budgetFriendly": 4
+    },
+    "idealStay": [4, 6],
+    "groupFriendly": true,
+    "recommendedGroupSize": 2,
+    "currency": "USD",
+    "cost": {
+      "airfare": 360,
+      "lodgingPerNight": 150,
+      "foodPerDay": 40,
+      "localTransit": 35,
+      "fees": 40
+    },
+    "assumptions": {
+      "baggage": "Carry-on only. You are taking a ferry and you will be glad you packed light.",
+      "airportTransfer": "Cancún to the Puerto Juárez ferry is a $25 shuttle, then a $12 ferry every 30 minutes.",
+      "transitHours": 1.8
+    },
+    "tripBio": "Five miles long, half a mile wide, and reachable only by boat. Golf carts instead of cars, a north beach the color of a screensaver, and a pace that makes Tulum look frantic. The cheapest Caribbean water on this list, if you will take the ferry.",
+    "hacks": [
+      {
+        "id": "isla-centro",
+        "title": "Stay in Centro instead of on North Beach",
+        "description": "Town rates a short walk from the same sand.",
+        "type": "altLodgingArea",
+        "savingsAmount": 60,
+        "appliesPerPerson": false,
+        "tradeoff": "A 10-minute walk to the good sand, and the town gets loud on weekend nights.",
+        "risk": "adds transit time",
+        "requires": {}
+      },
+      {
+        "id": "isla-ferry-shuttle",
+        "title": "Take the shared shuttle to the ferry",
+        "description": "$25 a head instead of a $95 private car to the terminal.",
+        "type": "transportChoice",
+        "savingsAmount": 40,
+        "appliesPerPerson": true,
+        "tradeoff": "It waits for a full van. Add 40 minutes to a travel day that is already long.",
+        "risk": "arrives late",
+        "requires": {}
+      },
+      {
+        "id": "isla-golf-cart",
+        "title": "Rent one golf cart for the group, one day only",
+        "description": "See the whole island in a day rather than renting for the week.",
+        "type": "groupSplit",
+        "savingsAmount": 55,
+        "appliesPerPerson": true,
+        "tradeoff": "You see everything on that one day and walk everywhere the rest of the trip.",
+        "risk": "needs 3+ travelers",
+        "requires": { "minTravelers": 3 }
+      }
+    ]
+  },
+
+  {
+    "id": "asheville",
+    "city": "Asheville",
+    "region": "North Carolina, USA",
+    "archetype": "outdoors",
+    "travelMode": "drive",
+    "art": { "sky": "#3A5A40", "accent": "#D98E5A", "motif": "ridge" },
+    "tags": {
+      "food": 4, "nightlife": 2, "nature": 5, "culture": 2, "beach": 0,
+      "relaxation": 3, "activity": 5, "familyFriendly": 4, "budgetFriendly": 5
+    },
+    "idealStay": [2, 4],
+    "groupFriendly": true,
+    "recommendedGroupSize": 4,
+    "currency": "USD",
+    "cost": {
+      "airfare": 30,
+      "lodgingPerNight": 185,
+      "foodPerDay": 50,
+      "localTransit": 15,
+      "fees": 35
+    },
+    "assumptions": {
+      "baggage": "Driving. Bring boots, a rain shell, and a layer — the ridge runs 15 degrees colder than town.",
+      "airportTransfer": "No transfer. A two-hour drive from Charlotte, and you need the car for every trailhead.",
+      "transitHours": 2.0
+    },
+    "tripBio": "Two hours from your front door and a completely different climate. Waterfalls 20 minutes from the car, a downtown with more breweries than blocks, and the Blue Ridge Parkway running right past it. The highest-effort, lowest-cost match here. Hikes hard, eats well, sleeps early.",
+    "hacks": [
+      {
+        "id": "avl-west",
+        "title": "Stay in West Asheville instead of downtown",
+        "description": "Across the river, same access, lower nightly rate.",
+        "type": "altLodgingArea",
+        "savingsAmount": 45,
+        "appliesPerPerson": false,
+        "tradeoff": "A 10-minute drive to downtown, which means someone is not drinking.",
+        "risk": "adds transit time",
+        "requires": {}
+      },
+      {
+        "id": "avl-carpool",
+        "title": "Carpool and split gas",
+        "description": "One car for the group instead of two.",
+        "type": "groupSplit",
+        "savingsAmount": 20,
+        "appliesPerPerson": true,
+        "tradeoff": "One car means one schedule. No splitting up for different trailheads.",
+        "risk": "needs 3+ travelers",
+        "requires": { "minTravelers": 3 }
+      },
+      {
+        "id": "avl-weekday",
+        "title": "Go Sunday to Wednesday",
+        "description": "Cabin rates drop by roughly a third midweek.",
+        "type": "dateFlex",
+        "savingsAmount": 65,
+        "appliesPerPerson": true,
+        "tradeoff": "Parkway visitor centers keep shorter hours, and some kitchens close Monday.",
+        "risk": "requires flexible dates",
+        "requires": { "flexibleDates": true }
+      }
+    ]
+  }
+]

@@ -1,0 +1,353 @@
+/* Roamance — design tokens and base styles.
+   Owned by Person 4. Components use var(--token), never raw hex, so the whole
+   app can be re-themed from this block. */
+
+:root {
+  /* Warm paper ground, ink text, coral for the romance half of the name,
+     deep teal for the roam half. */
+  --bg: #fbf7f2;
+  --surface: #ffffff;
+  --surface-2: #f4ede4;
+  --ink: #1d1a17;
+  --ink-2: #5d564e;
+  --ink-3: #8d8479;
+  --line: #e6ddd2;
+
+  --coral: #e0574c;
+  --coral-soft: #fdeceb;
+  --teal: #10646b;
+  --teal-soft: #e3f1f1;
+  --gold: #b8802a;
+  --gold-soft: #faf0dd;
+
+  --radius: 18px;
+  --radius-lg: 26px;
+  --shadow-card: 0 1px 2px rgba(29, 26, 23, 0.06), 0 12px 32px rgba(29, 26, 23, 0.1);
+  --shadow-lift: 0 2px 4px rgba(29, 26, 23, 0.08), 0 24px 56px rgba(29, 26, 23, 0.16);
+
+  --font: ui-sans-serif, -apple-system, "Segoe UI", Inter, Helvetica, Arial, sans-serif;
+
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #15120f;
+    --surface: #211d19;
+    --surface-2: #2b251f;
+    --ink: #f6f1ea;
+    --ink-2: #c3b9ac;
+    --ink-3: #8f8578;
+    --line: #372f27;
+
+    --coral: #f47a6d;
+    --coral-soft: #3a211d;
+    --teal: #6fc5c8;
+    --teal-soft: #14312f;
+    --gold: #e0ad5c;
+    --gold-soft: #33260f;
+
+    color-scheme: dark;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 15px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  font-weight: 650;
+}
+
+p {
+  margin: 0;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+/* ---------- layout ---------- */
+
+.app {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.screen {
+  flex: 1;
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 24px 20px 40px;
+}
+
+.screen--wide {
+  max-width: 900px;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--line);
+  background: var(--bg);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.wordmark {
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  font-size: 17px;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 1px;
+}
+.wordmark em {
+  font-style: normal;
+  color: var(--coral);
+}
+
+.topbar__actions {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+/* ---------- buttons ---------- */
+
+.btn {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+  border-radius: 999px;
+  padding: 10px 18px;
+  font-weight: 560;
+  font-size: 14px;
+  transition: transform 0.12s ease, background 0.15s ease, border-color 0.15s ease;
+}
+.btn:hover {
+  border-color: var(--ink-3);
+}
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn--primary {
+  background: var(--coral);
+  border-color: var(--coral);
+  color: #fff;
+}
+.btn--primary:hover {
+  background: #cf4c41;
+  border-color: #cf4c41;
+}
+
+.btn--ghost {
+  background: transparent;
+  border-color: transparent;
+  color: var(--ink-2);
+  padding: 8px 12px;
+}
+.btn--ghost:hover {
+  background: var(--surface-2);
+  border-color: transparent;
+}
+
+.btn--block {
+  width: 100%;
+  justify-content: center;
+  padding: 14px 20px;
+  font-size: 15px;
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* ---------- chips and badges ---------- */
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 560;
+  background: var(--surface-2);
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+
+.chip--risk {
+  background: var(--gold-soft);
+  color: var(--gold);
+}
+
+.chip--match {
+  background: var(--coral);
+  color: #fff;
+  font-variant-numeric: tabular-nums;
+}
+
+.estimate-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  color: var(--ink-3);
+  letter-spacing: 0.01em;
+}
+.estimate-badge::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--ink-3);
+  opacity: 0.6;
+}
+
+/* ---------- cards ---------- */
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+}
+
+.muted {
+  color: var(--ink-2);
+}
+.dim {
+  color: var(--ink-3);
+}
+
+.eyebrow {
+  font-size: 12px;
+  font-weight: 650;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.stack--sm {
+  gap: 8px;
+}
+.stack--lg {
+  gap: 28px;
+}
+
+.row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- forms ---------- */
+
+label.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 560;
+  color: var(--ink-2);
+}
+
+input[type="text"],
+input[type="number"],
+select {
+  font: inherit;
+  font-size: 15px;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 11px 13px;
+  width: 100%;
+}
+
+input:focus-visible,
+select:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 2px;
+}
+
+.segmented {
+  display: flex;
+  gap: 6px;
+  background: var(--surface-2);
+  padding: 4px;
+  border-radius: 999px;
+}
+.segmented button {
+  flex: 1;
+  border: none;
+  background: transparent;
+  border-radius: 999px;
+  padding: 9px 12px;
+  font-size: 13.5px;
+  font-weight: 560;
+  color: var(--ink-2);
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.segmented button[aria-pressed="true"] {
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: 0 1px 3px rgba(29, 26, 23, 0.12);
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 440px) {
+  .grid-2 {
+    grid-template-columns: 1fr;
+  }
+}

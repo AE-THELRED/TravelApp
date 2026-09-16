@@ -1,0 +1,94 @@
+{
+  "questions": [
+    {
+      "id": "pace",
+      "prompt": "Day two of the trip. What is happening?",
+      "options": [
+        {
+          "id": "packed",
+          "label": "Packed day",
+          "blurb": "Out the door by nine, three things booked, dinner at ten.",
+          "weights": { "activity": 5, "relaxation": 1, "culture": 3, "planningStyle": 3 }
+        },
+        {
+          "id": "slow",
+          "label": "Slow morning",
+          "blurb": "Coffee for two hours. Maybe a walk. Nothing booked.",
+          "weights": { "activity": 1, "relaxation": 5, "nature": 2, "planningStyle": 1 }
+        }
+      ]
+    },
+    {
+      "id": "food",
+      "prompt": "The best meal of the trip is…",
+      "options": [
+        {
+          "id": "street",
+          "label": "Street food",
+          "blurb": "Eaten standing up, cost four dollars, still thinking about it.",
+          "weights": { "food": 5, "budgetSensitivity": 4, "culture": 3, "nightlife": 2 }
+        },
+        {
+          "id": "nice",
+          "label": "One nice dinner",
+          "blurb": "A real reservation. You dressed for it.",
+          "weights": { "food": 4, "budgetSensitivity": 1, "relaxation": 3, "culture": 2 }
+        }
+      ]
+    },
+    {
+      "id": "setting",
+      "prompt": "Pick your backdrop.",
+      "options": [
+        {
+          "id": "beach",
+          "label": "Beach reset",
+          "blurb": "Water you can get into. A book you might finish.",
+          "weights": { "beach": 5, "relaxation": 5, "nature": 3, "activity": 1, "nightlife": 1 }
+        },
+        {
+          "id": "city",
+          "label": "City energy",
+          "blurb": "Something open at every hour. Somewhere to walk to.",
+          "weights": { "culture": 5, "nightlife": 4, "food": 3, "activity": 4, "beach": 0 }
+        }
+      ]
+    },
+    {
+      "id": "planning",
+      "prompt": "How does the itinerary work?",
+      "options": [
+        {
+          "id": "planned",
+          "label": "Planned itinerary",
+          "blurb": "There is a document. It has times in it.",
+          "weights": { "planningStyle": 5, "culture": 3, "activity": 3 }
+        },
+        {
+          "id": "loose",
+          "label": "Follow the moment",
+          "blurb": "We will figure out dinner at seven.",
+          "weights": { "planningStyle": 0, "relaxation": 3, "nightlife": 3, "nature": 2 }
+        }
+      ]
+    },
+    {
+      "id": "spend",
+      "prompt": "Last question. The money.",
+      "options": [
+        {
+          "id": "save",
+          "label": "Save money",
+          "blurb": "Every dollar saved is another trip later.",
+          "weights": { "budgetSensitivity": 5, "food": 2, "nature": 2 }
+        },
+        {
+          "id": "treat",
+          "label": "Treat yourself",
+          "blurb": "You are already here. Do it properly.",
+          "weights": { "budgetSensitivity": 0, "relaxation": 3, "food": 3, "beach": 2 }
+        }
+      ]
+    }
+  ]
+}

@@ -1,4 +1,19 @@
-# CLAUDE.md — Travel Hacker
+# CLAUDE.md — Roamance
+
+> **⚠️ These docs are mid-rewrite and currently describe the OLD plan.**
+>
+> Four decisions changed on 2026-09-15 and the code now reflects them, not the docs below:
+>
+> | Topic | Docs still say | Actual |
+> |---|---|---|
+> | Framework | Next.js + TypeScript + Tailwind | **Vite + React + plain JS**, no router |
+> | Name | Travel Hacker | **Roamance** (storage key `roamance:v1:state`) |
+> | Trip schema | `baseCostPerPerson` | **itemised `cost{}`** + `risk` + `requires{}` per hack |
+> | Images | committed photos in `public/images/<id>/` | **generated SVG art** from `trip.art`; no `photos[]` |
+>
+> Trust `src/lib/types.js` and `src/data/trips.json` over any prose in this repo until
+> ARCHITECTURE / STATE / PERSISTENCE / ASSETS / DATA-SCHEMA / VERCEL / README are rewritten.
+> `NEXTJS.md` has been deleted; a `VITE.md` replacing it is not written yet.
 
 Context file for Claude Code. Read this first, then read the linked docs before writing code.
 
