@@ -16,6 +16,30 @@
  */
 
 /**
+ * A vibe board on the "Your Type" screen. Coarse aesthetic signal: picking one
+ * pushes every tag it lists upward. Art is generated from `art`, never a photo.
+ * @typedef {Object} VibeBoard
+ * @property {string} id kebab-case, unique.
+ * @property {string} title
+ * @property {string} note One line, shown under the title.
+ * @property {string[]} chips Up to 3 short labels rendered on the card.
+ * @property {string} caption Names the photograph this stands in for. Doubles as the shot list.
+ * @property {TripArt} art
+ * @property {Partial<ProfileTags>} tags 0–5 strength per dimension this board signals.
+ */
+
+/**
+ * One photo on the "Find Your Type" swipe screen. Fine refinement: a crush
+ * nudges its tags up, a pass pulls them down.
+ * @typedef {Object} SwipePhoto
+ * @property {string} id kebab-case, unique.
+ * @property {string} label Shown under the card.
+ * @property {string} caption Names the photograph this stands in for.
+ * @property {TripArt} art
+ * @property {Partial<ProfileTags>} tags 0–5 strength per dimension this photo signals.
+ */
+
+/**
  * @typedef {Object} TripTags
  * @property {number} [food]
  * @property {number} [nightlife]
@@ -93,10 +117,58 @@
  */
 
 /**
+ * A vibe board on the "Your Type" screen. Coarse aesthetic signal: picking one
+ * pushes every tag it lists upward. Art is generated from `art`, never a photo.
+ * @typedef {Object} VibeBoard
+ * @property {string} id kebab-case, unique.
+ * @property {string} title
+ * @property {string} note One line, shown under the title.
+ * @property {string[]} chips Up to 3 short labels rendered on the card.
+ * @property {string} caption Names the photograph this stands in for. Doubles as the shot list.
+ * @property {TripArt} art
+ * @property {Partial<ProfileTags>} tags 0–5 strength per dimension this board signals.
+ */
+
+/**
+ * One photo on the "Find Your Type" swipe screen. Fine refinement: a crush
+ * nudges its tags up, a pass pulls them down.
+ * @typedef {Object} SwipePhoto
+ * @property {string} id kebab-case, unique.
+ * @property {string} label Shown under the card.
+ * @property {string} caption Names the photograph this stands in for.
+ * @property {TripArt} art
+ * @property {Partial<ProfileTags>} tags 0–5 strength per dimension this photo signals.
+ */
+
+/**
  * @typedef {Object} TripArt
  * @property {string} sky Background base color, hex.
  * @property {string} accent Foreground/highlight color, hex.
  * @property {"brass"|"mural"|"rowhouse"|"skyline"|"oak"|"waves"|"palm"|"dune"|"ferry"|"ridge"} motif Selects the generated SVG scene.
+ */
+
+/**
+ * A vibe board on the "Your Type" screen. Coarse aesthetic signal: picking one
+ * pushes every tag it lists upward. Art is generated from `art`, never a photo.
+ * @typedef {Object} VibeBoard
+ * @property {string} id kebab-case, unique.
+ * @property {string} title
+ * @property {string} note One line, shown under the title.
+ * @property {string[]} chips Up to 3 short labels rendered on the card.
+ * @property {string} caption Names the photograph this stands in for. Doubles as the shot list.
+ * @property {TripArt} art
+ * @property {Partial<ProfileTags>} tags 0–5 strength per dimension this board signals.
+ */
+
+/**
+ * One photo on the "Find Your Type" swipe screen. Fine refinement: a crush
+ * nudges its tags up, a pass pulls them down.
+ * @typedef {Object} SwipePhoto
+ * @property {string} id kebab-case, unique.
+ * @property {string} label Shown under the card.
+ * @property {string} caption Names the photograph this stands in for.
+ * @property {TripArt} art
+ * @property {Partial<ProfileTags>} tags 0–5 strength per dimension this photo signals.
  */
 
 /**
@@ -119,6 +191,30 @@
  */
 
 /**
+ * A vibe board on the "Your Type" screen. Coarse aesthetic signal: picking one
+ * pushes every tag it lists upward. Art is generated from `art`, never a photo.
+ * @typedef {Object} VibeBoard
+ * @property {string} id kebab-case, unique.
+ * @property {string} title
+ * @property {string} note One line, shown under the title.
+ * @property {string[]} chips Up to 3 short labels rendered on the card.
+ * @property {string} caption Names the photograph this stands in for. Doubles as the shot list.
+ * @property {TripArt} art
+ * @property {Partial<ProfileTags>} tags 0–5 strength per dimension this board signals.
+ */
+
+/**
+ * One photo on the "Find Your Type" swipe screen. Fine refinement: a crush
+ * nudges its tags up, a pass pulls them down.
+ * @typedef {Object} SwipePhoto
+ * @property {string} id kebab-case, unique.
+ * @property {string} label Shown under the card.
+ * @property {string} caption Names the photograph this stands in for.
+ * @property {TripArt} art
+ * @property {Partial<ProfileTags>} tags 0–5 strength per dimension this photo signals.
+ */
+
+/**
  * @typedef {Object} TripConstraints
  * @property {string} departure
  * @property {"specific"|"region"|"surprise"} destinationPref
@@ -127,14 +223,20 @@
  * @property {number} adults
  * @property {number} children
  * @property {number[]} childAges
- * @property {1|2|3} budgetTier
+ * @property {1|2|3} budgetTier 1 = keep it cheap, 2 = comfortable middle, 3 = treat ourselves.
+ *   Sole source of profile.budgetSensitivity — see scoring.js.
  * @property {boolean} flexibleDates Gates every dateFlex and offSeason hack.
  */
 
 /**
+ * The traveler as the two vibe screens describe them.
+ *
+ * DERIVED — build it with `buildProfile(picks, likes, constraints)` inside a
+ * useMemo. Only `picks` and `likes` are ever persisted; `tags` is recomputed.
  * @typedef {Object} TravelerProfile
- * @property {Record<string, string>} answers questionId -> optionId
- * @property {ProfileTags} tags Derived from answers via quiz.json weights.
+ * @property {string[]} picks Selected vibe-board ids.
+ * @property {Record<string, boolean>} likes photoId -> true (crush) | false (not my type).
+ * @property {ProfileTags} tags Derived from picks + likes + constraints.budgetTier.
  */
 
 /**
@@ -147,11 +249,12 @@
 /**
  * @typedef {Object} AppState
  * @property {TripConstraints|null} constraints
- * @property {TravelerProfile|null} travelerProfile
+ * @property {string[]} picks Selected vibe-board ids. An INPUT, so it persists.
+ * @property {Record<string, boolean>} likes photoId -> verdict. An INPUT, so it persists.
  * @property {SavedTrip[]} savedTrips
  * @property {number} deckIndex
  * @property {boolean} hydrated false until localStorage has been read.
- * @property {"landing"|"onboarding"|"quiz"|"matches"|"detail"|"saved"} screen
+ * @property {"landing"|"onboarding"|"vibe"|"swipe"|"matches"|"detail"|"saved"} screen
  * @property {string|null} activeTripId
  */
 

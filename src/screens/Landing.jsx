@@ -1,10 +1,10 @@
 import EstimateBadge from "../components/EstimateBadge.jsx";
 
 /**
- * Landing — Person 2.
+ * Landing — Phase C.
  * Sets the premise in one line, then gets out of the way.
  */
-export default function Landing({ dispatch, hasProfile }) {
+export default function Landing({ dispatch, hasVibe }) {
   return (
     <div className="screen stack--lg stack">
       <div className="stack">
@@ -15,7 +15,7 @@ export default function Landing({ dispatch, hasProfile }) {
           <span style={{ color: "var(--coral)" }}>Meet one.</span>
         </h1>
         <p className="muted" style={{ fontSize: "17px", maxWidth: "42ch" }}>
-          Answer a few questions about how you travel. We&rsquo;ll introduce you to ten
+          Pick the places that already look like your trip. We&rsquo;ll introduce you to ten
           destinations that match — then show you exactly what each one would cost, and what
           every shortcut actually costs you.
         </p>
@@ -23,9 +23,9 @@ export default function Landing({ dispatch, hasProfile }) {
 
       <div className="stack">
         <button className="btn btn--primary btn--block" onClick={() => dispatch({ type: "GO", screen: "onboarding" })}>
-          {hasProfile ? "Start over" : "Find your match"}
+          {hasVibe ? "Start over" : "Find your type"}
         </button>
-        {hasProfile && (
+        {hasVibe && (
           <button className="btn btn--block" onClick={() => dispatch({ type: "GO", screen: "matches" })}>
             Back to your deck
           </button>

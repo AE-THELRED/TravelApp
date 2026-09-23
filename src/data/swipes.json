@@ -1,0 +1,60 @@
+{
+  "photos": [
+    {
+      "id": "rooftop-late",
+      "label": "Rooftop, 1am",
+      "caption": "photo / rooftop bar after midnight",
+      "art": { "sky": "#1F1B35", "accent": "#F06C5A", "motif": "skyline" },
+      "tags": { "nightlife": 5, "culture": 3, "activity": 2 }
+    },
+    {
+      "id": "hammock-noon",
+      "label": "Nothing scheduled",
+      "caption": "photo / hammock strung between palms",
+      "art": { "sky": "#2C8CA6", "accent": "#F7E2B8", "motif": "palm" },
+      "tags": { "relaxation": 5, "beach": 3, "nature": 2 }
+    },
+    {
+      "id": "trailhead-cold",
+      "label": "Out before the fog lifts",
+      "caption": "photo / trailhead in early fog",
+      "art": { "sky": "#44586B", "accent": "#BFD3BC", "motif": "ridge" },
+      "tags": { "nature": 5, "activity": 4, "relaxation": 1 }
+    },
+    {
+      "id": "taco-counter",
+      "label": "Four dollars, standing up",
+      "caption": "photo / three tacos on butcher paper",
+      "art": { "sky": "#8A3520", "accent": "#F3C04A", "motif": "mural" },
+      "tags": { "food": 5, "culture": 3, "nightlife": 2 }
+    },
+    {
+      "id": "gallery-empty",
+      "label": "There before it opens",
+      "caption": "photo / empty gallery before opening",
+      "art": { "sky": "#35323B", "accent": "#E4D9C8", "motif": "rowhouse" },
+      "tags": { "culture": 5, "activity": 2, "relaxation": 2 }
+    },
+    {
+      "id": "empty-sand",
+      "label": "Footprints and nothing else",
+      "caption": "photo / footprints and nothing else",
+      "art": { "sky": "#1D7E93", "accent": "#EFDFC0", "motif": "dune" },
+      "tags": { "beach": 5, "relaxation": 4, "nature": 3 }
+    },
+    {
+      "id": "ferry-wake",
+      "label": "Moving between islands",
+      "caption": "photo / wake off the back of a ferry",
+      "art": { "sky": "#10606F", "accent": "#63C9BE", "motif": "ferry" },
+      "tags": { "activity": 4, "beach": 3, "nature": 3 }
+    },
+    {
+      "id": "long-table",
+      "label": "Second bottle, no plan",
+      "caption": "photo / long table, second bottle",
+      "art": { "sky": "#4A2E2A", "accent": "#E0A860", "motif": "oak" },
+      "tags": { "food": 4, "nightlife": 3, "relaxation": 3, "culture": 2 }
+    }
+  ]
+}

@@ -5,11 +5,13 @@
  * No randomness, no Date.now(), no LLM. The "intelligence" the user perceives
  * comes from the reasons being shown, not from the math being clever.
  *
+ * The traveler profile comes from vibe boards + swipe refinement, not a quiz.
  * Ranking is VIBE-FIRST by design. Savings never enter this function — a cheap
  * trip you would hate is not a match. Money is the second act, in cost.js.
  */
 
-import quiz from "../data/quiz.json";
+import boards from "../data/boards.json";
+import swipes from "../data/swipes.json";
 
 /** The seven dimensions a trip and a traveler are both scored on. */
 export const SHARED_TAGS = [
@@ -37,36 +39,91 @@ function emptyTags() {
   };
 }
 
+/** How much each signal moves a tag, before normalisation. */
+const BOARD_WEIGHT = 2;
+const SWIPE_YES_WEIGHT = 1.5;
+const SWIPE_NO_WEIGHT = -1;
+
 /**
- * Turn quiz answers into a traveler tag vector.
- * Answers are averaged per dimension rather than summed, so a dimension that
- * appears in four questions cannot drown out one that appears in two.
+ * The onboarding budget tier IS the budget signal. Vibe boards are about
+ * aesthetics; asking someone to express price-sensitivity through photographs
+ * is worse than just reading the number they already gave us.
+ * 1 = keep it cheap, 2 = comfortable middle, 3 = treat ourselves.
+ */
+const BUDGET_SENSITIVITY_BY_TIER = { 1: 5, 2: 3, 3: 1 };
+
+/** Add one board's or photo's tags into the running totals, scaled by weight. */
+function addSignal(totals, tags, weight) {
+  for (const [key, strength] of Object.entries(tags ?? {})) {
+    if (!(key in totals)) continue;
+    totals[key] += weight * (strength / 5);
+  }
+}
+
+const clamp05 = (n) => Math.max(0, Math.min(5, n));
+
+/**
+ * Turn vibe-board picks and swipe verdicts into a traveler tag vector.
  *
- * @param {Record<string, string>} answers questionId -> optionId
+ * Two stages, matching the two screens:
+ *   1. Boards are the coarse signal — each picked board pushes its tags up.
+ *   2. Swipes refine — a yes nudges up, a no pulls down.
+ *
+ * Totals are then normalised so the traveler's STRONGEST dimension reads as 5.
+ * This is what keeps scoring honest across very different players: someone who
+ * picks one board and someone who picks four should both end up with a profile
+ * whose peak is 5, or the four-board player would out-score every trip simply
+ * by having clicked more.
+ *
+ * `budgetSensitivity` is not normalised — it comes straight from the tier.
+ *
+ * @param {string[]} picks Selected board ids.
+ * @param {Record<string, boolean>} likes photoId -> true (crush) | false (not my type).
+ * @param {import("./types.js").TripConstraints|null} constraints
  * @returns {import("./types.js").ProfileTags}
  */
-export function buildProfileTags(answers) {
+export function buildProfileTags(picks = [], likes = {}, constraints = null) {
   const totals = emptyTags();
-  const counts = emptyTags();
 
-  for (const question of quiz.questions) {
-    const chosenId = answers[question.id];
-    if (!chosenId) continue;
-    const option = question.options.find((o) => o.id === chosenId);
-    if (!option) continue;
-
-    for (const [key, value] of Object.entries(option.weights)) {
-      if (!(key in totals)) continue;
-      totals[key] += value;
-      counts[key] += 1;
-    }
+  for (const board of boards.boards) {
+    if (!picks.includes(board.id)) continue;
+    addSignal(totals, board.tags, BOARD_WEIGHT);
   }
+
+  for (const photo of swipes.photos) {
+    const verdict = likes[photo.id];
+    if (verdict === undefined || verdict === null) continue;
+    addSignal(totals, photo.tags, verdict ? SWIPE_YES_WEIGHT : SWIPE_NO_WEIGHT);
+  }
+
+  // Scale off the seven shared dimensions only. planningStyle rides along on
+  // the same factor but never sets it — it is display copy, not a match input.
+  const peak = Math.max(0, ...SHARED_TAGS.map((k) => totals[k]));
+  const scale = peak > 0 ? 5 / peak : 0;
 
   const tags = emptyTags();
-  for (const key of Object.keys(tags)) {
-    tags[key] = counts[key] > 0 ? totals[key] / counts[key] : 0;
+  for (const key of SHARED_TAGS) {
+    tags[key] = clamp05(totals[key] * scale);
   }
+  tags.planningStyle = peak > 0 ? clamp05(totals.planningStyle * scale) : 2.5;
+  tags.budgetSensitivity = BUDGET_SENSITIVITY_BY_TIER[constraints?.budgetTier] ?? 3;
+
   return tags;
+}
+
+/**
+ * Convenience wrapper: the object shape `scoreTrip` and `rankTrips` expect.
+ * Call it inside a `useMemo` — it is derived, never stored.
+ *
+ * @returns {import("./types.js").TravelerProfile}
+ */
+export function buildProfile(picks, likes, constraints) {
+  return { picks: picks ?? [], likes: likes ?? {}, tags: buildProfileTags(picks, likes, constraints) };
+}
+
+/** Has the traveler given us enough to rank anything? One board is the floor. */
+export function hasVibe(picks) {
+  return Array.isArray(picks) && picks.length > 0;
 }
 
 /** Total humans on the trip. */
@@ -124,10 +181,13 @@ export function scoreTrip(profile, trip, constraints) {
   // profile.budgetSensitivity (how much they care) vs trip.budgetFriendly (how cheap it is).
   const sensitivity = p.budgetSensitivity ?? 0;
   const friendly = t.budgetFriendly ?? 3;
-  const budgetCloseness = 1 - Math.abs(sensitivity - friendly) / 5;
-  // A price-driven traveler on a cheap trip scores full marks. An indifferent
-  // traveler is not penalised either way, so half marks is the neutral floor.
-  const budgetFit = sensitivity >= 3 ? Math.max(0, budgetCloseness) : 0.7;
+  // Being cheap must never COST a trip points. The old form of this was
+  // `1 - |sensitivity - friendly| / 5`, which scored an expensive trip highest
+  // for a mid-budget traveler and pushed genuinely cheap matches down the deck.
+  // Instead: how much you care scales how much an expensive trip hurts.
+  const care = sensitivity / 5; // 0 = money is no object, 1 = every dollar counts
+  const cheap = friendly / 5; // 0 = expensive, 1 = very budget-friendly
+  const budgetFit = Math.max(0, 1 - care * (1 - cheap));
   score += budgetFit * 25;
   if (sensitivity >= 4 && friendly >= 4) {
     reasons.push("stretches a tight budget");

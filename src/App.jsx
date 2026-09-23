@@ -9,12 +9,13 @@ import Landing from "./screens/Landing.jsx";
  * Owns the single reducer and the two persistence effects. Every screen gets
  * `state` and `dispatch` as props; there is no Context by design.
  *
- * Screens still to build:
- *   onboarding  Person 2   constraints form
- *   quiz        Person 2   five-question vibe test
- *   matches     Person 3   swipe deck
- *   detail      Person 3   true-cost card + Hack Stack
- *   saved       Person 4   saved matches and group split
+ * Screens still to build (see docs/WORKFLOW.md for who owns which):
+ *   onboarding  Phase C   constraints form — who, how long, what budget
+ *   vibe        Phase A   "Your Type" — vibe-board picker
+ *   swipe       Phase A   "Find Your Type" — refine on 8 photos
+ *   matches     Phase B   ranked deck
+ *   detail      Phase B   true-cost card + Hack Stack
+ *   saved       Phase C   saved matches and group split
  */
 export default function App() {
   const [state, dispatch] = useReducer(tripReducer, initialState);
@@ -37,7 +38,7 @@ export default function App() {
   }
 
   const screens = {
-    landing: <Landing dispatch={dispatch} hasProfile={!!state.travelerProfile} />,
+    landing: <Landing dispatch={dispatch} hasVibe={state.picks.length > 0} />,
   };
 
   return (

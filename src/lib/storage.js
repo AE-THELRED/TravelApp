@@ -5,7 +5,8 @@
  * version. If the shape changes in a breaking way, bump VERSION and old data is
  * dropped rather than migrated.
  *
- * Only inputs are persisted. Match scores, bios, and totals are recomputed on
+ * Only inputs are persisted: constraints, board picks, swipe verdicts, saved
+ * trips. The tag profile, match scores, bios, and totals are all recomputed on
  * load — storing a derived number is how a demo ends up showing a stale price.
  *
  * Every access is wrapped: storage can be disabled (private windows), full
@@ -13,7 +14,10 @@
  */
 
 const KEY = "roamance:v1:state";
-const VERSION = 1;
+// v2: the quiz was replaced by vibe boards + swipe refinement, so the persisted
+// `travelerProfile` blob no longer has a meaning. Bumping drops v1 data on read
+// rather than rehydrating a profile nothing can score.
+const VERSION = 2;
 
 const isBrowser = () => typeof window !== "undefined" && !!window.localStorage;
 
@@ -27,7 +31,8 @@ export function loadState() {
     if (parsed?.version !== VERSION) return {}; // drop incompatible data
     return {
       constraints: parsed.constraints ?? null,
-      travelerProfile: parsed.travelerProfile ?? null,
+      picks: Array.isArray(parsed.picks) ? parsed.picks : [],
+      likes: parsed.likes && typeof parsed.likes === "object" ? parsed.likes : {},
       savedTrips: Array.isArray(parsed.savedTrips) ? parsed.savedTrips : [],
       deckIndex: typeof parsed.deckIndex === "number" ? parsed.deckIndex : 0,
     };
@@ -45,7 +50,8 @@ export function saveState(state) {
       JSON.stringify({
         version: VERSION,
         constraints: state.constraints,
-        travelerProfile: state.travelerProfile,
+        picks: state.picks,
+        likes: state.likes,
         savedTrips: state.savedTrips,
         deckIndex: state.deckIndex,
       }),

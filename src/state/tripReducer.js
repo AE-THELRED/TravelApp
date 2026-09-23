@@ -9,15 +9,21 @@
  * Date.now() except where an action carries it in, no randomness. Persistence
  * happens in an effect in App.jsx, not here.
  *
- * Global state is exactly these things. Everything else — the current quiz
- * question, whether a drawer is open, drag position on a card — is local
- * useState in the component that owns it. Resist adding to this.
+ * Global state is exactly these things. Everything else — which swipe card is
+ * on top, whether a drawer is open, drag position — is local useState in the
+ * component that owns it. Resist adding to this.
+ *
+ * Note what is NOT here: the traveler's tag profile. `picks` and `likes` are
+ * inputs and they persist; the tag vector is derived from them with
+ * `buildProfile()` in a useMemo. Storing it would let a stale profile outlive
+ * the answers that produced it.
  */
 
 /** @type {import("../lib/types.js").AppState} */
 export const initialState = {
   constraints: null,
-  travelerProfile: null,
+  picks: [],
+  likes: {},
   savedTrips: [],
   deckIndex: 0,
   hydrated: false,
@@ -31,8 +37,8 @@ export function tripReducer(state, action) {
     case "HYDRATE": {
       const p = action.payload ?? {};
       const next = { ...state, ...p, hydrated: true };
-      // Returning users with a finished quiz land on their deck, not the splash.
-      if (state.screen === "landing" && p.travelerProfile && p.constraints) {
+      // Returning users who already picked a vibe land on their deck, not the splash.
+      if (state.screen === "landing" && p.constraints && p.picks?.length) {
         next.screen = "matches";
       }
       return next;
@@ -44,11 +50,35 @@ export function tripReducer(state, action) {
     // Replaces wholesale. Does NOT clear savedTrips — editing your trip length
     // should re-price what you saved, not delete it.
     case "SET_CONSTRAINTS":
-      return { ...state, constraints: action.payload, screen: "quiz" };
+      return { ...state, constraints: action.payload, screen: "vibe" };
 
-    // New answers mean a new ranking, so the deck starts over.
-    case "SET_PROFILE":
-      return { ...state, travelerProfile: action.payload, deckIndex: 0, screen: "matches" };
+    // Vibe boards. Selection is a toggle so the grid needs no separate remove.
+    case "TOGGLE_BOARD": {
+      const on = state.picks.includes(action.boardId);
+      return {
+        ...state,
+        deckIndex: 0, // the ranking is about to change
+        picks: on
+          ? state.picks.filter((id) => id !== action.boardId)
+          : [...state.picks, action.boardId],
+      };
+    }
+
+    // One swipe verdict. `liked: null` clears it, which is how "undo" works.
+    case "SET_LIKE": {
+      const likes = { ...state.likes };
+      if (action.liked === null || action.liked === undefined) delete likes[action.photoId];
+      else likes[action.photoId] = action.liked;
+      return { ...state, likes, deckIndex: 0 };
+    }
+
+    // Both vibe screens are done — go meet the deck.
+    case "COMMIT_VIBE":
+      return { ...state, deckIndex: 0, screen: "matches" };
+
+    // "Edit vibe" from the matches rail. Keeps picks and likes intact.
+    case "EDIT_VIBE":
+      return { ...state, screen: "vibe" };
 
     case "ADVANCE_DECK":
       return { ...state, deckIndex: state.deckIndex + 1 };

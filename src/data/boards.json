@@ -1,0 +1,96 @@
+{
+  "boards": [
+    {
+      "id": "brass-and-neon",
+      "title": "Brass and Neon",
+      "note": "The music starts before dinner and the street stays loud.",
+      "chips": ["late nights", "live music", "street food"],
+      "caption": "board / trumpet under a bar sign",
+      "art": { "sky": "#2A1B3D", "accent": "#E8B44A", "motif": "brass" },
+      "tags": {
+        "nightlife": 5,
+        "food": 4,
+        "culture": 4,
+        "activity": 3,
+        "planningStyle": 1
+      }
+    },
+    {
+      "id": "market-mornings",
+      "title": "Market Mornings",
+      "note": "You plan the whole day around what you are going to eat.",
+      "chips": ["markets", "cooking", "old neighborhoods"],
+      "caption": "board / crates of chilies at dawn",
+      "art": { "sky": "#7A2E1E", "accent": "#F2B33D", "motif": "mural" },
+      "tags": {
+        "food": 5,
+        "culture": 4,
+        "activity": 3,
+        "nightlife": 2,
+        "planningStyle": 3
+      }
+    },
+    {
+      "id": "sun-bleached",
+      "title": "Sun-Bleached Coastal",
+      "note": "Water you can get into and a book you might finish.",
+      "chips": ["slow water", "no schedule", "long light"],
+      "caption": "board / white cubes above water",
+      "art": { "sky": "#1E6F8C", "accent": "#F4E3C4", "motif": "waves" },
+      "tags": {
+        "beach": 5,
+        "relaxation": 5,
+        "nature": 3,
+        "activity": 1,
+        "planningStyle": 0
+      }
+    },
+    {
+      "id": "blue-water-fins",
+      "title": "Blue Water, Bring Fins",
+      "note": "The beach is a basecamp, not a bed.",
+      "chips": ["snorkel", "boat days", "salt hair"],
+      "caption": "board / snorkel gear on a boat rail",
+      "art": { "sky": "#0E5A6B", "accent": "#52D1C4", "motif": "ferry" },
+      "tags": {
+        "beach": 4,
+        "activity": 5,
+        "nature": 4,
+        "relaxation": 2,
+        "planningStyle": 2
+      }
+    },
+    {
+      "id": "porch-and-moss",
+      "title": "Porch and Moss",
+      "note": "Slow streets, big trees, nowhere urgent to be.",
+      "chips": ["walkable", "old houses", "long dinners"],
+      "caption": "board / oak branches over a brick lane",
+      "art": { "sky": "#2F4A33", "accent": "#D9C89A", "motif": "oak" },
+      "tags": {
+        "relaxation": 5,
+        "culture": 4,
+        "nature": 3,
+        "food": 3,
+        "activity": 1,
+        "planningStyle": 1
+      }
+    },
+    {
+      "id": "ridge-and-fog",
+      "title": "Ridge and Fog",
+      "note": "Elevation, cold mornings, and a town to come back down to.",
+      "chips": ["trails", "cold air", "one good bar"],
+      "caption": "board / blue ridges stacked in haze",
+      "art": { "sky": "#3B4E63", "accent": "#C7D6C0", "motif": "ridge" },
+      "tags": {
+        "nature": 5,
+        "activity": 4,
+        "relaxation": 3,
+        "food": 3,
+        "culture": 2,
+        "planningStyle": 2
+      }
+    }
+  ]
+}
