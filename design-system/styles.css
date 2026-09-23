@@ -5,11 +5,18 @@
  * and re-run `node design-system/build.mjs`; anything you change here is lost.
  */
 
+/* Work Sans. Also linked from index.html for preconnect, but declared here too:
+   this stylesheet is consumed standalone by the design system, where that
+   <link> does not exist, and a design system that silently falls back to a
+   system font is worse than one that blocks briefly. */
+@import url("https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700&display=swap");
+
 /* ============================================================================
    ROAMANCE — THE DESIGN SURFACE
    ----------------------------------------------------------------------------
    This block is the whole theme. Change a value here and it changes everywhere,
-   because every component uses var(--token) and never a raw hex or px radius.
+   because every component reads its colours and metrics from these variables
+   and never a raw hex or px radius.
 
    If you are the one doing visual design: you should almost never need to open
    a .jsx file. Retheme the app from this block. If something you want to change

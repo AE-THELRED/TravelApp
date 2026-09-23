@@ -25,7 +25,7 @@
  *   as a chip, and read out as the accessible label.
  * @param {string} [props.className]
  */
-export default function Art({ art, caption, className = "" }) {
+export function Art({ art, caption, className = "" }) {
   const { sky = "#2A1B3D", accent = "#E8B44A", motif = "none" } = art ?? {};
   // Pattern ids must be unique per colour pair or two <Art> on one screen share
   // the first one's fill — SVG defs are global to the document.
@@ -58,3 +58,7 @@ export default function Art({ art, caption, className = "" }) {
     </div>
   );
 }
+
+// Named export above is what the design-system bundle re-exports; the default
+// keeps every existing `import Art from` call site working unchanged.
+export default Art;

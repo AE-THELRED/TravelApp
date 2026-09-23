@@ -1,0 +1,20 @@
+{
+  "pkg": "roamance",
+  "globalName": "Roamance",
+  "shape": "package",
+  "srcDir": "src",
+  "cssEntry": "src/index.css",
+  "componentSrcMap": {
+    "Art": "src/components/Art.jsx",
+    "EstimateBadge": "src/components/EstimateBadge.jsx"
+  },
+  "guidelinesGlob": [
+    "docs/THEME.md",
+    "docs/ASSETS.md"
+  ],
+  "dtsPropsFor": {
+    "Art": "  /** Colour and motif record the SVG scene is generated from. */\n  art: {\n    /** Background base colour, hex. */\n    sky?: string;\n    /** Foreground / highlight colour, hex. */\n    accent?: string;\n    /** Which scene to draw. Undrawn motifs fall through to the stripe placeholder. */\n    motif?:\n      | 'brass' | 'mural' | 'rowhouse' | 'skyline' | 'oak'\n      | 'waves' | 'palm' | 'dune' | 'ferry' | 'ridge';\n  };\n  /** Names the photograph this art stands in for. Rendered as a monospace chip\n   *  and used as the SVG's accessible label, so it is required. */\n  caption: string;\n  /** 'art--tall' (3:4) or 'art--wide' (16:9). Omit for the 4:3 default.\n   *  Shape comes from CSS \u2014 Art fills whatever box it is given. */\n  className?: string;",
+    "EstimateBadge": "  /** Label text. Defaults to 'Estimated prototype data'.\n   *  Must stay visible anywhere a price appears \u2014 every price in this app\n   *  is invented, and the badge is what says so. */\n  children?: React.ReactNode;"
+  },
+  "readmeHeader": ".design-sync/conventions.md"
+}
