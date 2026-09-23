@@ -63,7 +63,7 @@ rather than a blank page.
 ## Status
 
 **The prototype runs end to end.** All seven screens are built, and the full
-click path is verified by an automated browser walk (`.ds-sync/smoke.mjs`):
+click path is verified by an automated browser walk ([`scripts/smoke.mjs`](scripts/smoke.mjs)):
 landing → onboarding → vibe → swipe → matches → detail → saved, plus reload
 persistence and reset.
 

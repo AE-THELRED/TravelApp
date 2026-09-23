@@ -73,8 +73,10 @@ Run the walk yourself:
 ```bash
 npm run build
 npm run preview -- --port 4444 &
-cd .ds-sync && APP_URL=http://localhost:4444/ node smoke.mjs
+npm run smoke
 ```
+
+One-time, per machine: `npm i -D playwright && npx playwright install chromium`.
 
 ## What is already built and verified
 
