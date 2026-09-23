@@ -41,9 +41,26 @@ export function loadState() {
   }
 }
 
+/**
+ * True when the user has given us nothing worth remembering. Reset produces
+ * exactly this state, and the persist effect fires immediately afterwards — so
+ * without this check `clearState()` was dead code, silently re-written one
+ * render later.
+ * @param {import("./types.js").AppState} state
+ */
+function isPristine(state) {
+  return (
+    !state.constraints &&
+    !state.picks?.length &&
+    !Object.keys(state.likes ?? {}).length &&
+    !state.savedTrips?.length
+  );
+}
+
 /** @param {import("./types.js").AppState} state */
 export function saveState(state) {
   if (!isBrowser()) return;
+  if (isPristine(state)) return clearState(); // nothing to remember; don't leave a husk
   try {
     window.localStorage.setItem(
       KEY,

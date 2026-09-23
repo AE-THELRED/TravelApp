@@ -2,6 +2,12 @@ import { useEffect, useReducer } from "react";
 import { initialState, tripReducer } from "./state/tripReducer.js";
 import { loadState, saveState, clearState } from "./lib/storage.js";
 import Landing from "./screens/Landing.jsx";
+import Onboarding from "./screens/Onboarding.jsx";
+import VibeBoards from "./screens/VibeBoards.jsx";
+import SwipeRefine from "./screens/SwipeRefine.jsx";
+import Matches from "./screens/Matches.jsx";
+import TripDetail from "./screens/TripDetail.jsx";
+import Saved from "./screens/Saved.jsx";
 
 /**
  * App shell — shared. Both phases register a screen here.
@@ -9,13 +15,12 @@ import Landing from "./screens/Landing.jsx";
  * Owns the single reducer and the two persistence effects. Every screen gets
  * `state` and `dispatch` as props; there is no Context by design.
  *
- * Screens still to build (see docs/WORKFLOW.md for who owns which):
- *   onboarding  Phase A   constraints form — who, how long, what budget
- *   vibe        Phase A   "Your Type" — vibe-board picker
- *   swipe       Phase A   "Find Your Type" — refine on 8 photos
- *   matches     Phase B   ranked deck
- *   detail      Phase B   true-cost card + Hack Stack
- *   saved       Phase B   saved matches and group split
+ * The flow:
+ *   landing → onboarding → vibe → swipe → matches → detail → saved
+ *
+ * Screens that need constraints are gated on them rather than rendered against
+ * a null: a reload straight into /matches with cleared storage would otherwise
+ * divide by a party size that doesn't exist.
  */
 export default function App() {
   const [state, dispatch] = useReducer(tripReducer, initialState);
@@ -37,8 +42,26 @@ export default function App() {
     dispatch({ type: "RESET_ALL" });
   }
 
+  // Hydration reads storage in an effect, i.e. after first paint. Without this
+  // gate a returning user sees the landing screen for one frame before HYDRATE
+  // flips them to their deck — the flash docs/STATE.md warns about.
+  if (!state.hydrated) return <div className="app" />;
+
+  // Every screen past onboarding prices against `constraints`. If it is
+  // missing — cleared storage, or a link straight into the deck — send the
+  // user to collect it rather than rendering a screen full of NaN.
+  const needsConstraints = ["vibe", "swipe", "matches", "detail", "saved"];
+  const screen =
+    needsConstraints.includes(state.screen) && !state.constraints ? "onboarding" : state.screen;
+
   const screens = {
     landing: <Landing dispatch={dispatch} hasVibe={state.picks.length > 0} />,
+    onboarding: <Onboarding state={state} dispatch={dispatch} />,
+    vibe: <VibeBoards state={state} dispatch={dispatch} />,
+    swipe: <SwipeRefine state={state} dispatch={dispatch} />,
+    matches: <Matches state={state} dispatch={dispatch} />,
+    detail: <TripDetail state={state} dispatch={dispatch} />,
+    saved: <Saved state={state} dispatch={dispatch} />,
   };
 
   return (
@@ -63,7 +86,7 @@ export default function App() {
         </div>
       </header>
 
-      {screens[state.screen] ?? <NotBuiltYet screen={state.screen} dispatch={dispatch} />}
+      {screens[screen] ?? <NotBuiltYet screen={screen} dispatch={dispatch} />}
     </div>
   );
 }

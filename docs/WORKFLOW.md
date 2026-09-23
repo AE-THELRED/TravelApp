@@ -62,6 +62,20 @@ the bottom three are the demo.
 7. The ranked deck.
 8. The trip detail with a working Hack Stack and visible tradeoffs.
 
+## The prototype is built
+
+All seven screens exist and the full click path passes an automated browser
+walk. The phase table below is kept as the record of how the work was split,
+and as the map of who owns which files when you change them.
+
+Run the walk yourself:
+
+```bash
+npm run build
+npm run preview -- --port 4444 &
+cd .ds-sync && APP_URL=http://localhost:4444/ node smoke.mjs
+```
+
 ## What is already built and verified
 
 - `scoring.js` — `buildProfileTags`, `buildProfile`, `scoreTrip`, `rankTrips`.

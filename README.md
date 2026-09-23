@@ -62,12 +62,19 @@ rather than a blank page.
 
 ## Status
 
-Built and verified: the scoring engine, the cost engine, bios, persistence, the
-reducer, the app shell, and the landing screen. Ten trips, six vibe boards, and
-eight swipe photos are committed.
+**The prototype runs end to end.** All seven screens are built, and the full
+click path is verified by an automated browser walk (`.ds-sync/smoke.mjs`):
+landing → onboarding → vibe → swipe → matches → detail → saved, plus reload
+persistence and reset.
 
-To build: the six remaining screens. See
-[docs/WORKFLOW.md](docs/WORKFLOW.md) for who owns which.
+What that walk asserts, every run: the deck is exactly ten trips in descending
+match order with no duplicates; two contrasting vibe profiles produce different
+top matches; toggling a hack moves the total and never renders a negative or
+`NaN`; a hack whose requirement is unmet is not offered; reload restores the
+session; reset clears storage and returns to the landing screen.
+
+Remaining work is polish, not structure — see the cut list in
+[docs/WORKFLOW.md](docs/WORKFLOW.md).
 
 ## Documentation
 
