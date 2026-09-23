@@ -399,3 +399,47 @@ button:focus-visible {
     grid-template-columns: 1fr;
   }
 }
+
+/* ---------- generated art ---------- */
+
+/* The image slot for boards, swipe cards, trip cards and the detail hero.
+   Set the shape from the outside with an aspect-ratio utility or a height —
+   <Art> itself is happy to be any size. */
+.art {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+  aspect-ratio: 4 / 3;
+}
+
+.art--tall {
+  aspect-ratio: 3 / 4;
+}
+
+.art--wide {
+  aspect-ratio: 16 / 9;
+}
+
+.art__canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Names the photograph the art stands in for. Doubles as the shot list if this
+   ever gets real photography. */
+.art__caption {
+  position: absolute;
+  left: var(--space-2);
+  bottom: var(--space-2);
+  max-width: calc(100% - var(--space-4));
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  background: color-mix(in oklch, var(--surface) 88%, transparent);
+  color: var(--ink-2);
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}

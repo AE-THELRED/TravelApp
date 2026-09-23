@@ -1,64 +1,101 @@
-# Travel Hacker
+# Roamance
 
-A front-end-only Next.js prototype that turns trip planning into a swipe-based matching experience. Answer a few constraints and a short vibe quiz, then meet ten trip "profiles" with matchmaker-style bios. Each match has a **Hack Stack**: toggleable money-saving strategies that adjust the estimated cost and always show the tradeoff.
+**Stop searching for trips. Meet one.**
 
-> **Stop searching for trips. Meet one.**
+A front-end-only prototype that rebrands mainstream trip booking — Expedia,
+Kayak, Booking — around one argument:
 
-All prices are **estimated prototype data**. There is no booking, no live pricing, and no external API.
+> Booking sites compete on the lowest headline number and hide what it costs
+> you. Roamance shows the saving and the tradeoff in the same breath.
+
+You pick aesthetic **vibe boards**, refine on eight photos, and meet ten
+destination "profiles" ranked against the taste that produces. Each match opens
+a **true-cost card** with a **Hack Stack**: toggleable money-saving strategies
+that move the estimate and always name what they cost you — three flights of
+stairs, a 40-minute shuttle wait, someone on the pull-out couch.
+
+All prices are **estimated prototype data**. No booking, no live pricing, no
+accounts, no external API.
 
 ## Live demo
 
-Production: `<paste Vercel production URL here>`
+Production: `<paste the deployment URL here>`
 
 ## Quick start
 
 ```bash
-git clone <repo-url>
-cd travel-hacker
+git clone https://github.com/AE-THELRED/TravelApp.git
+cd TravelApp
 npm install
-npm run dev        # http://localhost:3000
+npm run dev        # http://localhost:5173
 ```
 
 Before pushing:
 
 ```bash
-npm run build      # must pass
+npm run build && npm run lint
 ```
 
 ## Stack
 
 | Concern | Choice |
 |---|---|
-| Framework | Next.js (App Router), React |
-| Language | TypeScript |
-| Hosting | Vercel (Git-integrated previews) |
-| State | Local `useState` + one Context/`useReducer` store |
-| Persistence | Browser `localStorage`, single versioned key |
-| Data | Committed static `src/data/trips.json` |
-| Assets | Committed images in `public/images/<trip-id>/` |
+| Build | Vite |
+| UI | React 19, plain JavaScript |
+| Types | JSDoc typedefs in `src/lib/types.js` |
+| Routing | None — one `screen` string in the reducer |
+| State | One `useReducer` in `App.jsx`, passed as props |
+| Persistence | `localStorage`, one versioned key |
+| Data | Committed static JSON |
+| Art | Generated SVG — no photography, no image files |
+| Lint | oxlint |
 | Backend | None |
-
-## Documentation
-
-Start with [CLAUDE.md](CLAUDE.md) — it is the entry point for AI coding assistants and for humans.
-
-- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) — system diagram, layers, module boundaries, data flow
-- [docs/NEXTJS.md](docs/NEXTJS.md) — scaffold, file layout, client/server components, routing
-- [docs/VERCEL.md](docs/VERCEL.md) — deployment, preview URLs, build triage, static-export fallback
-- [docs/STATE.md](docs/STATE.md) — state ownership, types, reducer actions, derived values
-- [docs/PERSISTENCE.md](docs/PERSISTENCE.md) — `localStorage` schema, SSR-safe access, reset
-- [docs/ASSETS.md](docs/ASSETS.md) — image sourcing, sizing, `next/image`, placeholders
-- [docs/DATA-SCHEMA.md](docs/DATA-SCHEMA.md) — `trips.json` construction guide
-- [docs/WORKFLOW.md](docs/WORKFLOW.md) — phase ownership, branching, review, integration checklist
 
 ## Screens
 
-`/` landing → `/onboarding` constraints → `/quiz` vibe test → `/matches` swipe deck → `/trip/[id]` detail + Hack Stack → `/saved` comparison
+`landing` → `onboarding` (who, how long, what budget) → `vibe` (board picker) →
+`swipe` (refine on eight photos) → `matches` (ranked deck of ten) → `detail`
+(true cost + Hack Stack) → `saved` (compare)
+
+Screens that are not built yet render a visible `NotBuiltYet` placeholder
+rather than a blank page.
+
+## Status
+
+Built and verified: the scoring engine, the cost engine, bios, persistence, the
+reducer, the app shell, and the landing screen. Ten trips, six vibe boards, and
+eight swipe photos are committed.
+
+To build: the six remaining screens. See
+[docs/WORKFLOW.md](docs/WORKFLOW.md) for who owns which.
+
+## Documentation
+
+Start with [CLAUDE.md](CLAUDE.md) — the entry point for AI coding assistants
+and for humans.
+
+- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) — layers, data flow, module boundaries
+- [docs/DATA-SCHEMA.md](docs/DATA-SCHEMA.md) — building `trips.json`, `boards.json`, `swipes.json`
+- [docs/STATE.md](docs/STATE.md) — state shape, actions, what is derived
+- [docs/PERSISTENCE.md](docs/PERSISTENCE.md) — the `localStorage` contract
+- [docs/VITE.md](docs/VITE.md) — scaffold, imports, conventions, gotchas
+- [docs/ASSETS.md](docs/ASSETS.md) — the generated-SVG art system
+- [docs/THEME.md](docs/THEME.md) — retheme the app from one file
+- [docs/WORKFLOW.md](docs/WORKFLOW.md) — phases, branching, review, integration
+- [docs/VERCEL.md](docs/VERCEL.md) — deployment and build triage
+- [docs/RESEARCH-LOG.md](docs/RESEARCH-LOG.md) — AI-assisted research decisions
+
+## Design
+
+`design/roamance-handoff/` holds the art direction: an interactive prototype,
+the design-system CSS, and screenshots of all five designed screens.
+
+It was authored in parallel with the code, before any source existed, so it
+describes a **different product** — mood-board discovery feeding an end-to-end
+booking flow. Its visual language and its two front screens are adopted; its
+booking flow is not. [CLAUDE.md](CLAUDE.md) explains that split in full.
 
 ## Non-goals
 
-Real bookings, live flight or lodging prices, scraping, accounts, multi-device sync, runtime LLM calls, maps requiring an API key.
-
-## Credits
-
-Third-party image attributions: [`public/images/CREDITS.md`](public/images/CREDITS.md).
+Real bookings, live prices, scraping, accounts, multi-device sync, runtime LLM
+calls, maps requiring an API key.

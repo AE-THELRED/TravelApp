@@ -1,125 +1,100 @@
-# Local Component State
+# State
 
 ## Rule of thumb
 
-- **Local `useState`** for anything one component owns and no one else reads: current quiz question index, whether a drawer is open, hover/drag state on a card, form field values before submit.
-- **Context + `useReducer`** for the four things multiple screens need: `constraints`, `travelerProfile`, `savedTrips`, `deckIndex`.
-- Nothing else is global. Resist adding to the store.
+- **Local `useState`** for anything one component owns and nobody else reads:
+  which swipe card is on top, whether a drawer is open, drag position, form
+  field values before submit.
+- **The reducer** for the six things multiple screens need: `constraints`,
+  `picks`, `likes`, `savedTrips`, `deckIndex`, `screen`.
+- Nothing else is global. Resist adding to it.
 
-`useReducer` returns `[state, dispatch]` and its reducer must be a pure function of `(state, action)` that returns the next state ([React `useReducer`](https://react.dev/reference/react/useReducer)). Keep every reducer case free of `localStorage` writes, `Date.now()`, and random values — persistence happens in an effect, not in the reducer.
+There is **no Context**. One `useReducer` lives in `App.jsx` and `state` and
+`dispatch` are passed down as props. The tree is three levels deep, and for a
+team learning React in parallel, a visible prop beats an invisible provider.
 
-## Types — `src/context/types.ts`
+## Shape — `src/lib/types.js` (`AppState`)
 
-```ts
-export type TagKey =
-  | "food" | "nightlife" | "nature" | "culture" | "beach"
-  | "relaxation" | "activity" | "budgetSensitivity" | "planningStyle";
-
-export interface TripConstraints {
-  departure: string;
-  destinationPref: "specific" | "region" | "surprise";
-  destinationValue?: string;   // set when destinationPref !== "surprise"
-  nights: number;
-  adults: number;
-  children: number;
-  childAges: number[];
-  budgetTier: 1 | 2 | 3;
-}
-
-export interface TravelerProfile {
-  answers: Record<string, string>;      // questionId -> optionId
-  tags: Record<TagKey, number>;         // 0–5 weights derived from answers
-}
-
-export interface SavedTrip {
-  tripId: string;
-  savedAt: number;
-  selectedHackIds: string[];
-}
-
-export interface AppState {
-  constraints: TripConstraints | null;
-  travelerProfile: TravelerProfile | null;
-  savedTrips: SavedTrip[];
-  deckIndex: number;
-  hydrated: boolean;      // false until localStorage has been read
+```js
+{
+  constraints: null,   // TripConstraints | null
+  picks: [],           // string[]  selected vibe-board ids
+  likes: {},           // { [photoId]: boolean }  true = crush, false = pass
+  savedTrips: [],      // SavedTrip[]
+  deckIndex: 0,
+  hydrated: false,     // false until localStorage has been read
+  screen: "landing",   // landing|onboarding|vibe|swipe|matches|detail|saved
+  activeTripId: null,
 }
 ```
 
-## Actions — `src/context/tripReducer.ts`
+Note what is **not** here: the traveler's tag profile. `picks` and `likes` are
+the inputs; the tag vector is derived from them with `buildProfile()` in a
+`useMemo`. Storing it would let a stale profile outlive the answers that
+produced it.
 
-```ts
-export type Action =
-  | { type: "HYDRATE"; payload: Partial<AppState> }
-  | { type: "SET_CONSTRAINTS"; payload: TripConstraints }
-  | { type: "SET_PROFILE"; payload: TravelerProfile }
-  | { type: "ADVANCE_DECK" }
-  | { type: "SAVE_TRIP"; tripId: string }
-  | { type: "UNSAVE_TRIP"; tripId: string }
-  | { type: "TOGGLE_HACK"; tripId: string; hackId: string }
-  | { type: "RESET_ALL" };
-```
+## Actions
 
-Behavior contracts:
+| Action | Payload | Must do |
+|---|---|---|
+| `HYDRATE` | `payload` | Merge persisted values, set `hydrated: true`. Dispatched once, from the effect in `App.jsx`. A returning user with constraints and at least one pick lands on `matches`, not the splash. |
+| `GO` | `screen`, `tripId?` | Navigate. Sets `activeTripId`. |
+| `SET_CONSTRAINTS` | `payload` | Replace wholesale, then go to `vibe`. Does **not** clear `savedTrips` — editing trip length should re-price what you saved, not delete it. |
+| `TOGGLE_BOARD` | `boardId` | Add or remove from `picks`. Resets `deckIndex` — the ranking is about to change. |
+| `SET_LIKE` | `photoId`, `liked` | Record a verdict. `liked: null` deletes the key, which is how undo works. Resets `deckIndex`. |
+| `COMMIT_VIBE` | — | Both vibe screens are done; go to `matches`. |
+| `EDIT_VIBE` | — | Back to `vibe`, keeping picks and likes. |
+| `ADVANCE_DECK` | — | `deckIndex + 1`. |
+| `SAVE_TRIP` | `tripId`, `savedAt` | Idempotent. Also advances the deck, so a right-swipe does exactly one thing. |
+| `UNSAVE_TRIP` | `tripId` | Remove. |
+| `TOGGLE_HACK` | `tripId`, `hackId`, `savedAt` | If the trip is not saved yet, save it first — you cannot hold hack selections for something that is not on your board. Toggle is idempotent per id. |
+| `RESET_ALL` | — | Return to the initial state with `hydrated: true`. Clearing storage happens in `App.jsx`, not here. |
 
-| Action | Must do |
-|---|---|
-| `HYDRATE` | Merge persisted values, set `hydrated: true`. Only dispatched once, from `TripProvider`. |
-| `SET_CONSTRAINTS` | Replace wholesale. Does not clear `savedTrips`. |
-| `SET_PROFILE` | Replace wholesale and reset `deckIndex` to `0`. |
-| `SAVE_TRIP` | No-op if `tripId` already saved. Also advances the deck. |
-| `TOGGLE_HACK` | If the trip is not saved yet, save it first, then toggle. Toggle is idempotent per id. |
-| `RESET_ALL` | Return the initial state and clear storage (the clearing happens in the persistence effect, keyed on the state change). |
+The reducer is a pure function of `(state, action)`. **No `localStorage` writes,
+no `Date.now()`, no randomness.** Anything time-based is carried in on the
+action — that is why `SAVE_TRIP` takes `savedAt`.
 
-## Provider shape — `src/context/TripProvider.tsx`
+## Selectors
 
-```tsx
-"use client";
-const TripContext = createContext<{ state: AppState; dispatch: Dispatch<Action> } | null>(null);
+```js
+import { selectedHackIds, isSaved } from "../state/tripReducer.js";
 
-export function TripProvider({ children }: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(tripReducer, initialState);
-
-  useEffect(() => {                       // hydrate once, client-side only
-    dispatch({ type: "HYDRATE", payload: loadState() });
-  }, []);
-
-  useEffect(() => {                       // persist on change, after hydration
-    if (!state.hydrated) return;
-    saveState(state);
-  }, [state]);
-
-  return <TripContext.Provider value={{ state, dispatch }}>{children}</TripContext.Provider>;
-}
-
-export function useTrip() {
-  const ctx = useContext(TripContext);
-  if (!ctx) throw new Error("useTrip must be used inside <TripProvider>");
-  return ctx;
-}
+selectedHackIds(state, tripId)  // string[], empty if not saved
+isSaved(state, tripId)          // boolean
 ```
 
 ## Derived values — never stored
 
-Compute these with `useMemo` in the screen that renders them:
+Compute in the screen that renders them:
 
-```ts
+```js
+const profile = useMemo(
+  () => buildProfile(state.picks, state.likes, state.constraints),
+  [state.picks, state.likes, state.constraints],
+);
+
 const ranked = useMemo(
-  () => rankTrips(trips, profile, constraints),
-  [profile, constraints]
+  () => rankTrips(trips, profile, state.constraints),
+  [profile, state.constraints],
 );
 
 const cost = useMemo(
-  () => applyHacks(trip, constraints, selectedHackIds),
-  [trip, constraints, selectedHackIds]
+  () => applyHacks(trip, state.constraints, enabledIds),
+  [trip, state.constraints, enabledIds],
 );
 ```
 
-Match scores, bios, base totals, hacked totals, savings, and tradeoff lists are all derived. If you find yourself putting one in the reducer, stop.
+Match scores, bios, base totals, hacked totals, savings, and tradeoff lists are
+all derived. If you find yourself putting one in the reducer, stop.
 
-## Common pitfalls in this project
+## Common pitfalls here
 
-- Rendering saved trips before `hydrated` is `true` causes a flash of an empty list. Gate on `state.hydrated`.
-- Mutating `state.savedTrips` with `push` instead of returning a new array — React will not re-render. Always spread.
-- Putting the quiz's current question index in Context. It is local to `<Quiz />`.
-- Recomputing `rankTrips` on every keystroke because `constraints` is rebuilt as a new object each render. Only dispatch on submit.
+- Rendering saved trips before `hydrated` is `true` flashes an empty list. Gate
+  on `state.hydrated`.
+- Mutating `state.savedTrips` with `push` instead of returning a new array —
+  React will not re-render. Always spread.
+- Putting the current swipe index in the reducer. It is local to `SwipeRefine`.
+- Rebuilding `constraints` as a fresh object every render, which invalidates
+  every `useMemo` downstream. Only dispatch on submit.
+- Reading `state.picks.length` to decide whether the vibe step is done, when
+  what you want is `hasVibe(state.picks)` from `scoring.js`.

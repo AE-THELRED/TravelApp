@@ -1,92 +1,101 @@
 # Assets
 
-## Policy
+## Policy: there are no image files
 
-All imagery is **committed to the repository** under `public/images/`. No image APIs, no hotlinking, no key-based providers, no deprecated "random photo" URL services. Every file must be something the team has a clear right to use.
+Every image slot in Roamance is **drawn in SVG from a small data object**, not
+photographed. No `public/images/`, no licence tracking, no compression step, no
+404s in the demo, and no 15 MB of binaries in a repo three people are merging
+into in the same hour.
 
-Acceptable sources:
-- Photos the team took.
-- Explicitly open-licensed / public-domain photos (for example CC0 or CC BY, with attribution recorded when the license requires it).
-- Generated images the team produced themselves.
+This also matches the design handoff, which ships diagonal-stripe placeholders
+with captions naming what belongs in each slot rather than real photography.
 
-Record every third-party image in `public/images/CREDITS.md` with filename, source URL, author, and license. Do this as you add files, not the night before the demo.
+## The `art` object
 
-## Folder convention
+Boards, swipe photos, and trips all carry the same shape:
 
-```text
-public/
-  images/
-    CREDITS.md
-    placeholder.jpg           # 1600x1200 neutral fallback
-    new-orleans/1.jpg 2.jpg 3.jpg
-    mexico-city/1.jpg 2.jpg 3.jpg
-    ...
+```json
+"art": { "sky": "#2A1B3D", "accent": "#E8B44A", "motif": "brass" }
 ```
 
-- Folder name **must equal the trip `id`** in `trips.json`. This is the integration contract; it lets anyone add a trip without touching component code.
-- 2–3 photos per trip. The first is the card hero.
-- Paths in `trips.json` are absolute from `public/`: `"/images/new-orleans/1.jpg"`.
-- Filenames lowercase, no spaces. Vercel paths are case-sensitive even when macOS is not.
+| Field | Meaning |
+|---|---|
+| `sky` | Background base colour, hex. |
+| `accent` | Foreground / highlight colour, hex. |
+| `motif` | Which scene to draw. |
 
-## Sizing and budget
+## The component
 
-| Use | Target dimensions | Format | Max size |
-|---|---|---|---|
-| Card hero | 1200 × 900 | `.webp` (fallback `.jpg`) | 250 KB |
-| Detail gallery | 1600 × 1200 | `.webp` / `.jpg` | 400 KB |
-| Icons / logos | inline SVG in `src/components` | SVG | — |
+```jsx
+import Art from "../components/Art.jsx";
 
-Keep the whole `public/images` folder under roughly 15 MB. Compress before committing:
-
-```bash
-# one-time
-brew install imagemagick
-# resize + convert every jpg in a folder
-mogrify -resize 1600x1200\> -quality 82 -format webp public/images/new-orleans/*.jpg
+<Art art={trip.art} caption={board.caption} className="art--wide" />
 ```
 
-## Using `next/image`
+| Prop | Notes |
+|---|---|
+| `art` | The object above. |
+| `caption` | Names the photograph this stands in for. Rendered as a monospace chip and used as the SVG's accessible label. |
+| `className` | `art--tall` (3:4), `art--wide` (16:9), or nothing for the 4:3 default. |
 
-`next/image` extends `<img>` with automatic optimization; `src` and `alt` are required, and `width`/`height` must be set together unless the image is statically imported or you use `fill` ([Next.js Image component](https://nextjs.org/docs/app/api-reference/components/image)).
+Shape comes from CSS, not from the component — `<Art>` fills whatever box you
+put it in.
 
-```tsx
-import Image from "next/image";
+## Current state: a stub
 
-<div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
-  <Image
-    src={trip.photos[0]}
-    alt={`${trip.city}, ${trip.country}`}
-    fill
-    sizes="(max-width: 640px) 100vw, 400px"
-    priority={isTopCard}
-    className="object-cover"
-  />
-</div>
-```
+`src/components/Art.jsx` renders the stripe placeholder for **every** motif.
+That is intentional. It means Phase B can build and lay out trip cards before
+Phase A has drawn anything.
 
-Rules:
-- `fill` needs a parent with `position: relative` and a defined height or aspect ratio, or the image collapses.
-- Always give a real `alt` describing the destination. `alt=""` only for purely decorative images.
-- `priority` on the top deck card and the detail hero only — not on every card, or you defeat lazy loading.
-- If you switch to static export for GitHub Pages, set `images: { unoptimized: true }` in `next.config.js` ([static exports](https://nextjs.org/docs/app/guides/static-exports)).
+**Phase A owns replacing the internals.** Two rules:
 
-## Missing-image handling
+1. **Do not change the props.** Three screens already call it.
+2. **Keep the stripe fallback.** Any motif you have not drawn yet should fall
+   through to it, so the app is never broken — only progressively less
+   abstract. Draw them one at a time and merge as you go.
 
-Never let a broken image reach the demo. Resolve photos through a helper:
+## Motifs
 
-```ts
-// src/lib/photos.ts
-export const PLACEHOLDER = "/images/placeholder.jpg";
+Ten, spanning trips, boards, and swipe photos:
 
-export function tripPhotos(trip: Trip): string[] {
-  return trip.photos?.length ? trip.photos : [PLACEHOLDER];
-}
-```
+| Motif | Depicts | Used by |
+|---|---|---|
+| `brass` | Horns and a bar sign at night | New Orleans, Brass and Neon board |
+| `mural` | Painted wall, market awnings | Mexico City, Market Mornings board |
+| `rowhouse` | Stacked facades and stairs | Montreal, gallery photo |
+| `skyline` | Towers against a flat sky | Chicago, rooftop photo |
+| `oak` | Branches and hanging moss | Savannah, Porch and Moss board |
+| `waves` | Flat water in horizontal bands | Sun-Bleached Coastal board |
+| `palm` | Fronds over a low horizon | Tulum, hammock photo |
+| `dune` | Sand ridges and grass | Gulf Shores, empty-sand photo |
+| `ferry` | A wake and a rail | San Juan, Isla Mujeres, Blue Water board |
+| `ridge` | Stacked ranges in haze | Asheville, Ridge and Fog board |
 
-Use `tripPhotos(trip)` everywhere instead of `trip.photos` directly. This lets teammates add trip data before their photos exist and keeps parallel work unblocked.
+Keep them **abstract and flat** — shapes, bands, silhouettes. They read at
+120px on a card. A detailed illustration will not, and will cost an hour each.
 
-## Fonts and other static files
+## Drawing guidance
 
-- Load fonts via `next/font` (self-hosted at build time, no external request), not a CDN `<link>`.
-- No video files in the repo.
-- If a static map image is wanted on the trip detail, use a committed illustrative image and label it decorative — do not call a maps API.
+- Use the `viewBox="0 0 400 300"` coordinate space already in the stub, with
+  `preserveAspectRatio="xMidYMid slice"`, so one drawing works in all three
+  aspect ratios.
+- Compose from `sky` and `accent` plus opacity. Do not hard-code a third
+  colour, or a retheme will miss it.
+- Give every `<pattern>` or `<linearGradient>` a **unique id that includes the
+  motif and colours**. SVG defs are global to the document — two `<Art>` on one
+  screen with the same id will both render the first one's fill. The stub shows
+  the pattern to follow.
+- Decorative inner shapes need no `aria` attributes; the wrapper `<svg>`
+  already carries `role="img"` and the caption as its label.
+
+## Fonts
+
+Work Sans, loaded from Google Fonts in `index.html`, with a real system
+fallback stack in `--font`. If the class wifi drops the webfont the app still
+reads — check that the fallback is not obviously broken before demoing.
+
+## If someone insists on real photography
+
+They shouldn't, for this prototype. If it happens anyway: it changes the data
+schema, `Art.jsx`, `ASSETS.md`, and the licence story all at once, so it is a
+team decision made before anyone branches — not a thing to slip into a PR.

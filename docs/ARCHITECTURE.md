@@ -1,93 +1,126 @@
 # System Architecture
 
-## One-sentence summary
+## One sentence
 
-A statically rendered Next.js single-page-feeling app that reads one committed JSON dataset, scores it against quiz answers in pure client-side functions, and stores user choices in `localStorage`.
+A Vite + React single-page app that reads three committed JSON files, scores
+them against a tag profile derived from vibe-board picks and swipe verdicts in
+pure functions, and keeps the user's inputs in `localStorage`.
 
 ## Diagram
 
 ```text
-                        ┌──────────────────────────────┐
-                        │  Browser (only runtime)      │
-                        │                              │
-  ┌──────────────┐      │  ┌────────────────────────┐  │
-  │ trips.json   │─────▶│  │ TripProvider (Context) │  │
-  │ (committed)  │      │  │  constraints           │  │
-  └──────────────┘      │  │  travelerProfile       │  │
-                        │  │  savedTrips            │  │
-  ┌──────────────┐      │  │  deckIndex             │  │
-  │ /public/     │─────▶│  └───────┬────────────────┘  │
-  │ images       │      │          │                    │
-  └──────────────┘      │  ┌───────▼────────────────┐  │
-                        │  │ Screens                │  │
-                        │  │  Landing               │  │
-                        │  │  Onboarding            │  │
-                        │  │  Quiz                  │  │
-                        │  │  Matches (swipe deck)  │  │
-                        │  │  TripDetail + HackStack│  │
-                        │  │  Saved                 │  │
-                        │  └───────┬────────────────┘  │
-                        │          │                    │
-                        │  ┌───────▼────────────────┐  │
-                        │  │ lib/ pure functions    │  │
-                        │  │  scoreTrip()           │  │
-                        │  │  rankTrips()           │  │
-                        │  │  buildBio()            │  │
-                        │  │  applyHacks()          │  │
-                        │  └───────┬────────────────┘  │
-                        │          │                    │
-                        │  ┌───────▼────────────────┐  │
-                        │  │ localStorage adapter   │  │
-                        │  └────────────────────────┘  │
-                        └──────────────────────────────┘
+                    ┌─────────────────────────────────────────┐
+                    │  Browser — the only runtime             │
+                    │                                         │
+ ┌────────────────┐ │  ┌───────────────────────────────────┐  │
+ │ src/data/      │ │  │ App.jsx                           │  │
+ │  trips.json    │─┼─▶│  useReducer(tripReducer)          │  │
+ │  boards.json   │ │  │   constraints                     │  │
+ │  swipes.json   │ │  │   picks[]   likes{}   ← INPUTS    │  │
+ └────────────────┘ │  │   savedTrips  deckIndex  screen   │  │
+                    │  └──────────────┬────────────────────┘  │
+                    │       state + dispatch as PROPS         │
+                    │                 │                        │
+                    │  ┌──────────────▼────────────────────┐  │
+                    │  │ screens/                          │  │
+                    │  │  Landing → Onboarding → VibeBoards│  │
+                    │  │  → SwipeRefine → Matches          │  │
+                    │  │  → TripDetail → Saved             │  │
+                    │  └──────────────┬────────────────────┘  │
+                    │        useMemo( … ) — DERIVED           │
+                    │                 │                        │
+                    │  ┌──────────────▼────────────────────┐  │
+                    │  │ lib/ — pure, no React, no window  │  │
+                    │  │  buildProfile()  rankTrips()      │  │
+                    │  │  applyHacks()    buildMatchLine() │  │
+                    │  └──────────────┬────────────────────┘  │
+                    │                 │                        │
+                    │  ┌──────────────▼────────────────────┐  │
+                    │  │ lib/storage.js — the only module  │  │
+                    │  │ that touches localStorage         │  │
+                    │  └───────────────────────────────────┘  │
+                    └─────────────────────────────────────────┘
                                       │
                                       ▼
-                        Vercel static/edge hosting (no server logic)
+                       Static hosting. No server logic at all.
 ```
 
-## Layers and responsibilities
+## Layers
 
-### 1. Data layer — `src/data/`
-- `trips.json` — array of Trip objects (see [DATA-SCHEMA.md](DATA-SCHEMA.md)).
-- `quiz.json` — questions, answer options, and the tag weights each answer contributes.
-- Imported statically (`import trips from "@/data/trips.json"`). No fetching.
-- **Nobody mutates this data at runtime.** Treat it as read-only.
+### 1. Data — `src/data/`
 
-### 2. Logic layer — `src/lib/`
-All pure, dependency-free, unit-testable functions. This is the only place scoring or cost math lives.
+| File | Holds |
+|---|---|
+| `trips.json` | 10 `Trip` objects: tags, itemised `cost`, `assumptions`, `tripBio`, 3–4 `hacks`. |
+| `boards.json` | 6 `VibeBoard` objects — the coarse aesthetic signal. |
+| `swipes.json` | 8 `SwipePhoto` objects — the refinement signal. |
 
-| File | Exports | Contract |
+Imported statically (`import trips from "../data/trips.json"`). Vite bundles
+JSON imports directly; there is no fetch. **Nobody mutates this at runtime.**
+
+### 2. Logic — `src/lib/`
+
+Pure, dependency-free, no React import, no `window` (except `storage.js`).
+
+| File | Key exports | Contract |
 |---|---|---|
-| `scoring.js` | `scoreTrip(profile, trip, constraints)` → `0–100` | Deterministic. Same inputs always give the same score. |
-| `scoring.js` | `rankTrips(trips, profile, constraints)` → sorted array of `{ trip, matchScore, reasons }` | `reasons` is an array of short strings used for the "why you match" copy. |
-| `bio.js` | `buildBio(trip, profile)` → string | Assembles a bio from `trip.tripBio` plus template fragments keyed on top matching tags. No LLM. |
-| `cost.js` | `applyHacks(trip, constraints, enabledHackIds)` → `{ baseTotal, hackedTotal, perPerson, savings, tradeoffs[] }` | Never returns a negative total; clamp at a floor. |
-| `storage.js` | `loadState()`, `saveState(partial)`, `clearState()` | The only module that touches `localStorage`. |
+| `scoring.js` | `buildProfileTags(picks, likes, constraints)`, `buildProfile(…)`, `scoreTrip(profile, trip, constraints)`, `rankTrips(trips, profile, constraints)` | Deterministic. Boards weight +2, a crush +1.5, a pass −1, then normalised so the strongest dimension reads 5. Ranking is vibe-first — savings never enter it. |
+| `cost.js` | `baseCost`, `availableHacks`, `applyHacks`, `basePerPerson`, `bestPerPerson`, `money` | Itemised group totals. Lodging is a whole-unit nightly rate divided by travellers — that is what makes group-splitting visible. Never returns a total below the floor. |
+| `bio.js` | `buildMatchLine`, `reasonChips` | Assembled from pre-authored fragments. No LLM. |
+| `storage.js` | `loadState`, `saveState`, `clearState` | One versioned key. Every access wrapped in try/catch. |
 
-### 3. State layer — `src/context/`
-One React Context + `useReducer` store. See [STATE.md](STATE.md).
+### 3. State — `src/state/tripReducer.js`
 
-### 4. View layer — `src/components/` and `src/app/`
-Presentational components receive data via props from screen-level components. Screens read from Context. No component calls `localStorage` or `scoreTrip` directly except its owning screen.
+One `useReducer` in `App.jsx`. `state` and `dispatch` go down as props.
+
+**No Context, deliberately.** The tree is three levels deep; for a team working
+in parallel and learning React at the same time, prop-drilling is easier to
+follow than a provider, and it makes every data dependency visible in the JSX.
+
+See [STATE.md](STATE.md).
+
+### 4. View — `src/screens/` and `src/components/`
+
+Screens own their own local `useState` and call into `lib/` inside a `useMemo`.
+Components are presentational and take props.
 
 ## Data flow, end to end
 
-1. `Onboarding` collects `TripConstraints` → `dispatch({ type: "SET_CONSTRAINTS" })` → reducer updates state → effect writes to `localStorage`.
-2. `Quiz` collects answers → maps through `quiz.json` weights → `dispatch({ type: "SET_PROFILE" })`.
-3. `Matches` calls `rankTrips(trips, profile, constraints)` inside a `useMemo` and renders the top 10 as a card stack.
-4. Swipe right → `dispatch({ type: "SAVE_TRIP", tripId })`. Swipe left → `dispatch({ type: "ADVANCE_DECK" })`.
-5. `TripDetail` calls `applyHacks(...)` on every toggle and renders base vs. hacked cost, savings, and the accumulated tradeoff list.
-6. `Saved` reads `savedTrips` and re-derives costs with `applyHacks` so nothing stale is stored.
+1. `Onboarding` collects `TripConstraints` → `SET_CONSTRAINTS` → screen becomes
+   `vibe`.
+2. `VibeBoards` toggles board ids → `TOGGLE_BOARD`.
+3. `SwipeRefine` records verdicts → `SET_LIKE`, then `COMMIT_VIBE`.
+4. `Matches` computes `buildProfile(picks, likes, constraints)` and
+   `rankTrips(trips, profile, constraints)` in a `useMemo` and renders the deck.
+5. Save → `SAVE_TRIP` (idempotent, and advances the deck). Pass → `ADVANCE_DECK`.
+6. `TripDetail` calls `applyHacks(trip, constraints, enabledIds)` on every
+   toggle and renders base vs. hacked cost, the savings, and one tradeoff line
+   per enabled hack.
+7. `Saved` re-derives every cost with `applyHacks` so nothing stale is shown.
+8. An effect in `App.jsx` writes state to `localStorage` after every change,
+   but never before hydration.
 
-**Rule: store inputs, derive outputs.** Persist quiz answers, constraints, saved trip IDs, and enabled hack IDs. Never persist computed scores or totals — recompute them.
+## The rule
 
-## Module boundary rules for Claude Code
+**Store inputs, derive outputs.**
 
-- A component may import from `lib/` and `context/`. `lib/` may not import from `components/` or `context/`.
+| Persisted | Derived every render |
+|---|---|
+| `constraints` | tag profile |
+| `picks`, `likes` | match scores and ordering |
+| `savedTrips[].tripId` | bios and reason chips |
+| `savedTrips[].selectedHackIds` | base totals, hacked totals, savings, tradeoffs |
+
+## Module boundary rules
+
+- A screen may import from `lib/`, `state/`, `components/`, `data/`.
+- `lib/` may not import from `components/`, `screens/`, or `state/`.
 - Only `lib/storage.js` references `window`.
-- Only `context/TripProvider` owns the reducer. Screens dispatch; they do not mutate.
-- New data fields go in `trips.json` and `DATA-SCHEMA.md` together, in the same commit.
+- Only `App.jsx` owns the reducer. Screens dispatch; they never mutate state.
+- A new data field changes the JSON, `types.js`, and `DATA-SCHEMA.md` in one
+  commit.
 
-## Explicit non-goals
+## Non-goals
 
-Real booking or checkout, live flight/hotel pricing, scraping, user accounts, multi-device sync, server-side rendering of personalized content, maps requiring an API key, analytics, i18n.
+Real booking or checkout, live pricing, scraping, accounts, multi-device sync,
+server-side rendering, maps requiring an API key, analytics, i18n.
