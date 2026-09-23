@@ -91,8 +91,6 @@ const nums = [parseInt(featured), ...scores.map((s) => parseInt(s))];
 check(nums.every((n, i) => i === 0 || nums[i - 1] >= n), `scores descend: ${nums.join(" ")}`);
 const cities = await p.locator(".mini strong").allInnerTexts();
 check(new Set(cities).size === cities.length, "no duplicate trips in the deck");
-const beachTop = (await txt()).match(/([A-Z][a-z]+(?: [A-Z][a-z]+)*)\n/);
-const firstDeck = nums[0];
 
 console.log("\n— true cost + hack stack —");
 await p.getByRole("button", { name: /see the real cost/i }).click();
