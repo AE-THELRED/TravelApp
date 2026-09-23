@@ -1,51 +1,98 @@
-/* Roamance — design tokens and base styles.
-   Owned by Person 4. Components use var(--token), never raw hex, so the whole
-   app can be re-themed from this block. */
+/* ============================================================================
+   ROAMANCE — THE DESIGN SURFACE
+   ----------------------------------------------------------------------------
+   This block is the whole theme. Change a value here and it changes everywhere,
+   because every component uses var(--token) and never a raw hex or px radius.
+
+   If you are the one doing visual design: you should almost never need to open
+   a .jsx file. Retheme the app from this block. If something you want to change
+   is NOT a token here, that is a bug in this file — add the token, then use it.
+
+   Values come from design/roamance-handoff/ (modernist.css plus the override
+   block in Likeness.dc.html), which is the art-direction source of truth.
+   See docs/THEME.md for what each group does and how to preview a change.
+   ============================================================================ */
 
 :root {
-  /* Warm paper ground, ink text, coral for the romance half of the name,
-     deep teal for the roam half. */
-  --bg: #fbf7f2;
+  /* --- Accents -------------------------------------------------------------
+     Coral is the "romance" half of the name, teal the "roam" half. Gold is a
+     third voice used only for the estimate/honesty badges, so money-related
+     copy never wears the same colour as a call to action. */
+  --coral: oklch(64% 0.19 35);
+  --coral-soft: oklch(97% 0.02 35);
+  --coral-deep: oklch(45% 0.16 35);
+  --teal: oklch(60% 0.13 190);
+  --teal-soft: oklch(96% 0.02 190);
+  --gold: oklch(72% 0.13 75);
+  --gold-soft: oklch(96% 0.03 75);
+
+  /* --- Ground and ink ------------------------------------------------------ */
+  --bg: #f4f1ee;
   --surface: #ffffff;
-  --surface-2: #f4ede4;
-  --ink: #1d1a17;
-  --ink-2: #5d564e;
-  --ink-3: #8d8479;
-  --line: #e6ddd2;
+  --surface-2: #ece7e1;
+  --ink: #201e1d;
+  --ink-2: #57514c;
+  --ink-3: #8a827b;
+  --line: color-mix(in oklch, var(--coral) 14%, #d8d1c9);
 
-  --coral: #e0574c;
-  --coral-soft: #fdeceb;
-  --teal: #10646b;
-  --teal-soft: #e3f1f1;
-  --gold: #b8802a;
-  --gold-soft: #faf0dd;
-
-  --radius: 18px;
+  /* --- Radius --------------------------------------------------------------
+     Chips and inputs take sm, cards md, hero/photo surfaces lg. */
+  --radius-sm: 10px;
+  --radius-md: 16px;
   --radius-lg: 26px;
-  --shadow-card: 0 1px 2px rgba(29, 26, 23, 0.06), 0 12px 32px rgba(29, 26, 23, 0.1);
-  --shadow-lift: 0 2px 4px rgba(29, 26, 23, 0.08), 0 24px 56px rgba(29, 26, 23, 0.16);
+  --radius: var(--radius-md);
 
-  --font: ui-sans-serif, -apple-system, "Segoe UI", Inter, Helvetica, Arial, sans-serif;
+  /* --- Spacing -------------------------------------------------------------
+     Use these instead of typing px in a component. 4px scale. */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 28px;
+  --space-8: 32px;
+
+  /* --- Shadows -------------------------------------------------------------
+     Accent-tinted rather than neutral grey, so cards sit on the warm ground
+     instead of floating above a different, cooler one. */
+  --shadow-sm: 0 1px 2px color-mix(in oklch, var(--coral) 14%, transparent);
+  --shadow-md:
+    0 1px 2px color-mix(in oklch, var(--coral) 12%, transparent),
+    0 12px 32px color-mix(in oklch, var(--coral) 16%, transparent);
+  --shadow-lg:
+    0 2px 4px color-mix(in oklch, var(--coral) 14%, transparent),
+    0 24px 56px color-mix(in oklch, var(--coral) 22%, transparent);
+  --shadow-card: var(--shadow-md);
+  --shadow-lift: var(--shadow-lg);
+
+  /* --- Type ----------------------------------------------------------------
+     Work Sans is loaded in index.html. The fallback stack is real, not
+     decorative — if the class wifi drops the webfont the app still reads. */
+  --font: "Work Sans", ui-sans-serif, -apple-system, "Segoe UI", Inter, Helvetica, Arial, sans-serif;
+  --font-heading: var(--font);
+  --font-heading-weight: 700;
 
   color-scheme: light;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
+    --coral: oklch(72% 0.16 35);
+    --coral-soft: oklch(30% 0.08 35);
+    --coral-deep: oklch(85% 0.10 35);
+    --teal: oklch(74% 0.11 190);
+    --teal-soft: oklch(28% 0.05 190);
+    --gold: oklch(80% 0.11 75);
+    --gold-soft: oklch(30% 0.06 75);
+
     --bg: #15120f;
     --surface: #211d19;
     --surface-2: #2b251f;
     --ink: #f6f1ea;
     --ink-2: #c3b9ac;
     --ink-3: #8f8578;
-    --line: #372f27;
-
-    --coral: #f47a6d;
-    --coral-soft: #3a211d;
-    --teal: #6fc5c8;
-    --teal-soft: #14312f;
-    --gold: #e0ad5c;
-    --gold-soft: #33260f;
+    --line: color-mix(in oklch, var(--coral) 18%, #372f27);
 
     color-scheme: dark;
   }
@@ -77,7 +124,8 @@ h3 {
   margin: 0;
   line-height: 1.15;
   letter-spacing: -0.02em;
-  font-weight: 650;
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
 }
 
 p {
