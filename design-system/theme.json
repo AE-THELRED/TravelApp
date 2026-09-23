@@ -1,0 +1,53 @@
+{
+  "name": "Roamance",
+  "description": "Warm paper ground, coral for action, teal for focus, gold for money. Soft radii and accent-tinted shadows.",
+  "generatedFrom": "src/index.css",
+  "fonts": {
+    "heading": "Work Sans",
+    "body": "Work Sans"
+  },
+  "colors": {
+    "--coral": "oklch(64% 0.19 35)",
+    "--coral-soft": "oklch(97% 0.02 35)",
+    "--coral-deep": "oklch(45% 0.16 35)",
+    "--coral-hover": "oklch(56% 0.19 35)",
+    "--on-accent": "#ffffff",
+    "--teal": "oklch(60% 0.13 190)",
+    "--teal-soft": "oklch(96% 0.02 190)",
+    "--gold": "oklch(72% 0.13 75)",
+    "--gold-soft": "oklch(96% 0.03 75)",
+    "--bg": "#f4f1ee",
+    "--surface": "#ffffff",
+    "--surface-2": "#ece7e1",
+    "--ink": "#201e1d",
+    "--ink-2": "#57514c",
+    "--ink-3": "#8a827b",
+    "--line": "color-mix(in oklch, var(--coral) 14%, #d8d1c9)"
+  },
+  "space": {
+    "--space-1": "4px",
+    "--space-2": "8px",
+    "--space-3": "12px",
+    "--space-4": "16px",
+    "--space-5": "20px",
+    "--space-6": "24px",
+    "--space-7": "28px",
+    "--space-8": "32px"
+  },
+  "radius": {
+    "--radius-sm": "10px",
+    "--radius-md": "16px",
+    "--radius-lg": "26px",
+    "--radius": "var(--radius-md)"
+  },
+  "shadow": {
+    "--shadow-sm": "0 1px 2px color-mix(in oklch, var(--coral) 14%, transparent)",
+    "--shadow-card": "var(--shadow-md)",
+    "--shadow-lift": "var(--shadow-lg)"
+  },
+  "type": {
+    "--font": "\"Work Sans\", ui-sans-serif, -apple-system, \"Segoe UI\", Inter, Helvetica, Arial, sans-serif",
+    "--font-heading": "var(--font)",
+    "--font-heading-weight": "700"
+  }
+}

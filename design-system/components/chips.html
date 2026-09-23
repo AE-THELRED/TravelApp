@@ -1,0 +1,57 @@
+<!-- @dsCard group="Components" name="Chips & the estimate badge" subtitle="Match score, reason chips, risk chips, and the label that must appear beside every price" viewport="640x400" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chips & badges — Roamance</title>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { padding: 24px; }
+  .ds-row { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; }
+  .ds-stack { display: flex; flex-direction: column; gap: var(--space-5); }
+  .ds-label { font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); font-weight: 600; }
+  .ds-note { font-size: 12.5px; color: var(--ink-2); max-width: 62ch; }
+</style>
+</head>
+<body>
+<div class="ds-stack">
+  <div>
+    <h2 style="font-size:20px">Chips &amp; the estimate badge</h2>
+    <p class="ds-note">Three chip roles. Neutral chips carry match reasons. The coral chip is the match score
+    and appears once per card. Gold chips carry a hack's <em>risk</em> — the short label for what a saving
+    costs you.</p>
+  </div>
+  <div>
+    <div class="ds-label">Reason chips</div>
+    <div class="ds-row" style="margin-top:8px">
+      <span class="chip">food-forward</span>
+      <span class="chip">stays up late</span>
+      <span class="chip">built for 3–4 nights</span>
+    </div>
+  </div>
+  <div>
+    <div class="ds-label">Match score</div>
+    <div class="ds-row" style="margin-top:8px">
+      <span class="chip chip--match">97%</span>
+      <span class="chip chip--match">84%</span>
+      <span class="chip chip--match">62%</span>
+    </div>
+  </div>
+  <div>
+    <div class="ds-label">Risk</div>
+    <div class="ds-row" style="margin-top:8px">
+      <span class="chip chip--risk">carry-on only</span>
+      <span class="chip chip--risk">adds transit time</span>
+      <span class="chip chip--risk">needs 3+ travelers</span>
+    </div>
+  </div>
+  <div>
+    <div class="ds-label">Estimate badge — required wherever a price appears</div>
+    <div style="margin-top:8px">
+      <span class="estimate-badge">Estimated prototype data. No booking, no live pricing.</span>
+    </div>
+  </div>
+</div>
+</body>
+</html>

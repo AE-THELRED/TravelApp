@@ -1,7 +1,7 @@
 import EstimateBadge from "../components/EstimateBadge.jsx";
 
 /**
- * Landing — Phase C.
+ * Landing — shared.
  * Sets the premise in one line, then gets out of the way.
  */
 export default function Landing({ dispatch, hasVibe }) {

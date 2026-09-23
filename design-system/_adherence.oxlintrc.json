@@ -1,0 +1,62 @@
+{
+  "plugins": [
+    "react",
+    "import"
+  ],
+  "rules": {
+    "no-restricted-syntax": [
+      "warn",
+      {
+        "selector": "Literal[value=/#[0-9a-fA-F]{3,8}\\b/]",
+        "message": "Raw hex colour — use a Roamance colour token via var(). See docs/THEME.md."
+      },
+      {
+        "selector": "Literal[value=/\\b\\d+px\\b/]",
+        "message": "Raw px value — use a --space-* or --radius-* token via var()."
+      },
+      {
+        "selector": "Literal[value=/font-family\\s*:\\s*(?!['\"]?(?:Work Sans))/i]",
+        "message": "Font not provided by the design system. Available: Work Sans."
+      }
+    ]
+  },
+  "x-omelette": {
+    "components": {},
+    "tokens": [
+      "--bg",
+      "--coral",
+      "--coral-deep",
+      "--coral-hover",
+      "--coral-soft",
+      "--font",
+      "--font-heading",
+      "--font-heading-weight",
+      "--gold",
+      "--gold-soft",
+      "--ink",
+      "--ink-2",
+      "--ink-3",
+      "--line",
+      "--on-accent",
+      "--radius",
+      "--radius-lg",
+      "--radius-md",
+      "--radius-sm",
+      "--shadow-card",
+      "--shadow-lift",
+      "--shadow-sm",
+      "--space-1",
+      "--space-2",
+      "--space-3",
+      "--space-4",
+      "--space-5",
+      "--space-6",
+      "--space-7",
+      "--space-8",
+      "--surface",
+      "--surface-2",
+      "--teal",
+      "--teal-soft"
+    ]
+  }
+}

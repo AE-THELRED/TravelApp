@@ -1,0 +1,68 @@
+<!-- @dsCard group="Components" name="Cards" subtitle="The surface every match, board and saved trip sits on" viewport="640x520" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cards — Roamance</title>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { padding: 24px; }
+  .ds-row { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; }
+  .ds-stack { display: flex; flex-direction: column; gap: var(--space-5); }
+  .ds-label { font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); font-weight: 600; }
+  .ds-note { font-size: 12.5px; color: var(--ink-2); max-width: 62ch; }
+</style>
+</head>
+<body>
+<div class="ds-stack">
+  <div>
+    <h2 style="font-size:20px">Cards</h2>
+    <p class="ds-note">One surface, used for match cards, vibe boards and saved trips. Art fills the top edge
+    to edge — the card clips it, so the art component never needs its own corner radius.</p>
+  </div>
+  <div class="grid-2" style="max-width:560px">
+    <div class="card">
+      <div class="art art--wide" data-motif="brass">
+        <svg class="art__canvas" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" role="img" aria-label="board / trumpet under a bar sign">
+          <defs><pattern id="s1" width="28" height="28" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+            <rect width="28" height="28" fill="#2A1B3D"></rect><rect width="14" height="28" fill="#E8B44A"></rect>
+          </pattern></defs>
+          <rect width="400" height="300" fill="url(#s1)" opacity="0.55"></rect>
+        </svg>
+        <span class="art__caption">board / trumpet under a bar sign</span>
+      </div>
+      <div style="padding:var(--space-4);display:flex;flex-direction:column;gap:var(--space-2)">
+        <div class="row" style="display:flex;justify-content:space-between;align-items:center">
+          <strong>New Orleans</strong><span class="chip chip--match">97%</span>
+        </div>
+        <p class="muted" style="font-size:13px">Louisiana, USA · 3–4 nights</p>
+        <div class="ds-row"><span class="chip">food-forward</span><span class="chip">stays up late</span></div>
+        <p class="tabular" style="font-size:18px">$1,870 <span class="muted" style="font-size:13px">· $468/person</span></p>
+        <span class="estimate-badge">Estimated prototype data</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="art art--wide" data-motif="ridge">
+        <svg class="art__canvas" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" role="img" aria-label="board / blue ridges stacked in haze">
+          <defs><pattern id="s2" width="28" height="28" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+            <rect width="28" height="28" fill="#3B4E63"></rect><rect width="14" height="28" fill="#C7D6C0"></rect>
+          </pattern></defs>
+          <rect width="400" height="300" fill="url(#s2)" opacity="0.55"></rect>
+        </svg>
+        <span class="art__caption">board / blue ridges stacked in haze</span>
+      </div>
+      <div style="padding:var(--space-4);display:flex;flex-direction:column;gap:var(--space-2)">
+        <div class="row" style="display:flex;justify-content:space-between;align-items:center">
+          <strong>Asheville</strong><span class="chip chip--match">91%</span>
+        </div>
+        <p class="muted" style="font-size:13px">North Carolina, USA · 2–4 nights</p>
+        <div class="ds-row"><span class="chip">gets you outside</span><span class="chip">matches your pace</span></div>
+        <p class="tabular" style="font-size:18px">$1,300 <span class="muted" style="font-size:13px">· $325/person</span></p>
+        <span class="estimate-badge">Estimated prototype data</span>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

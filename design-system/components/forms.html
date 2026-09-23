@@ -1,0 +1,46 @@
+<!-- @dsCard group="Components" name="Forms" subtitle="Native inputs and the segmented control, themed — no script" viewport="640x480" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Forms — Roamance</title>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { padding: 24px; }
+  .ds-row { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; }
+  .ds-stack { display: flex; flex-direction: column; gap: var(--space-5); }
+  .ds-label { font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); font-weight: 600; }
+  .ds-note { font-size: 12.5px; color: var(--ink-2); max-width: 62ch; }
+</style>
+</head>
+<body>
+<div class="ds-stack">
+  <div>
+    <h2 style="font-size:20px">Forms</h2>
+    <p class="ds-note">Native elements only. Everything the onboarding screen needs: text, number, select, and
+    the segmented control for budget tier. Focus is the teal ring on all of them.</p>
+  </div>
+  <div style="max-width:380px;display:flex;flex-direction:column;gap:var(--space-4)">
+    <label class="field">Leaving from
+      <input type="text" value="Atlanta">
+    </label>
+    <div class="grid-2">
+      <label class="field">Nights<input type="number" value="4"></label>
+      <label class="field">Adults<input type="number" value="2"></label>
+    </div>
+    <label class="field">Where to
+      <select><option>Surprise me</option><option>A specific place</option><option>A region</option></select>
+    </label>
+    <div>
+      <div class="ds-label" style="margin-bottom:8px">Budget</div>
+      <div class="segmented">
+        <button aria-pressed="false">Keep it cheap</button>
+        <button aria-pressed="true">Comfortable</button>
+        <button aria-pressed="false">Treat us</button>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

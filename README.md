@@ -81,6 +81,7 @@ and for humans.
 - [docs/VITE.md](docs/VITE.md) — scaffold, imports, conventions, gotchas
 - [docs/ASSETS.md](docs/ASSETS.md) — the generated-SVG art system
 - [docs/THEME.md](docs/THEME.md) — retheme the app from one file
+- [design-system/readme.md](design-system/readme.md) — the importable design system
 - [docs/WORKFLOW.md](docs/WORKFLOW.md) — phases, branching, review, integration
 - [docs/VERCEL.md](docs/VERCEL.md) — deployment and build triage
 - [docs/RESEARCH-LOG.md](docs/RESEARCH-LOG.md) — AI-assisted research decisions
@@ -90,8 +91,14 @@ and for humans.
 `design/roamance-handoff/` holds the art direction: an interactive prototype,
 the design-system CSS, and screenshots of all five designed screens.
 
-It was authored in parallel with the code, before any source existed, so it
-describes a **different product** — mood-board discovery feeding an end-to-end
+`design-system/` is the importable design system built from the app's own
+tokens and components — foundation and component previews, a generated
+`theme.json` and card manifest, and adherence rules. It is what Claude Design
+reads when the design system is imported from this codebase; see
+[design-system/readme.md](design-system/readme.md).
+
+The handoff was authored in parallel with the code, before any source existed,
+so it describes a **different product** — mood-board discovery feeding an end-to-end
 booking flow. Its visual language and its two front screens are adopted; its
 booking flow is not. [CLAUDE.md](CLAUDE.md) explains that split in full.
 

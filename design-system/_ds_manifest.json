@@ -1,0 +1,275 @@
+{
+  "namespace": "Roamance",
+  "components": [],
+  "startingPoints": [],
+  "cards": [
+    {
+      "path": "foundations/color.html",
+      "group": "Foundations",
+      "viewport": "640x560",
+      "subtitle": "Coral acts, teal focuses, gold carries money — three voices that never swap jobs",
+      "name": "Color"
+    },
+    {
+      "path": "foundations/layout.html",
+      "group": "Foundations",
+      "viewport": "640x520",
+      "subtitle": "A 4px scale, three radii, accent-tinted shadows",
+      "name": "Spacing & elevation"
+    },
+    {
+      "path": "foundations/type.html",
+      "group": "Foundations",
+      "viewport": "640x600",
+      "subtitle": "Work Sans throughout; headings tighten, numbers go tabular",
+      "name": "Typography"
+    },
+    {
+      "path": "components/buttons.html",
+      "group": "Components",
+      "viewport": "640x420",
+      "subtitle": "Primary, default, ghost and block, with the teal focus ring",
+      "name": "Buttons"
+    },
+    {
+      "path": "components/cards.html",
+      "group": "Components",
+      "viewport": "640x520",
+      "subtitle": "The surface every match, board and saved trip sits on",
+      "name": "Cards"
+    },
+    {
+      "path": "components/chips.html",
+      "group": "Components",
+      "viewport": "640x400",
+      "subtitle": "Match score, reason chips, risk chips, and the label that must appear beside every price",
+      "name": "Chips & the estimate badge"
+    },
+    {
+      "path": "components/forms.html",
+      "group": "Components",
+      "viewport": "640x480",
+      "subtitle": "Native inputs and the segmented control, themed — no script",
+      "name": "Forms"
+    },
+    {
+      "path": "components/art.html",
+      "group": "Components",
+      "viewport": "640x460",
+      "subtitle": "Every image slot is drawn SVG with a caption naming the photo it stands in for",
+      "name": "Generated art"
+    }
+  ],
+  "templates": [],
+  "hasThumbnailHtml": true,
+  "globalCssPaths": [
+    "styles.css"
+  ],
+  "tokens": [
+    {
+      "name": "--coral",
+      "value": "oklch(64% 0.19 35)",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--coral-soft",
+      "value": "oklch(97% 0.02 35)",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--coral-deep",
+      "value": "oklch(45% 0.16 35)",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--coral-hover",
+      "value": "oklch(56% 0.19 35)",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--on-accent",
+      "value": "#ffffff",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--teal",
+      "value": "oklch(60% 0.13 190)",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--teal-soft",
+      "value": "oklch(96% 0.02 190)",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--gold",
+      "value": "oklch(72% 0.13 75)",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--gold-soft",
+      "value": "oklch(96% 0.03 75)",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--bg",
+      "value": "#f4f1ee",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--surface",
+      "value": "#ffffff",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--surface-2",
+      "value": "#ece7e1",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--ink",
+      "value": "#201e1d",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--ink-2",
+      "value": "#57514c",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--ink-3",
+      "value": "#8a827b",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--line",
+      "value": "color-mix(in oklch, var(--coral) 14%, #d8d1c9)",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--radius-sm",
+      "value": "10px",
+      "kind": "radius",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--radius-md",
+      "value": "16px",
+      "kind": "radius",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--radius-lg",
+      "value": "26px",
+      "kind": "radius",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--radius",
+      "value": "var(--radius-md)",
+      "kind": "radius",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--space-1",
+      "value": "4px",
+      "kind": "space",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--space-2",
+      "value": "8px",
+      "kind": "space",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--space-3",
+      "value": "12px",
+      "kind": "space",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--space-4",
+      "value": "16px",
+      "kind": "space",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--space-5",
+      "value": "20px",
+      "kind": "space",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--space-6",
+      "value": "24px",
+      "kind": "space",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--space-7",
+      "value": "28px",
+      "kind": "space",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--space-8",
+      "value": "32px",
+      "kind": "space",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--shadow-sm",
+      "value": "0 1px 2px color-mix(in oklch, var(--coral) 14%, transparent)",
+      "kind": "shadow",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--shadow-card",
+      "value": "var(--shadow-md)",
+      "kind": "shadow",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--shadow-lift",
+      "value": "var(--shadow-lg)",
+      "kind": "shadow",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--font",
+      "value": "\"Work Sans\", ui-sans-serif, -apple-system, \"Segoe UI\", Inter, Helvetica, Arial, sans-serif",
+      "kind": "font",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--font-heading",
+      "value": "var(--font)",
+      "kind": "font",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--font-heading-weight",
+      "value": "700",
+      "kind": "font",
+      "definedIn": "styles.css"
+    }
+  ],
+  "source": "generated by design-system/build.mjs from src/index.css"
+}

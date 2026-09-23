@@ -2,21 +2,33 @@
 
 Append an entry every time AI research shaped a decision. This file is the assignment's evidence of the research phase — keep it honest and specific, including suggestions you rejected.
 
+> **On the first three entries' sources.** Those entries were written on 2026-09-15
+> from conversation, and their source lines were left blank. The URLs were located
+> on 2026-09-22 and substantiate the claims already recorded — they are not a
+> reconstruction of the original queries, which were not saved. Entries from
+> 2026-09-22 onward cite what was actually read at the time.
+
 ---
 
 ### 2026-09-15 — What do existing "travel hack" tools actually solve?
 **Prompt / query used:** Compared single-purpose tools (hidden-city fare search, group lodging saves, post-booking itinerary organizers) against a combined dashboard concept.
 **What we learned:** Each existing tool solves one slice — fare tricks, shared saved listings, or itinerary organization — and none surface the full "true cost" of a compromise.
 **Decision it drove:** Rebrand around transparency: every saving is paired with a visible tradeoff, rather than pushing the lowest headline number.
-**Sources:** (add URLs — whoever ran this search, fill these in)
+**Sources** (located 2026-09-22):
+- Hidden-city fare search — [The Points Guy, "What is skiplagging"](https://thepointsguy.com/airline/what-is-skiplagging) and [NPR on American Airlines suing over skiplagging](https://www.npr.org/2023/08/23/1194998452/skiplagging-airfare-flying-skiplagged-american-airlines). Confirms the pattern we built the Hack Stack around: a real saving (roughly 50%) carried by real, unstated costs — checked bags routed to the wrong city, cancelled return legs, revoked miles, account bans. The saving is advertised; the tradeoff is not.
+- Itinerary organizers and group splitting — [TripIt, "5 Best Group Travel Planning + Organizer Apps"](https://www.tripit.com/web/blog/travel-tips/best-group-travel-planning-app). Each tool owns one slice: TripIt organizes confirmations post-booking with one-way sharing and no expense splitting; Splitwise does expenses only and sits alongside a separate planner.
+- Hidden true cost, and that this is a recognised problem and not just our opinion — [FTC final rule banning junk ticket and hotel fees](https://www.ftc.gov/news-events/news/press-releases/2024/12/federal-trade-commission-announces-bipartisan-rule-banning-junk-ticket-hotel-fees) and the [Federal Register text](https://www.federalregister.gov/documents/2025/01/10/2024-30293/trade-regulation-rule-on-unfair-or-deceptive-fees). "Drip pricing" — a low headline price with mandatory fees revealed at checkout — is the exact practice this rebrand argues against, and the rule only forces disclosure of *fees*, never of what a cheaper choice costs you in stairs, transit time, or a pull-out couch. That gap is the product.
 
 ---
 
 ### 2026-09-15 — Is a swipe/matching mechanic defensible for travel?
 **Prompt / query used:** Researched travel-personality quiz dimensions (pace, budget, adventure tolerance, social preference, interests).
 **What we learned:** Preference dimensions used by existing travel-personality tools map cleanly onto tag weights.
-**Decision it drove:** A 4–5 question vibe quiz feeding a deterministic weighted-tag score, presented as dating-app "matches."
-**Sources:** (add URLs — whoever ran this search, fill these in)
+**Decision it drove:** A 4–5 question vibe quiz feeding a deterministic weighted-tag score, presented as dating-app "matches." (Superseded on 2026-09-22 — the quiz was replaced by vibe boards and swipe refinement, but the weighted-tag scoring it fed survives unchanged.)
+**Sources** (located 2026-09-22):
+- [Plog's model of allocentricity and psychocentricity (Tourism Teacher)](https://tourismteacher.com/plogs-model-of-allocentricity-and-psychocentricity/) and [Plog's tourist motivation model (Research-Methodology)](https://research-methodology.net/plogs-tourist-motivation-model/). Plog (1974) places travellers on a novelty-versus-familiarity spectrum, with most people mid-centric. This is the precedent for scoring a traveller on continuous dimensions rather than sorting them into a bucket — and it is why `rankTrips` compresses displayed scores into 62–97 instead of letting anything read as a dead card.
+- [Truity travel personality test](https://www.truity.com/test/travel-personality-test) — a live example of the pattern: Big Five-derived questions resolving to named types ("Zen Traveler", "Culture Hound", "Trip Maximizer", "Creature of Comfort"). Confirmed that a handful of questions is enough to produce a result that reads as personal, which is what our seven shared tags do.
+- [Talker Research, five American travel personas](https://talkerresearch.com/study-reveals-americans-fit-into-5-different-travel-personas/) — evidence that consumer-facing travel segmentation already runs on a small number of archetypes, supporting six vibe boards rather than twenty.
 
 ---
 
@@ -25,7 +37,8 @@ Append an entry every time AI research shaped a decision. This file is the assig
 **What we learned:** Static hosting plus browser storage covers the entire demo requirement; a backend adds setup cost with no demo payoff.
 **Decision it drove:** Front-end-only Next.js on Vercel, committed JSON dataset, `localStorage` persistence, no API keys.
 **Rejected AI suggestions:** Live flight-price integration and runtime LLM bio generation — both add credential/latency/hallucination risk and neither is visible in a two-minute demo.
-**Sources:** (add URLs — whoever ran this search, fill these in)
+**Sources** (located 2026-09-22):
+- [MDN, Storage quotas and eviction criteria](https://developer.mozilla.org/en-US/docs/Web/API/Storage_API/Storage_quotas_and_eviction_criteria). Confirms `localStorage` is 5 MiB per origin — far more than our one state blob needs — and that exceeding it throws `QuotaExceededError`, which "should be handled by using a `try...catch` block." This is the direct justification for wrapping every access in `src/lib/storage.js`, and for the failure paths returning `{}` rather than throwing: the same guard also covers Safari private browsing, where the quota is effectively zero and the *first* write throws.
 
 ---
 

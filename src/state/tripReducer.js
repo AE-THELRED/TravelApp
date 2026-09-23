@@ -1,5 +1,5 @@
 /**
- * The one store — Person 4.
+ * The one store — shared.
  *
  * A single useReducer lives in App.jsx and its state and dispatch are passed
  * down as props. No Context: the tree is three levels deep and prop-drilling is

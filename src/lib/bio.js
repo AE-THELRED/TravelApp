@@ -1,5 +1,5 @@
 /**
- * Matchmaker copy — Person 1.
+ * Matchmaker copy — done.
  *
  * No LLM at runtime. `trip.tripBio` is pre-authored and committed; this module
  * only assembles the personalised sentence that follows it, from template

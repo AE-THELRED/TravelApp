@@ -1,5 +1,5 @@
 /**
- * Persistence — Person 4. The ONLY module in the app that touches localStorage.
+ * Persistence — shared. The ONLY module in the app that touches localStorage.
  *
  * One namespaced key holding one JSON blob: one read, one write, one place to
  * version. If the shape changes in a breaking way, bump VERSION and old data is

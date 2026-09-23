@@ -1,5 +1,5 @@
 /**
- * True-cost and Hack Stack math — Person 1.
+ * True-cost and Hack Stack math — done, verified.
  *
  * Every number the user sees comes from here. Two rules:
  *   1. Round once, at the end. Rounding per line item makes the group total

@@ -4,18 +4,18 @@ import { loadState, saveState, clearState } from "./lib/storage.js";
 import Landing from "./screens/Landing.jsx";
 
 /**
- * App shell — Person 4.
+ * App shell — shared. Both phases register a screen here.
  *
  * Owns the single reducer and the two persistence effects. Every screen gets
  * `state` and `dispatch` as props; there is no Context by design.
  *
  * Screens still to build (see docs/WORKFLOW.md for who owns which):
- *   onboarding  Phase C   constraints form — who, how long, what budget
+ *   onboarding  Phase A   constraints form — who, how long, what budget
  *   vibe        Phase A   "Your Type" — vibe-board picker
  *   swipe       Phase A   "Find Your Type" — refine on 8 photos
  *   matches     Phase B   ranked deck
  *   detail      Phase B   true-cost card + Hack Stack
- *   saved       Phase C   saved matches and group split
+ *   saved       Phase B   saved matches and group split
  */
 export default function App() {
   const [state, dispatch] = useReducer(tripReducer, initialState);

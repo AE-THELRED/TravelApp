@@ -73,8 +73,9 @@ land mid-flow in a broken state.
 1. Create `src/screens/YourScreen.jsx`, default-exporting a function component.
 2. Take `state` and `dispatch` as props. Do not reach for a global.
 3. Derive with `useMemo`; keep component-local UI state in `useState`.
-4. Register it in the `screens` object in `App.jsx` — **that file belongs to
-   Phase C**, so either coordinate or let the integrator wire it up.
+4. Register it in the `screens` object in `App.jsx`. **That file is shared by
+   both phases**, so keep your edit to the `screens` object and say so in the
+   PR — that keeps the conflict trivial.
 5. `npm run build && npm run lint` before you push.
 
 ## Gotchas

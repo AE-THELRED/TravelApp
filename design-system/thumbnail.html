@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Roamance — design system</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+  body { display: grid; place-items: center; min-height: 100%; padding: var(--space-8); }
+  .cover { display: flex; flex-direction: column; gap: var(--space-5); max-width: 420px; }
+  .swatches { display: flex; gap: var(--space-2); }
+  .swatches span { flex: 1; height: 44px; border-radius: var(--radius-sm); }
+</style>
+</head>
+<body>
+  <div class="cover">
+    <div class="wordmark" style="font-size:30px">Ro<em>a</em>mance</div>
+    <p class="muted" style="font-size:15px">
+      Stop searching for trips. Meet one. Warm paper, coral for action, teal for focus,
+      gold for money — and a tradeoff shown beside every saving.
+    </p>
+    <div class="swatches">
+      <span style="background:var(--coral)"></span>
+      <span style="background:var(--teal)"></span>
+      <span style="background:var(--gold)"></span>
+      <span style="background:var(--surface-2)"></span>
+      <span style="background:var(--ink)"></span>
+    </div>
+    <div class="row" style="display:flex;gap:var(--space-2);align-items:center;flex-wrap:wrap">
+      <button class="btn btn--primary">Find your type</button>
+      <span class="chip chip--match">97%</span>
+      <span class="chip chip--risk">carry-on only</span>
+    </div>
+    <span class="estimate-badge">Estimated prototype data</span>
+  </div>
+</body>
+</html>

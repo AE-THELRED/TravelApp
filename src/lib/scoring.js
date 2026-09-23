@@ -1,5 +1,5 @@
 /**
- * Match scoring — Person 1.
+ * Match scoring — done, verified.
  *
  * Pure and deterministic: the same inputs always produce the same score.
  * No randomness, no Date.now(), no LLM. The "intelligence" the user perceives

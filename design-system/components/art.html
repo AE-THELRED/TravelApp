@@ -1,0 +1,68 @@
+<!-- @dsCard group="Components" name="Generated art" subtitle="Every image slot is drawn SVG with a caption naming the photo it stands in for" viewport="640x460" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Generated art — Roamance</title>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { padding: 24px; }
+  .ds-row { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; }
+  .ds-stack { display: flex; flex-direction: column; gap: var(--space-5); }
+  .ds-label { font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); font-weight: 600; }
+  .ds-note { font-size: 12.5px; color: var(--ink-2); max-width: 62ch; }
+</style>
+</head>
+<body>
+<div class="ds-stack">
+  <div>
+    <h2 style="font-size:20px">Generated art</h2>
+    <p class="ds-note">There are no image files in this project. Boards, swipe photos, trip cards and the detail
+    hero all render <code>&lt;Art&gt;</code> from an <code>{ sky, accent, motif }</code> object. The monospace
+    caption names the photograph the art stands in for, and doubles as a shot list. Three aspect ratios:
+    <code>.art</code> 4:3, <code>.art--tall</code> 3:4, <code>.art--wide</code> 16:9.</p>
+  </div>
+  <div class="ds-row" style="align-items:flex-start">
+    <div style="width:150px">
+      <div class="art " data-motif="waves">
+        <svg class="art__canvas" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" role="img" aria-label="board / white cubes above water">
+          <defs><pattern id="a0" width="28" height="28" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+            <rect width="28" height="28" fill="#1E6F8C"></rect><rect width="14" height="28" fill="#F4E3C4"></rect>
+          </pattern></defs>
+          <rect width="400" height="300" fill="url(#a0)" opacity="0.55"></rect>
+        </svg>
+        <span class="art__caption">board / white cubes above water</span>
+      </div>
+      <div class="ds-label" style="margin-top:6px">4:3 default</div>
+    </div>
+    <div style="width:130px">
+      <div class="art art--tall" data-motif="palm">
+        <svg class="art__canvas" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" role="img" aria-label="photo / hammock strung between palms">
+          <defs><pattern id="a1" width="28" height="28" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+            <rect width="28" height="28" fill="#2C8CA6"></rect><rect width="14" height="28" fill="#F7E2B8"></rect>
+          </pattern></defs>
+          <rect width="400" height="300" fill="url(#a1)" opacity="0.55"></rect>
+        </svg>
+        <span class="art__caption">photo / hammock strung between palms</span>
+      </div>
+      <div class="ds-label" style="margin-top:6px">3:4 tall</div>
+    </div>
+    <div style="width:230px">
+      <div class="art art--wide" data-motif="dune">
+        <svg class="art__canvas" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" role="img" aria-label="photo / footprints and nothing else">
+          <defs><pattern id="a2" width="28" height="28" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+            <rect width="28" height="28" fill="#1D7E93"></rect><rect width="14" height="28" fill="#EFDFC0"></rect>
+          </pattern></defs>
+          <rect width="400" height="300" fill="url(#a2)" opacity="0.55"></rect>
+        </svg>
+        <span class="art__caption">photo / footprints and nothing else</span>
+      </div>
+      <div class="ds-label" style="margin-top:6px">16:9 wide</div>
+    </div>
+  </div>
+  <p class="ds-note">The stripe fill is the placeholder every motif currently falls through to. As real motifs
+  are drawn they replace it one at a time, so the app is never broken — only progressively less abstract.</p>
+</div>
+</body>
+</html>

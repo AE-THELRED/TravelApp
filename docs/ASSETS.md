@@ -4,8 +4,8 @@
 
 Every image slot in Roamance is **drawn in SVG from a small data object**, not
 photographed. No `public/images/`, no licence tracking, no compression step, no
-404s in the demo, and no 15 MB of binaries in a repo three people are merging
-into in the same hour.
+404s in the demo, and no 15 MB of binaries to merge around in a single
+session.
 
 This also matches the design handoff, which ships diagonal-stripe placeholders
 with captions naming what belongs in each slot rather than real photography.

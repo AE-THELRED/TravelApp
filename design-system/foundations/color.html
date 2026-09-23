@@ -1,0 +1,99 @@
+<!-- @dsCard group="Foundations" name="Color" subtitle="Coral acts, teal focuses, gold carries money — three voices that never swap jobs" viewport="640x560" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Color — Roamance</title>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { padding: 24px; }
+  .ds-row { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; }
+  .ds-stack { display: flex; flex-direction: column; gap: var(--space-5); }
+  .ds-label { font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); font-weight: 600; }
+  .ds-swatch { width: 104px; }
+  .ds-chipbox { height: 56px; border-radius: var(--radius-sm); border: 1px solid var(--line); }
+  .ds-note { font-size: 12.5px; color: var(--ink-2); max-width: 62ch; }
+</style>
+</head>
+<body>
+<div class="ds-stack">
+  <div>
+    <h2 style="font-size:20px">Color</h2>
+    <p class="ds-note">Three accent voices with fixed jobs. <strong>Coral</strong> is the romance half of the
+    name and carries every call to action. <strong>Teal</strong> is the roam half and owns the focus ring.
+    <strong>Gold</strong> is reserved for money and honesty — the estimate badge and risk chips — so price
+    copy never wears the same colour as a button.</p>
+  </div>
+  <div class="ds-row"><div class="ds-swatch">
+    <div class="ds-chipbox" style="background: var(--coral)"></div>
+    <div class="ds-label" style="margin-top:6px">coral</div>
+    <div style="font-size:11px;color:var(--ink-3)">primary actions</div>
+  </div><div class="ds-swatch">
+    <div class="ds-chipbox" style="background: var(--coral-hover)"></div>
+    <div class="ds-label" style="margin-top:6px">coral-hover</div>
+    <div style="font-size:11px;color:var(--ink-3)">hover / pressed</div>
+  </div><div class="ds-swatch">
+    <div class="ds-chipbox" style="background: var(--coral-soft)"></div>
+    <div class="ds-label" style="margin-top:6px">coral-soft</div>
+    <div style="font-size:11px;color:var(--ink-3)">tinted fills</div>
+  </div><div class="ds-swatch">
+    <div class="ds-chipbox" style="background: var(--coral-deep)"></div>
+    <div class="ds-label" style="margin-top:6px">coral-deep</div>
+    <div style="font-size:11px;color:var(--ink-3)">accent text</div>
+  </div><div class="ds-swatch">
+    <div class="ds-chipbox" style="background: var(--teal)"></div>
+    <div class="ds-label" style="margin-top:6px">teal</div>
+    <div style="font-size:11px;color:var(--ink-3)">focus ring, roam</div>
+  </div><div class="ds-swatch">
+    <div class="ds-chipbox" style="background: var(--teal-soft)"></div>
+    <div class="ds-label" style="margin-top:6px">teal-soft</div>
+    <div style="font-size:11px;color:var(--ink-3)">tinted fills</div>
+  </div><div class="ds-swatch">
+    <div class="ds-chipbox" style="background: var(--gold)"></div>
+    <div class="ds-label" style="margin-top:6px">gold</div>
+    <div style="font-size:11px;color:var(--ink-3)">money / honesty</div>
+  </div><div class="ds-swatch">
+    <div class="ds-chipbox" style="background: var(--gold-soft)"></div>
+    <div class="ds-label" style="margin-top:6px">gold-soft</div>
+    <div style="font-size:11px;color:var(--ink-3)">risk chips</div>
+  </div><div class="ds-swatch">
+    <div class="ds-chipbox" style="background: var(--bg)"></div>
+    <div class="ds-label" style="margin-top:6px">bg</div>
+    <div style="font-size:11px;color:var(--ink-3)">page ground</div>
+  </div><div class="ds-swatch">
+    <div class="ds-chipbox" style="background: var(--surface)"></div>
+    <div class="ds-label" style="margin-top:6px">surface</div>
+    <div style="font-size:11px;color:var(--ink-3)">cards</div>
+  </div><div class="ds-swatch">
+    <div class="ds-chipbox" style="background: var(--surface-2)"></div>
+    <div class="ds-label" style="margin-top:6px">surface-2</div>
+    <div style="font-size:11px;color:var(--ink-3)">recessed</div>
+  </div><div class="ds-swatch">
+    <div class="ds-chipbox" style="background: var(--ink)"></div>
+    <div class="ds-label" style="margin-top:6px">ink</div>
+    <div style="font-size:11px;color:var(--ink-3)">body text</div>
+  </div><div class="ds-swatch">
+    <div class="ds-chipbox" style="background: var(--ink-2)"></div>
+    <div class="ds-label" style="margin-top:6px">ink-2</div>
+    <div style="font-size:11px;color:var(--ink-3)">secondary</div>
+  </div><div class="ds-swatch">
+    <div class="ds-chipbox" style="background: var(--ink-3)"></div>
+    <div class="ds-label" style="margin-top:6px">ink-3</div>
+    <div style="font-size:11px;color:var(--ink-3)">tertiary</div>
+  </div><div class="ds-swatch">
+    <div class="ds-chipbox" style="background: var(--line)"></div>
+    <div class="ds-label" style="margin-top:6px">line</div>
+    <div style="font-size:11px;color:var(--ink-3)">hairlines</div>
+  </div></div>
+  <div>
+    <div class="ds-label">On an accent fill</div>
+    <div class="ds-row" style="margin-top:8px">
+      <span class="chip chip--match">97%</span>
+      <button class="btn btn--primary">Primary action</button>
+      <span class="ds-note">Both use <code>--on-accent</code>, which flips to ink in dark mode.</span>
+    </div>
+  </div>
+</div>
+</body>
+</html>

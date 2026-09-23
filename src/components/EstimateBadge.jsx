@@ -1,5 +1,5 @@
 /**
- * The "estimated prototype data" label — Person 4.
+ * The "estimated prototype data" label — shared.
  *
  * Hard constraint: this appears wherever a price appears. Roamance shows no
  * live pricing and the interface must never imply otherwise.

@@ -1,6 +1,6 @@
 # Team Workflow, Phases, and Evidence
 
-Three people, one session. The shared contract — `src/lib/types.js`,
+Two people, one session. The shared contract — `src/lib/types.js`,
 `src/data/*.json`, `src/lib/scoring.js`, `src/lib/cost.js`, `src/state/tripReducer.js`,
 `src/lib/storage.js` — is **already committed on `main`**. Do not re-litigate it
 at the start of the session; branch off it.
@@ -12,22 +12,55 @@ and `DATA-SCHEMA.md` together and say so in the team chat before you merge.
 
 | Phase | Owner | Builds | Files owned |
 |---|---|---|---|
-| **A. Vibe capture** | | "Your Type" board picker, "Find Your Type" swipe refine, the live tag-meter sidebar, and the real `Art` motifs | `screens/VibeBoards.jsx`, `screens/SwipeRefine.jsx`, `components/VibeCard.jsx`, `components/SwipeCard.jsx`, `components/TagMeters.jsx`, `components/Art.jsx` |
-| **B. Deck and true cost** | | Ranked deck of ten, trip detail, Hack Stack with live cost and the tradeoff list | `screens/Matches.jsx`, `screens/TripDetail.jsx`, `components/TripCard.jsx`, `components/HackStack.jsx`, `components/CostSummary.jsx` |
-| **C. Constraints, saved, integration** | | Onboarding constraints form, saved comparison, app shell, merges, QA, the demo click-path | `screens/Onboarding.jsx`, `screens/Saved.jsx`, `App.jsx`, `state/*`, `lib/storage.js` |
+| **A. Getting to know you** | | Onboarding constraints form, "Your Type" board picker, "Find Your Type" swipe refine, the live tag-meter sidebar | `screens/Onboarding.jsx`, `screens/VibeBoards.jsx`, `screens/SwipeRefine.jsx`, `components/VibeCard.jsx`, `components/SwipeCard.jsx`, `components/TagMeters.jsx` |
+| **B. The match and what it costs** | | Ranked deck of ten, trip detail, Hack Stack with live cost and the tradeoff list, saved comparison | `screens/Matches.jsx`, `screens/TripDetail.jsx`, `screens/Saved.jsx`, `components/TripCard.jsx`, `components/HackStack.jsx`, `components/CostSummary.jsx` |
 
 Put your name in the Owner column in your first commit.
 
-### Dependencies between phases
+`App.jsx`, `state/*`, `lib/*` and `index.css` are **shared**. Both of you will
+touch `App.jsx` to register a screen. Keep those edits to the `screens` object
+and say so in the PR, and the conflicts stay trivial.
 
-- **B depends on A only for `Art.jsx`.** A stub is already on `main` that
-  renders the handoff's diagonal-stripe placeholder for every motif, so B can
-  build trip cards on day one. Phase A replaces the stub's internals; the props
-  do not change. See [ASSETS.md](ASSETS.md).
-- **A and B both depend on C for `constraints`.** Until Onboarding exists, set a
-  fake constraints object in your own screen while developing. Do not commit it
-  to `App.jsx` — that is C's file.
+### This was a three-way split until a collaborator left
+
+The third phase was onboarding + saved + integration. Onboarding moved to A
+because it sits in the same flow; saved moved to B because it re-derives the
+same costs the detail screen already computes. Integration is now **both of
+you**, jointly, in the last third of the session.
+
+That is more work per person than before, so read the cut list below before you
+start rather than at the point you run out of time.
+
+### Dependencies
+
+- **B depends on A only for `Art.jsx`'s real motifs.** A stub is already on
+  `main` rendering the handoff's stripe placeholder for every motif, so B can
+  build trip cards on day one and it will never look broken. Drawing real
+  motifs is now optional polish, owned by whoever has time. See
+  [ASSETS.md](ASSETS.md).
+- **B depends on A for `constraints`.** Until Onboarding exists, hard-code a
+  constraints object locally while developing. Do not commit it to `App.jsx`.
 - **Nobody depends on `scoring.js` or `cost.js` landing.** They are done.
+
+## Cut list, in order
+
+If you are running out of time, cut from the top. Do not cut from the bottom —
+the bottom three are the demo.
+
+1. **Real `Art` motifs.** The stripe placeholder is a deliberate design choice,
+   not an unfinished one. Cutting this costs nothing.
+2. **The saved comparison screen.** The Hack Stack already makes the argument;
+   saved only shows it twice side by side.
+3. **The swipe-refine screen.** Boards alone produce a usable profile —
+   `buildProfileTags` works with `likes` empty. Wire the board picker straight
+   to `COMMIT_VIBE` and the app still runs end to end.
+4. **The onboarding form.** Dispatch a sensible default constraints object from
+   the landing button instead. You lose the budget tier as an input, which
+   flattens `budgetSensitivity` to its neutral 3.
+5. — everything below this line ships —
+6. The vibe-board picker.
+7. The ranked deck.
+8. The trip detail with a working Hack Stack and visible tradeoffs.
 
 ## What is already built and verified
 
@@ -80,10 +113,11 @@ Squash-merge into `main`.
 
 Reserve the last third of the session. Order matters:
 
-1. Merge **C**'s onboarding first — nothing downstream can be exercised without
-   a `constraints` object.
-2. Merge **A**. The deck cannot be checked without a real profile.
-3. Merge **B** on top, resolving conflicts in favour of the shared types.
+1. Merge **A** first — nothing downstream can be exercised without a
+   `constraints` object and a real profile.
+2. Merge **B** on top, resolving conflicts in favour of the shared types.
+3. Both of you wire the `screens` object in `App.jsx` together, in one sitting.
+   It is the one file you have both been editing.
 4. Walk the full click path on the deployed URL, on a phone.
 5. Freeze features. Remaining time goes to copy, spacing, and the reset button.
 
