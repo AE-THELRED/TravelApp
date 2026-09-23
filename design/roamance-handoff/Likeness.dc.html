@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="modernist.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700&display=swap">
+<style>
+  :root {
+    --font-heading: "Work Sans", system-ui, sans-serif;
+    --font-body: "Work Sans", system-ui, sans-serif;
+    --font-heading-weight: 700;
+    --color-accent: oklch(64% 0.19 35);
+    --color-accent-100: oklch(97% 0.02 35); --color-accent-200: oklch(92% 0.05 35);
+    --color-accent-300: oklch(85% 0.09 35); --color-accent-400: oklch(75% 0.14 35);
+    --color-accent-500: oklch(64% 0.19 35); --color-accent-600: oklch(56% 0.19 35);
+    --color-accent-700: oklch(47% 0.17 35); --color-accent-800: oklch(37% 0.14 35);
+    --color-accent-900: oklch(27% 0.10 35);
+    --color-accent-2: oklch(60% 0.13 190);
+    --color-accent-2-100: oklch(96% 0.02 190); --color-accent-2-200: oklch(90% 0.05 190);
+    --color-accent-2-300: oklch(82% 0.08 190); --color-accent-2-400: oklch(71% 0.11 190);
+    --color-accent-2-500: oklch(60% 0.13 190); --color-accent-2-600: oklch(52% 0.13 190);
+    --color-accent-2-700: oklch(44% 0.12 190); --color-accent-2-800: oklch(35% 0.10 190);
+    --color-accent-2-900: oklch(26% 0.07 190);
+    --color-divider: color-mix(in oklch, var(--color-accent) 14%, var(--color-neutral-300));
+    --radius-sm: 10px; --radius-md: 16px; --radius-lg: 26px;
+    --shadow-sm: 0 1px 3px color-mix(in oklch, var(--color-accent) 10%, transparent), 0 1px 2px rgba(32,30,29,.06);
+    --shadow-md: 0 8px 24px color-mix(in oklch, var(--color-accent) 12%, transparent), 0 2px 6px rgba(32,30,29,.08);
+    --shadow-lg: 0 20px 48px color-mix(in oklch, var(--color-accent) 14%, transparent), 0 6px 16px rgba(32,30,29,.10);
+  }
+  body { margin: 0; background: var(--color-bg); color: var(--color-text); font-family: var(--font-body); }
+  * { box-sizing: border-box; }
+  @keyframes lk-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  @keyframes lk-card { from { opacity: 0; transform: scale(.97); } to { opacity: 1; transform: none; } }
+  input[type="range"].input {
+    appearance: none; -webkit-appearance: none; background: transparent; height: 18px; padding: 0;
+  }
+  input[type="range"].input::-webkit-slider-runnable-track {
+    height: 4px; background: var(--color-neutral-300);
+  }
+  input[type="range"].input::-moz-range-track { height: 4px; background: var(--color-neutral-300); }
+  input[type="range"].input::-webkit-slider-thumb {
+    appearance: none; -webkit-appearance: none; width: 16px; height: 16px; margin-top: -6px;
+    background: var(--color-accent); border-radius: 0; cursor: pointer;
+  }
+  input[type="range"].input::-moz-range-thumb {
+    width: 16px; height: 16px; background: var(--color-accent); border: 0; border-radius: 0; cursor: pointer;
+  }
+  input[type="range"].input:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 3px; }
+</style>
+</helmet>
+
+<div style="min-height:100vh;display:flex;flex-direction:column">
+
+  <header style="display:flex;align-items:center;gap:var(--space-6);padding:var(--space-3) var(--space-6);border-bottom:2px solid var(--color-divider);flex-wrap:wrap">
+    <div style="font-family:var(--font-heading);font-weight:800;font-size:19px;letter-spacing:-0.02em">ROAMANCE</div>
+    <div style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-neutral-600);border-left:2px solid var(--color-divider);padding-left:var(--space-4)">Stop searching for trips. Meet one.</div>
+    <div style="margin-left:auto;display:flex;align-items:center;gap:var(--space-4);font-size:12px">
+      <span style="color:var(--color-neutral-600)">{{ originLabel }} · {{ nightsLabel }} · {{ partyLabel }}</span>
+      <button class="btn btn-secondary" onClick="{{ goTrip }}" style="justify-content:flex-start">Trip · {{ tripTotalLabel }}</button>
+    </div>
+  </header>
+
+  <nav style="display:grid;grid-template-columns:repeat(5,1fr);border-bottom:2px solid var(--color-divider)">
+    <sc-for list="{{ steps }}" as="s" hint-placeholder-count="5">
+      <button onClick="{{ s.go }}" style="appearance:none;background:transparent;border:0;border-right:1px solid var(--color-divider);padding:var(--space-3) var(--space-4);text-align:left;cursor:pointer;font-family:var(--font-heading);font-weight:800;font-size:13px;color:var(--color-text);display:flex;flex-direction:column;gap:2px" style-hover="background:var(--color-neutral-200)">
+        <span style="font-size:10px;letter-spacing:0.1em;color:var(--color-neutral-600);font-weight:600">{{ s.num }}</span>
+        <span>{{ s.name }}</span>
+        <sc-if value="{{ s.on }}" hint-placeholder-val="{{ true }}">
+          <span style="display:block;height:3px;background:var(--color-accent);margin-top:var(--space-1);width:28px"></span>
+        </sc-if>
+      </button>
+    </sc-for>
+  </nav>
+
+  <main style="flex:1;min-height:0">
+
+  <!-- 01 VIBE BOARDS -->
+  <sc-if value="{{ isVibe }}" hint-placeholder-val="{{ true }}">
+    <div style="padding:var(--space-8) var(--space-6);max-width:1240px;animation:lk-in .25s ease both">
+      <div style="display:flex;gap:var(--space-8);flex-wrap:wrap;align-items:flex-end;margin-bottom:var(--space-6)">
+        <h1 style="font-size:clamp(34px,5vw,58px);max-width:15ch;margin:0">Start with a look, not a place.</h1>
+        <p style="max-width:34ch;font-size:15px;color:var(--color-neutral-700);margin:0">Pick the boards that feel like the trip you want. We read the textures, light and pace in them — then find the places that share them.</p>
+      </div>
+      <div class="hr" style="margin:0 0 var(--space-6)"></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:var(--space-4);background:transparent;border:0">
+        <sc-for list="{{ boards }}" as="b" hint-placeholder-count="6">
+          <button onClick="{{ b.toggle }}" style="appearance:none;border:0;cursor:pointer;background:var(--color-bg);padding:0;text-align:left;display:flex;flex-direction:column;border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-sm);transition:box-shadow .15s ease,transform .15s ease" style-hover="background:var(--color-bg);box-shadow:var(--shadow-md);transform:translateY(-2px)">
+            <div style="height:180px;position:relative;background:repeating-linear-gradient(135deg,var(--color-accent-300) 0 9px,var(--color-accent-2-300) 9px 18px);display:flex;align-items:flex-end;padding:var(--space-3)">
+              <span style="font-family:ui-monospace,Menlo,monospace;font-size:10px;background:var(--color-bg);padding:3px 6px;border:1px solid var(--color-divider)">{{ b.slot }}</span>
+              <sc-if value="{{ b.on }}" hint-placeholder-val="{{ true }}">
+                <span style="position:absolute;top:0;left:0;right:0;height:6px;background:var(--color-accent)"></span>
+              </sc-if>
+            </div>
+            <div style="padding:var(--space-4)">
+              <div style="display:flex;justify-content:space-between;gap:var(--space-2);align-items:baseline">
+                <h3 style="font-size:19px;margin:0 0 var(--space-1)">{{ b.name }}</h3>
+                <sc-if value="{{ b.on }}" hint-placeholder-val="{{ true }}">
+                  <span class="tag tag-accent" style="flex:none">IN PROFILE</span>
+                </sc-if>
+              </div>
+              <p style="font-size:13px;color:var(--color-neutral-700);margin:0 0 var(--space-3)">{{ b.note }}</p>
+              <div style="display:flex;flex-wrap:wrap;gap:var(--space-1)">
+                <sc-for list="{{ b.tagList }}" as="t" hint-placeholder-count="3">
+                  <span class="tag tag-outline">{{ t }}</span>
+                </sc-for>
+              </div>
+            </div>
+          </button>
+        </sc-for>
+      </div>
+      <div style="display:flex;gap:var(--space-4);align-items:center;margin-top:var(--space-6);flex-wrap:wrap">
+        <button class="btn btn-primary" onClick="{{ goSwipe }}" style="justify-content:flex-start;min-width:230px;padding:var(--space-3) var(--space-4)">{{ vibeCta }}</button>
+        <span style="font-size:12px;color:var(--color-neutral-600)">{{ vibeHint }}</span>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- 02 SWIPE REFINE -->
+  <sc-if value="{{ isSwipe }}" hint-placeholder-val="{{ true }}">
+    <div style="display:grid;grid-template-columns:minmax(0,1fr) 340px;min-height:70vh;animation:lk-in .25s ease both">
+      <div style="padding:var(--space-8) var(--space-6);display:flex;flex-direction:column;align-items:flex-start;gap:var(--space-4)">
+        <div>
+          <h2 style="font-size:32px;margin:0 0 var(--space-1)">Find Your Type</h2>
+          <p style="font-size:14px;color:var(--color-neutral-700);margin:0">{{ swipeProgress }} — swipe what you'd crush on, pass on the rest.</p>
+        </div>
+        <sc-if value="{{ swipeCard }}" hint-placeholder-val="{{ true }}">
+          <div style="width:100%;max-width:520px">
+            <div style="border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-md);background:var(--color-bg);animation:lk-card .2s ease both" key="{{ swipeCard.key }}">
+              <div style="height:340px;background:repeating-linear-gradient(135deg,var(--color-accent-300) 0 9px,var(--color-accent-2-300) 9px 18px);display:flex;align-items:flex-end;padding:var(--space-3)">
+                <span style="font-family:ui-monospace,Menlo,monospace;font-size:10px;background:var(--color-bg);padding:3px 6px;border:1px solid var(--color-divider)">{{ swipeCard.slot }}</span>
+              </div>
+              <div style="padding:var(--space-4);border-top:2px solid var(--color-text);display:flex;justify-content:space-between;gap:var(--space-3);flex-wrap:wrap">
+                <div style="font-family:var(--font-heading);font-weight:800;font-size:17px">{{ swipeCard.label }}</div>
+                <div style="display:flex;gap:var(--space-1)">
+                  <sc-for list="{{ swipeCard.tags }}" as="t" hint-placeholder-count="2">
+                    <span class="tag tag-neutral">{{ t }}</span>
+                  </sc-for>
+                </div>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3);margin-top:var(--space-4)">
+              <button class="btn btn-secondary" onClick="{{ swipeNo }}" style="justify-content:flex-start;padding:var(--space-3) var(--space-4)">Not My Type</button>
+              <button class="btn btn-primary" onClick="{{ swipeYes }}" style="justify-content:flex-start;padding:var(--space-3) var(--space-4)">Crush ♡</button>
+            </div>
+            <button class="btn btn-ghost" onClick="{{ goMatches }}" style="margin-top:var(--space-2);padding-left:0">Skip to matches →</button>
+          </div>
+        </sc-if>
+        <sc-if value="{{ swipeDone }}" hint-placeholder-val="{{ true }}">
+          <div style="border-radius:var(--radius-lg);box-shadow:var(--shadow-md);background:var(--color-bg);padding:var(--space-6);max-width:520px;width:100%">
+            <h3 style="font-size:24px;margin:0 0 var(--space-2)">Your type, decided.</h3>
+            <p style="font-size:14px;color:var(--color-neutral-700)">{{ profileSummary }}</p>
+            <button class="btn btn-primary" onClick="{{ goMatches }}" style="justify-content:flex-start;min-width:200px;padding:var(--space-3) var(--space-4)">See your matches</button>
+          </div>
+        </sc-if>
+      </div>
+      <aside style="border-left:2px solid var(--color-divider);padding:var(--space-6) var(--space-4)">
+        <h6 style="margin:0 0 var(--space-3)">Your vibe profile</h6>
+        <sc-for list="{{ profileRows }}" as="r" hint-placeholder-count="6">
+          <div style="padding:var(--space-2) 0;border-bottom:1px solid var(--color-divider)">
+            <div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:4px">
+              <span>{{ r.tag }}</span>
+              <span style="font-family:ui-monospace,Menlo,monospace;color:var(--color-neutral-600)">{{ r.w }}</span>
+            </div>
+            <div style="height:6px;background:var(--color-neutral-200)">
+              <div style="height:6px;background:var(--color-accent);width:{{ r.pctW }}"></div>
+            </div>
+          </div>
+        </sc-for>
+        <p style="font-size:11.5px;color:var(--color-neutral-600);margin-top:var(--space-3)">Weights come from board picks (×2) and saves (×1.5). Drops subtract.</p>
+      </aside>
+    </div>
+  </sc-if>
+
+  <!-- 03 MATCHES -->
+  <sc-if value="{{ isMatches }}" hint-placeholder-val="{{ true }}">
+    <div style="display:grid;grid-template-columns:300px minmax(0,1fr);animation:lk-in .25s ease both">
+      <aside style="border-right:2px solid var(--color-divider);padding:var(--space-6) var(--space-4)">
+        <h6 style="margin:0 0 var(--space-4)">Filters</h6>
+        <div class="field" style="margin-bottom:var(--space-6)">
+          <label style="font-size:12px;letter-spacing:0.06em;text-transform:uppercase">Budget ceiling · {{ budgetLabel }}</label>
+          <input class="input" type="range" min="900" max="5200" step="100" value="{{ budget }}" onChange="{{ setBudget }}" style="width:100%;padding:0">
+          <div style="display:flex;justify-content:space-between;font-family:ui-monospace,Menlo,monospace;font-size:10.5px;color:var(--color-neutral-600)"><span>$900</span><span>$5,200</span></div>
+        </div>
+        <div class="field" style="margin-bottom:var(--space-6)">
+          <label style="font-size:12px;letter-spacing:0.06em;text-transform:uppercase">Max flight time · {{ flightLabel }}</label>
+          <input class="input" type="range" min="3" max="20" step="1" value="{{ flightMax }}" onChange="{{ setFlightMax }}" style="width:100%;padding:0">
+        </div>
+        <div class="field" style="margin-bottom:var(--space-6)">
+          <label style="font-size:12px;letter-spacing:0.06em;text-transform:uppercase">When</label>
+          <select class="input" value="{{ month }}" onChange="{{ setMonth }}" style="width:100%">
+            <sc-for list="{{ months }}" as="m" hint-placeholder-count="4">
+              <option value="{{ m }}">{{ m }}</option>
+            </sc-for>
+          </select>
+        </div>
+        <div class="field" style="margin-bottom:var(--space-6)">
+          <label style="font-size:12px;letter-spacing:0.06em;text-transform:uppercase">Sort</label>
+          <div style="display:grid;gap:2px;background:var(--color-divider);border:1px solid var(--color-divider)">
+            <sc-for list="{{ sorts }}" as="s" hint-placeholder-count="3">
+              <button onClick="{{ s.go }}" style="appearance:none;border:0;cursor:pointer;background:var(--color-bg);padding:var(--space-2) var(--space-3);text-align:left;font-size:13px;font-family:var(--font-heading);font-weight:800;display:flex;justify-content:space-between" style-hover="background:var(--color-neutral-200)">
+                <span>{{ s.name }}</span>
+                <sc-if value="{{ s.on }}" hint-placeholder-val="{{ true }}"><span style="color:var(--color-accent)">●</span></sc-if>
+              </button>
+            </sc-for>
+          </div>
+        </div>
+        <div class="hr"></div>
+        <h6 style="margin:0 0 var(--space-2)">Reading from</h6>
+        <div style="display:flex;flex-wrap:wrap;gap:var(--space-1)">
+          <sc-for list="{{ activeBoardNames }}" as="n" hint-placeholder-count="2">
+            <span class="tag tag-accent">{{ n }}</span>
+          </sc-for>
+        </div>
+        <button class="btn btn-ghost" onClick="{{ goVibe }}" style="padding-left:0;margin-top:var(--space-2)">Edit vibe →</button>
+      </aside>
+      <div style="padding:var(--space-6)">
+        <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:var(--space-3);margin-bottom:var(--space-4)">
+          <h2 style="font-size:32px;margin:0">{{ matchCountLabel }}</h2>
+          <span style="font-size:12px;color:var(--color-neutral-600)">Package estimate = flights + {{ nightsLabel }} stay for {{ partyLabel }}</span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:var(--space-4);background:transparent;border:0">
+          <sc-for list="{{ matches }}" as="d" hint-placeholder-count="6">
+            <button onClick="{{ d.go }}" style="appearance:none;border:0;cursor:pointer;background:var(--color-bg);padding:0;text-align:left;display:flex;flex-direction:column;border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-sm);transition:box-shadow .15s ease,transform .15s ease" style-hover="background:var(--color-bg);box-shadow:var(--shadow-md);transform:translateY(-2px)">
+              <div style="height:190px;background:repeating-linear-gradient(135deg,var(--color-accent-300) 0 9px,var(--color-accent-2-300) 9px 18px);position:relative;display:flex;align-items:flex-end;padding:var(--space-3)">
+                <span style="font-family:ui-monospace,Menlo,monospace;font-size:10px;background:var(--color-bg);padding:3px 6px;border:1px solid var(--color-divider)">{{ d.slot }}</span>
+                <span style="position:absolute;top:var(--space-2);right:var(--space-2);background:var(--color-accent);color:var(--color-bg);font-family:var(--font-heading);font-weight:800;font-size:20px;padding:6px 12px;border-radius:999px">{{ d.pct }}</span>
+                <sc-if value="{{ d.deal }}" hint-placeholder-val="{{ true }}">
+                  <span style="position:absolute;top:var(--space-2);left:var(--space-2);background:var(--color-accent-2);color:var(--color-bg);font-size:11px;font-weight:600;padding:5px 10px;letter-spacing:0.04em;border-radius:999px">{{ d.deal }}</span>
+                </sc-if>
+              </div>
+              <div style="padding:var(--space-4);flex:1;display:flex;flex-direction:column;gap:var(--space-2)">
+                <div>
+                  <h3 style="font-size:22px;margin:0">{{ d.name }}</h3>
+                  <div style="font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-neutral-600)">{{ d.country }} · {{ d.flightLabel }}</div>
+                </div>
+                <p style="font-size:13px;color:var(--color-neutral-700);margin:0">{{ d.blurb }}</p>
+                <div style="display:flex;flex-wrap:wrap;gap:var(--space-1)">
+                  <sc-for list="{{ d.matched }}" as="t" hint-placeholder-count="3">
+                    <span class="tag tag-accent">{{ t }}</span>
+                  </sc-for>
+                  <sc-for list="{{ d.missed }}" as="t" hint-placeholder-count="1">
+                    <span class="tag tag-outline">{{ t }}</span>
+                  </sc-for>
+                </div>
+                <div style="margin-top:auto;display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid var(--color-divider);padding-top:var(--space-2)">
+                  <span style="font-family:var(--font-heading);font-weight:800;font-size:19px">{{ d.priceLabel }}</span>
+                  <span style="font-size:12px;color:var(--color-accent-700)">Open →</span>
+                </div>
+              </div>
+            </button>
+          </sc-for>
+        </div>
+        <sc-if value="{{ noMatches }}" hint-placeholder-val="{{ false }}">
+          <p style="font-size:14px;color:var(--color-neutral-700);margin-top:var(--space-4)">Nothing inside those limits. Raise the budget or the flight ceiling.</p>
+        </sc-if>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- 04 DESTINATION -->
+  <sc-if value="{{ isDest }}" hint-placeholder-val="{{ false }}">
+    <div style="animation:lk-in .25s ease both">
+      <div style="display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);border-bottom:2px solid var(--color-divider)">
+        <div style="height:360px;background:repeating-linear-gradient(135deg,var(--color-accent-400) 0 10px,var(--color-accent-2-400) 10px 20px);display:flex;align-items:flex-end;padding:var(--space-4)">
+          <span style="font-family:ui-monospace,Menlo,monospace;font-size:11px;background:var(--color-bg);padding:4px 7px;border:1px solid var(--color-divider)">{{ dest.slot }}</span>
+        </div>
+        <div style="padding:var(--space-6);border-left:2px solid var(--color-divider);display:flex;flex-direction:column;gap:var(--space-3)">
+          <button class="btn btn-ghost" onClick="{{ goMatches }}" style="padding-left:0;align-self:flex-start">← All matches</button>
+          <div style="display:flex;align-items:flex-start;gap:var(--space-4);justify-content:space-between">
+            <h1 style="font-size:clamp(30px,4vw,46px);margin:0">{{ dest.name }}</h1>
+            <span style="background:var(--color-accent);color:var(--color-bg);font-family:var(--font-heading);font-weight:800;font-size:26px;padding:8px 16px;flex:none;border-radius:999px">{{ dest.pct }}</span>
+          </div>
+          <div style="font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-neutral-600)">{{ dest.country }} · {{ dest.flightLabel }} from {{ originLabel }} · {{ month }}</div>
+          <p style="font-size:15px;margin:0">{{ dest.blurb }}</p>
+          <div class="hr" style="margin:var(--space-2) 0"></div>
+          <h6 style="margin:0">Why you're compatible</h6>
+          <sc-for list="{{ dest.why }}" as="w" hint-placeholder-count="4">
+            <div style="display:flex;align-items:center;gap:var(--space-3);padding:5px 0;border-bottom:1px solid var(--color-divider)">
+              <span style="font-size:13px;min-width:44%">{{ w.tag }}</span>
+              <div style="flex:1;height:8px;background:var(--color-neutral-200)">
+                <div style="height:8px;background:var(--color-accent);width:{{ w.pctW }}"></div>
+              </div>
+              <span style="font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--color-neutral-600)">{{ w.src }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);border-bottom:2px solid var(--color-divider)">
+        <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="3">
+          <button onClick="{{ t.go }}" style="appearance:none;background:transparent;border:0;border-right:1px solid var(--color-divider);padding:var(--space-3) var(--space-4);cursor:pointer;text-align:left;font-family:var(--font-heading);font-weight:800;font-size:15px;color:var(--color-text);display:flex;align-items:center;gap:var(--space-2)" style-hover="background:var(--color-neutral-200)">
+            <span>{{ t.name }}</span>
+            <span style="font-size:11px;color:var(--color-neutral-600);font-weight:600">{{ t.meta }}</span>
+            <sc-if value="{{ t.on }}" hint-placeholder-val="{{ true }}">
+              <span style="margin-left:auto;width:10px;height:10px;background:var(--color-accent)"></span>
+            </sc-if>
+          </button>
+        </sc-for>
+      </div>
+
+      <!-- STAY -->
+      <sc-if value="{{ isStay }}" hint-placeholder-val="{{ true }}">
+        <div style="padding:var(--space-6)">
+          <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:var(--space-4);flex-wrap:wrap;margin-bottom:var(--space-4)">
+            <h2 style="font-size:28px;margin:0">Stays, compared</h2>
+            <div style="display:flex;gap:2px;border:1px solid var(--color-divider);background:var(--color-divider)">
+              <sc-for list="{{ hotelSorts }}" as="s" hint-placeholder-count="3">
+                <button onClick="{{ s.go }}" style="appearance:none;border:0;cursor:pointer;background:var(--color-bg);padding:var(--space-2) var(--space-3);font-size:12.5px;font-family:var(--font-heading);font-weight:800;color:var(--color-text)" style-hover="background:var(--color-neutral-200)">{{ s.label }}</button>
+              </sc-for>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:var(--space-4)">
+            <sc-for list="{{ hotels }}" as="h" hint-placeholder-count="3">
+              <div style="display:grid;grid-template-columns:200px minmax(0,1fr) 230px;background:var(--color-bg);border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-sm)">
+                <div style="background:repeating-linear-gradient(135deg,var(--color-accent-300) 0 9px,var(--color-accent-2-300) 9px 18px);min-height:150px;display:flex;align-items:flex-end;padding:var(--space-2)">
+                  <span style="font-family:ui-monospace,Menlo,monospace;font-size:10px;background:var(--color-bg);padding:2px 5px;border:1px solid var(--color-divider)">{{ h.slot }}</span>
+                </div>
+                <div style="padding:var(--space-4);display:flex;flex-direction:column;gap:var(--space-2)">
+                  <div style="display:flex;gap:var(--space-2);align-items:baseline;flex-wrap:wrap">
+                    <h3 style="font-size:20px;margin:0">{{ h.name }}</h3>
+                    <sc-if value="{{ h.deal }}" hint-placeholder-val="{{ true }}">
+                      <span style="background:var(--color-accent-2);color:var(--color-bg);font-size:11px;font-weight:600;padding:3px 9px;border-radius:999px">{{ h.deal }}</span>
+                    </sc-if>
+                  </div>
+                  <div style="font-size:12.5px;color:var(--color-neutral-700)">{{ h.meta }}</div>
+                  <div style="display:flex;align-items:center;gap:var(--space-3);max-width:420px">
+                    <span style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-neutral-600);min-width:88px">Chemistry</span>
+                    <div style="flex:1;height:8px;background:var(--color-neutral-200)">
+                      <div style="height:8px;background:var(--color-accent);width:{{ h.pctW }}"></div>
+                    </div>
+                    <span style="font-family:var(--font-heading);font-weight:800;font-size:14px">{{ h.pct }}</span>
+                  </div>
+                  <div style="display:flex;flex-wrap:wrap;gap:var(--space-1)">
+                    <sc-for list="{{ h.tags }}" as="t" hint-placeholder-count="3">
+                      <span class="tag tag-outline">{{ t }}</span>
+                    </sc-for>
+                  </div>
+                </div>
+                <div style="padding:var(--space-4);background:var(--color-neutral-100);display:flex;flex-direction:column;align-items:flex-start;gap:var(--space-1)">
+                  <sc-if value="{{ h.was }}" hint-placeholder-val="{{ true }}">
+                    <span style="font-size:12px;color:var(--color-neutral-600);text-decoration:line-through">{{ h.was }}</span>
+                  </sc-if>
+                  <div style="font-family:var(--font-heading);font-weight:800;font-size:26px;line-height:1">{{ h.priceLabel }}</div>
+                  <div style="font-size:11.5px;color:var(--color-neutral-600);margin-bottom:var(--space-2)">per night · {{ h.totalLabel }} total</div>
+                  <button class="btn btn-primary btn-block" onClick="{{ h.pick }}" style="justify-content:flex-start">{{ h.cta }}</button>
+                  <span style="font-size:11px;color:var(--color-neutral-600)">{{ h.source }}</span>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- DO -->
+      <sc-if value="{{ isDo }}" hint-placeholder-val="{{ false }}">
+        <div style="padding:var(--space-6)">
+          <h2 style="font-size:28px;margin:0 0 var(--space-4)">Interests</h2>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:var(--space-4);background:transparent;border:0">
+            <sc-for list="{{ activities }}" as="a" hint-placeholder-count="4">
+              <div style="background:var(--color-bg);display:flex;flex-direction:column;border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-sm)">
+                <div style="height:150px;background:repeating-linear-gradient(135deg,var(--color-accent-300) 0 9px,var(--color-accent-2-300) 9px 18px);display:flex;align-items:flex-end;padding:var(--space-2)">
+                  <span style="font-family:ui-monospace,Menlo,monospace;font-size:10px;background:var(--color-bg);padding:2px 5px;border:1px solid var(--color-divider)">{{ a.slot }}</span>
+                </div>
+                <div style="padding:var(--space-4);display:flex;flex-direction:column;gap:var(--space-2);flex:1">
+                  <h3 style="font-size:18px;margin:0">{{ a.name }}</h3>
+                  <div style="font-size:12px;letter-spacing:0.06em;text-transform:uppercase;color:var(--color-neutral-600)">{{ a.dur }} · {{ a.priceLabel }} pp</div>
+                  <p style="font-size:13px;color:var(--color-neutral-700);margin:0">{{ a.note }}</p>
+                  <div style="display:flex;align-items:center;gap:var(--space-2);margin-top:auto;padding-top:var(--space-2);border-top:1px solid var(--color-divider)">
+                    <span class="tag tag-accent">{{ a.pct }} match</span>
+                    <button class="btn btn-secondary" onClick="{{ a.toggle }}" style="margin-left:auto;justify-content:flex-start">{{ a.cta }}</button>
+                  </div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- FLY -->
+      <sc-if value="{{ isFly }}" hint-placeholder-val="{{ false }}">
+        <div style="padding:var(--space-6)">
+          <h2 style="font-size:28px;margin:0 0 var(--space-1)">Flights · {{ originCode }} → {{ dest.code }}</h2>
+          <p style="font-size:13px;color:var(--color-neutral-700);margin:0 0 var(--space-4)">{{ month }} · {{ partyLabel }} · prices are round-trip per person</p>
+          <table class="table" style="width:100%">
+            <thead><tr><th style="text-align:left">Carrier</th><th style="text-align:left">Out</th><th style="text-align:left">Back</th><th style="text-align:left">Duration</th><th style="text-align:left">Stops</th><th style="text-align:left">Fare</th><th></th></tr></thead>
+            <tbody>
+              <sc-for list="{{ flights }}" as="f" hint-placeholder-count="3">
+                <tr>
+                  <td style="font-weight:600">{{ f.airline }}</td>
+                  <td style="font-family:ui-monospace,Menlo,monospace">{{ f.out }}</td>
+                  <td style="font-family:ui-monospace,Menlo,monospace">{{ f.back }}</td>
+                  <td>{{ f.dur }}</td>
+                  <td>{{ f.stops }}</td>
+                  <td style="font-family:var(--font-heading);font-weight:800">{{ f.priceLabel }}</td>
+                  <td style="text-align:right"><button class="btn btn-primary" onClick="{{ f.pick }}" style="justify-content:flex-start">{{ f.cta }}</button></td>
+                </tr>
+              </sc-for>
+            </tbody>
+          </table>
+        </div>
+      </sc-if>
+    </div>
+  </sc-if>
+
+  <!-- 05 TRIP -->
+  <sc-if value="{{ isTrip }}" hint-placeholder-val="{{ false }}">
+    <div style="display:grid;grid-template-columns:minmax(0,1fr) 360px;animation:lk-in .25s ease both">
+      <div style="padding:var(--space-6)">
+        <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:var(--space-4);flex-wrap:wrap;margin-bottom:var(--space-4)">
+          <div>
+            <h2 style="font-size:32px;margin:0">{{ tripTitle }}</h2>
+            <p style="font-size:13px;color:var(--color-neutral-700);margin:0">Built from your vibe profile — swap any line and the total re-prices.</p>
+          </div>
+          <button class="btn btn-ghost" onClick="{{ goDest }}" style="padding-left:0">← Back to {{ dest.name }}</button>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:var(--space-3)">
+          <sc-for list="{{ tripRows }}" as="r" hint-placeholder-count="4">
+            <div style="display:grid;grid-template-columns:110px minmax(0,1fr) 170px;align-items:stretch;background:var(--color-bg);border-radius:var(--radius-md);box-shadow:var(--shadow-sm);overflow:hidden">
+              <div style="padding:var(--space-4);background:var(--color-accent-100);font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-accent-700);font-weight:600;display:flex;align-items:center">{{ r.kindLabel }}</div>
+              <div style="padding:var(--space-4);display:flex;flex-direction:column;gap:4px">
+                <div style="font-family:var(--font-heading);font-weight:800;font-size:18px">{{ r.title }}</div>
+                <div style="font-size:12.5px;color:var(--color-neutral-700)">{{ r.meta }}</div>
+                <sc-if value="{{ r.badge }}" hint-placeholder-val="{{ true }}">
+                  <span style="align-self:flex-start;background:var(--color-accent-2);color:var(--color-bg);font-size:11px;font-weight:600;padding:3px 9px;border-radius:999px">{{ r.badge }}</span>
+                </sc-if>
+              </div>
+              <div style="padding:var(--space-4);display:flex;flex-direction:column;align-items:flex-start;gap:var(--space-2)">
+                <span style="font-family:var(--font-heading);font-weight:800;font-size:19px">{{ r.priceLabel }}</span>
+                <button class="btn btn-secondary" onClick="{{ r.swap }}" style="justify-content:flex-start">{{ r.swapLabel }}</button>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+
+        <sc-if value="{{ swapOpen }}" hint-placeholder-val="{{ false }}">
+          <div style="border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-md);margin-top:var(--space-4)">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:var(--space-3) var(--space-4);background:var(--color-accent-100)">
+              <h3 style="font-size:17px;margin:0">{{ swapTitle }}</h3>
+              <button class="btn btn-ghost" onClick="{{ closeSwap }}">Close ✕</button>
+            </div>
+            <sc-for list="{{ swapOptions }}" as="o" hint-placeholder-count="3">
+              <button onClick="{{ o.pick }}" style="appearance:none;border:0;border-bottom:1px solid var(--color-divider);background:var(--color-bg);width:100%;text-align:left;cursor:pointer;padding:var(--space-3) var(--space-4);display:flex;gap:var(--space-4);align-items:center" style-hover="background:var(--color-neutral-100)">
+                <span style="flex:1;font-family:var(--font-heading);font-weight:800;font-size:15px">{{ o.title }}</span>
+                <span style="font-size:12px;color:var(--color-neutral-700);flex:1">{{ o.meta }}</span>
+                <span style="font-family:var(--font-heading);font-weight:800;font-size:15px">{{ o.priceLabel }}</span>
+                <span style="font-size:12px;color:var(--color-accent-700)">{{ o.delta }}</span>
+              </button>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <h3 style="font-size:22px;margin:var(--space-8) 0 var(--space-3)">Day by day</h3>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:var(--space-4);background:transparent;border:0">
+          <sc-for list="{{ days }}" as="d" hint-placeholder-count="6">
+            <div style="background:var(--color-bg);padding:var(--space-4);min-height:140px">
+              <div style="font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--color-neutral-600);margin-bottom:var(--space-2)">{{ d.num }}</div>
+              <div style="font-family:var(--font-heading);font-weight:800;font-size:15px;margin-bottom:4px">{{ d.title }}</div>
+              <div style="font-size:12.5px;color:var(--color-neutral-700)">{{ d.note }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      <aside style="border-left:2px solid var(--color-divider);padding:var(--space-6) var(--space-4)">
+        <h6 style="margin:0 0 var(--space-3)">Total</h6>
+        <sc-for list="{{ totals }}" as="t" hint-placeholder-count="4">
+          <div style="display:flex;justify-content:space-between;font-size:13px;padding:6px 0;border-bottom:1px solid var(--color-divider)">
+            <span>{{ t.label }}</span>
+            <span style="font-family:ui-monospace,Menlo,monospace">{{ t.value }}</span>
+          </div>
+        </sc-for>
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:var(--space-3);padding-top:var(--space-3);border-top:2px solid var(--color-text)">
+          <span style="font-size:12px;letter-spacing:0.08em;text-transform:uppercase">Trip total</span>
+          <span style="font-family:var(--font-heading);font-weight:800;font-size:30px">{{ tripTotalLabel }}</span>
+        </div>
+        <p style="font-size:11.5px;color:var(--color-neutral-600);margin:var(--space-1) 0 var(--space-4)">{{ budgetVerdict }}</p>
+        <button class="btn btn-primary btn-block" onClick="{{ book }}" style="justify-content:flex-start;padding:var(--space-3) var(--space-4)">{{ bookLabel }}</button>
+        <p style="font-size:11px;color:var(--color-neutral-600);margin:6px 0 0">Make it official — locks flights, stay and activities together.</p>
+        <sc-if value="{{ booked }}" hint-placeholder-val="{{ false }}">
+          <div style="border-radius:var(--radius-lg);background:var(--color-accent-2-100);padding:var(--space-4);margin-top:var(--space-4);box-shadow:var(--shadow-sm)">
+            <h4 style="font-size:16px;margin:0 0 var(--space-1);color:var(--color-accent-2-800)">Official — ref {{ bookingRef }}</h4>
+            <p style="font-size:12.5px;color:var(--color-neutral-700);margin:0">Flights, stay and activities are held on one confirmation. Free cancellation on the stay until 14 days out.</p>
+          </div>
+        </sc-if>
+      </aside>
+    </div>
+  </sc-if>
+
+  </main>
+
+  <footer style="border-top:2px solid var(--color-divider);padding:var(--space-4) var(--space-6);display:flex;gap:var(--space-6);flex-wrap:wrap;font-size:11.5px;color:var(--color-neutral-600)">
+    <span>LIKENESS · prototype</span>
+    <span>Photography slots are empty — drop real images in to finish the look.</span>
+  </footer>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;nights&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:6,&quot;min&quot;:3,&quot;max&quot;:14,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Trip setup&quot;},&quot;travellers&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:2,&quot;min&quot;:1,&quot;max&quot;:6,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Trip setup&quot;},&quot;origin&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Chicago&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Trip setup&quot;},&quot;originCode&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;ORD&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Trip setup&quot;}}">
+const BOARDS = [
+  ['coastal','Sun-Bleached Coastal','Lime-wash walls, hot stone, flat blue water.',['whitewashed stone','flat blue water','slow harbours','cliff paths'],'board / chalk village + sea'],
+  ['alpine','Alpine Quiet','Grey rock, cold lakes, weather that moves fast.',['dramatic peaks','cold water','low fog','quiet'],'board / peaks + still lake'],
+  ['market','Neon Night Market','Late food, wet pavement, signs on signs.',['night market','street food','late nights'],'board / night market stalls'],
+  ['desert','Desert Modernism','Flat light, clean lines, pool at four.',['mid-century','pool light','dry heat'],'board / modernist house + palms'],
+  ['forest','Rainforest & Mist','Green on green, warm rain, birds louder than cars.',['jungle canopy','warm rain','low fog'],'board / canopy + mist'],
+  ['stone','Old-Stone Europe','Terracotta, narrow alleys, bells at seven.',['stone alleys','terracotta','whitewashed stone'],'board / old town alley']
+];
+
+const SWIPES = [
+  ['Chalk alley, midday',['whitewashed stone','stone alleys'],'photo / lime-wash alley'],
+  ['Cold lake, low cloud',['cold water','low fog'],'photo / lake under cloud'],
+  ['Grilled skewers, 11pm',['street food','late nights'],'photo / night food stall'],
+  ['Pool, hard shadow',['pool light','dry heat'],'photo / pool + concrete'],
+  ['Ferns after rain',['jungle canopy','warm rain'],'photo / wet ferns'],
+  ['Harbour, empty chairs',['slow harbours','quiet'],'photo / harbour tables'],
+  ['Terracotta rooftops',['terracotta','stone alleys'],'photo / rooftops from above'],
+  ['Ridgeline at dusk',['dramatic peaks','quiet'],'photo / ridge silhouette']
+];
+
+const DESTS = [
+  ['paros','Paros','Greece','JTR',['whitewashed stone','flat blue water','slow harbours','cliff paths','stone alleys'],11.5,'Chalk cubes, a harbour that empties by ten, marble dust underfoot.','city / white cubes above water'],
+  ['lofoten','Lofoten','Norway','SVJ',['dramatic peaks','cold water','low fog','quiet','slow harbours'],12,'Granite straight out of the sea and a fishing village per fjord.','city / red cabins under peaks'],
+  ['oaxaca','Oaxaca','Mexico','OAX',['night market','street food','late nights','terracotta','stone alleys'],7,'Mezcal courtyards, market smoke, a green stone cathedral.','city / market street at night'],
+  ['palmsprings','Palm Springs','USA','PSP',['mid-century','pool light','dry heat','quiet'],4.5,'Butterfly roofs, blue rectangles, mountains doing nothing all day.','city / desert modernist street'],
+  ['uvita','Uvita','Costa Rica','SJO',['jungle canopy','warm rain','low fog','cliff paths'],6.5,'Canopy above, whale tail sandbar below, rain on schedule.','city / jungle meeting ocean'],
+  ['puglia','Puglia','Italy','BRI',['stone alleys','terracotta','whitewashed stone','flat blue water','slow harbours'],10.5,'Trulli, olive rows, towns bleached to bone by August.','city / whitewashed hill town'],
+  ['chefchaouen','Chefchaouen','Morocco','TNG',['stone alleys','whitewashed stone','night market','dry heat'],11,'A whole town painted one colour, up against dry mountains.','city / blue-washed medina'],
+  ['hakone','Hakone','Japan','HND',['low fog','quiet','cold water','dramatic peaks'],14,'Cedar, steam, a lake that shows the mountain when it feels like it.','city / onsen village in fog']
+];
+
+const HOTELS = {
+  paros:[['Kalypso Rooms',214,18,['harbour view','lime-wash','6 rooms'],'8 min to Naoussa harbour'],['Hotel Marmara',268,0,['marble courtyard','pool','breakfast'],'Parikia old town'],['Aliki Cliff House',392,9,['cliff terrace','private steps','sea pool'],'Aliki, south coast']],
+  lofoten:[['Rorbu 14',196,12,['fisherman cabin','wood stove','dock'],'Reine, on the water'],['Hattvika Lodge',284,0,['fjord glass','sauna','breakfast'],'Ballstad harbour'],['Nusfjord Arctic Resort',356,7,['heritage village','cold plunge','restaurant'],'Nusfjord']],
+  oaxaca:[['Casa Antonieta',168,15,['terracotta courtyard','rooftop','cafe'],'Centro, 3 min to Santo Domingo'],['Hotel Sin Nombre',242,0,['stone patio','pool','bar'],'Centro north'],['Grana B&B',148,22,['tiled rooms','roof terrace','market walk'],'Jalatlaco']],
+  palmsprings:[['Holiday House',229,10,['1950s cabana','pool bar','loungers'],'Uptown Design District'],['The Weekend',268,0,['butterfly roof','mountain view','fire pit'],'Racquet Club Estates'],['Villa Royale',196,17,['courtyard pool','adobe','spa'],'South Palm Springs']],
+  uvita:[['Kura Boutique',312,0,['infinity edge','open-air','jungle'],'Ridge above Uvita'],['Rancho Pacifico',248,14,['canopy deck','yoga','breakfast'],'Baru mountain'],['La Cusinga Lodge',162,9,['cliff trail','no glass walls','farm food'],'Bahia Ballena']],
+  puglia:[['Masseria Petrarolo',238,0,['olive grove','stone vaults','pool'],'Near Ostuni'],['Trullo Bianco',176,20,['conical roof','garden','village walk'],'Alberobello'],['Don Ferrante',402,6,['sea ramparts','rock pool','cellar bar'],'Monopoli, on the wall']],
+  chefchaouen:[['Dar Meziana',124,16,['blue courtyard','roof breakfast','medina'],'Inside the medina'],['Lina Ryad & Spa',186,0,['hammam','pool','terrace'],'Medina edge'],['Casa Perleta',98,24,['painted rooms','mountain view','tea roof'],'Upper medina']],
+  hakone:[['Gora Kadan',468,0,['private onsen','cedar','kaiseki'],'Gora, former imperial villa'],['Hakone Retreat',264,13,['lake side','forest bath','breakfast'],'Sengokuhara'],['Fukuzumiro',212,8,['1890 ryokan','river rooms','wood bath'],'Tonosawa']]
+};
+
+const ACTS = {
+  paros:[['Sunset sail to Antiparos',86,'5h','Small boat, two swim stops, bread and fish on deck.'],['Marble quarry walk',34,'2h','Into the hill the Venus de Milo came out of.'],['Kite morning at Golden Beach',58,'3h','Meltemi does the work; instructor optional.']],
+  lofoten:[['Reinebringen ridge hike',0,'4h','1,978 stone steps, then the whole archipelago.'],['Fjord kayak, midnight light',92,'3h','Flat water between granite walls.'],['Cod-drying rack tour + lunch',48,'2h','The smell is the point. Stockfish lunch after.']],
+  oaxaca:[['Night market food crawl',54,'3h','Tlayudas, mezcal, smoke corridor at 20 de Noviembre.'],['Hierve el Agua springs',76,'8h','Petrified waterfall, mineral pools, long drive.'],['Mezcal palenque visit',68,'5h','Donkey mill, clay pot still, tasting with the maker.']],
+  palmsprings:[['Modernism architecture drive',72,'3h','Kaufmann, Frey, and twelve butterfly roofs.'],['Aerial tramway + ridge trail',44,'4h','8,500 ft in ten minutes, 30° cooler at the top.'],['Joshua Tree sunset run',96,'6h','Boulders, then the sky does its thing.']],
+  uvita:[['Whale tail sandbar walk',18,'2h','Low tide only — the bar appears for four hours.'],['Nauyaca waterfall ride',88,'5h','Horses in, swim under 60 m of falling water.'],['Canopy night walk',52,'2h','Red torches, frogs, one very calm sloth.']],
+  puglia:[['Trulli cycling loop',62,'4h','Dry-stone walls, olive rows, a lot of shade.'],['Burrata making in a masseria',74,'3h','Morning milk, hot hands, lunch after.'],['Polignano sea-cave swim',58,'3h','Boat into the limestone, jump off it.']],
+  chefchaouen:[['Medina photo walk, dawn',38,'2h','Empty blue streets before the shops open.'],['Rif mountain day hike',64,'6h','Goat paths to God\u2019s Bridge, lunch in Akchour.'],['Rooftop tagine cooking',46,'3h','Market first, then the clay pot, then the roof.']],
+  hakone:[['Private onsen hour',58,'1h','Cedar tub, river below, nobody else.'],['Lake Ashi cedar avenue walk',0,'2h','400-year-old trees, then the old checkpoint.'],['Open-air museum + Picasso hall',42,'3h','Sculpture on grass with the mountain behind.']]
+};
+
+const FLIGHTS = {
+  paros:[['Aegean + Delta','06:40','15:05',1,742,'13h 25m'],['Lufthansa','17:20','09:50',1,688,'14h 10m'],['Emirates','21:05','18:40',2,604,'19h 35m']],
+  lofoten:[['SAS','18:15','11:20',1,712,'12h 05m'],['Norwegian + Icelandair','16:40','12:55',2,596,'15h 15m'],['Finnair','19:30','13:10',1,768,'12h 40m']],
+  oaxaca:[['Aeromexico','07:10','14:25',1,398,'7h 15m'],['United','11:45','19:50',1,442,'8h 05m'],['Volaris','06:00','16:40',2,318,'10h 40m']],
+  palmsprings:[['United','08:20','11:05',0,286,'4h 45m'],['American','13:10','16:00',0,312,'4h 50m'],['Southwest','06:15','11:40',1,244,'7h 25m']],
+  uvita:[['United + Sansa','06:50','14:30',1,486,'7h 40m'],['Copa','09:25','19:10',1,542,'9h 45m'],['Spirit + Sansa','05:40','16:20',2,396,'10h 40m']],
+  puglia:[['ITA Airways','16:55','13:40',1,724,'13h 45m'],['Lufthansa','18:30','14:05',1,698,'12h 35m'],['Turkish','21:40','19:25',2,612,'16h 45m']],
+  chefchaouen:[['Royal Air Maroc','19:05','12:30',1,668,'12h 25m'],['Iberia','17:45','13:55',2,584,'14h 10m'],['Air France','20:20','14:40',1,712,'12h 20m']],
+  hakone:[['ANA','12:55','16:20',0,912,'13h 25m'],['JAL + Alaska','10:40','17:55',1,848,'15h 15m'],['Air Canada','07:15','18:30',1,764,'16h 15m']]
+};
+
+const MONTHS = ['October 2026','November 2026','December 2026','March 2027','May 2027'];
+
+const money = n => '$' + Math.round(n).toLocaleString('en-US');
+
+class Component extends DCLogic {
+  state = {
+    screen: 'vibe',
+    picked: ['coastal'],
+    likes: {},
+    swipeIdx: 0,
+    budget: 3400,
+    flightMax: 15,
+    month: MONTHS[0],
+    sort: 'match',
+    hotelSort: 'match',
+    destId: null,
+    tab: 'stay',
+    hotelId: null,
+    flightIdx: 0,
+    acts: [],
+    swap: null,
+    booked: false
+  };
+
+  get nights() { return this.props.nights ?? 6; }
+  get party() { return this.props.travellers ?? 2; }
+  get origin() { return this.props.origin ?? 'Chicago'; }
+  get originCode() { return this.props.originCode ?? 'ORD'; }
+
+  profile() {
+    const w = {};
+    const add = (t, n) => { w[t] = (w[t] || 0) + n; };
+    this.state.picked.forEach(id => {
+      const b = BOARDS.find(x => x[0] === id);
+      if (b) b[3].forEach(t => add(t, 2));
+    });
+    Object.keys(this.state.likes).forEach(i => {
+      const card = SWIPES[+i];
+      if (!card) return;
+      card[1].forEach(t => add(t, this.state.likes[i] ? 1.5 : -1));
+    });
+    return w;
+  }
+
+  scored() {
+    const w = this.profile();
+    const pos = Object.keys(w).filter(k => w[k] > 0);
+    const max = pos.reduce((s, k) => s + w[k], 0) || 1;
+    return DESTS.map(d => {
+      const tags = d[4];
+      const hit = pos.filter(t => tags.indexOf(t) > -1);
+      const raw = hit.reduce((s, t) => s + w[t], 0);
+      const pen = Object.keys(w).filter(t => w[t] < 0 && tags.indexOf(t) > -1).length * 0.06;
+      const pct = Math.max(41, Math.min(98, Math.round(56 + 42 * (raw / max) - pen * 100 / 10)));
+      const pkg = this.pkgEstimate(d[0]);
+      return { d, pct, hit, pkg };
+    }).sort((a, b) => b.pct - a.pct);
+  }
+
+  pkgEstimate(id) {
+    const f = FLIGHTS[id][2][4];
+    const h = HOTELS[id].reduce((m, x) => Math.min(m, x[1]), 1e9);
+    return f * this.party + h * this.nights;
+  }
+
+  hotelPct(id, h, destPct) {
+    const w = this.profile();
+    const pos = Object.keys(w).filter(k => w[k] > 0);
+    const maxW = pos.reduce((s, k) => Math.max(s, w[k]), 1);
+    const tags = h[3];
+    const hitW = tags.reduce((s, t) => s + Math.max(0, w[t] || 0), 0);
+    const base = Math.round(58 + 34 * Math.min(1, hitW / (maxW * 1.6)));
+    return Math.max(50, Math.min(96, base - (h[2] > 15 ? 3 : 0)));
+  }
+
+  pkg() {
+    const id = this.state.destId || this.scored()[0].d[0];
+    const hotels = HOTELS[id];
+    const hotel = hotels[this.state.hotelId == null ? 0 : this.state.hotelId];
+    const flight = FLIGHTS[id][this.state.flightIdx];
+    const acts = this.state.acts.length ? this.state.acts : [0, 1];
+    return { id, hotel, flight, acts, hotels };
+  }
+
+  tripTotal() {
+    const p = this.pkg();
+    const stay = p.hotel[1] * this.nights;
+    const air = p.flight[4] * this.party;
+    const doing = p.acts.reduce((s, i) => s + ACTS[p.id][i][1] * this.party, 0);
+    return { stay, air, doing, total: stay + air + doing };
+  }
+
+  set(k, v) { this.setState({ [k]: v }); }
+
+  renderVals() {
+    const S = this.state;
+    const scored = this.scored();
+    const destEntry = scored.find(x => x.d[0] === S.destId) || scored[0];
+    const dId = destEntry.d[0];
+    const prof = this.profile();
+    const t = this.tripTotal();
+    const p = this.pkg();
+
+    const steps = [
+      ['01', 'Your Type', 'vibe'], ['02', 'Find Your Type', 'swipe'], ['03', 'Your Matches', 'matches'],
+      ['04', 'Match', 'dest'], ['05', 'Make It Official', 'trip']
+    ].map(s => ({ num: s[0], name: s[1], on: S.screen === s[2], go: () => this.set('screen', s[2]) }));
+
+    const boards = BOARDS.map(b => ({
+      name: b[1], note: b[2], tagList: b[3].slice(0, 3), slot: b[4],
+      on: S.picked.indexOf(b[0]) > -1,
+      toggle: () => this.setState(st => ({
+        picked: st.picked.indexOf(b[0]) > -1 ? st.picked.filter(x => x !== b[0]) : st.picked.concat(b[0])
+      }))
+    }));
+
+    const card = SWIPES[S.swipeIdx];
+    const swipeCard = card ? { key: 'sw' + S.swipeIdx, label: card[0], tags: card[1], slot: card[2] } : null;
+    const advance = v => this.setState(st => {
+      const likes = Object.assign({}, st.likes); likes[st.swipeIdx] = v;
+      return { likes, swipeIdx: st.swipeIdx + 1 };
+    });
+
+    const posTags = Object.keys(prof).filter(k => prof[k] > 0).sort((a, b) => prof[b] - prof[a]);
+    const maxW = posTags.length ? prof[posTags[0]] : 1;
+    const profileRows = posTags.slice(0, 9).map(k => ({
+      tag: k, w: prof[k].toFixed(1), pctW: Math.round(100 * prof[k] / maxW) + '%'
+    }));
+
+    const visible = scored.filter(x => x.pkg <= S.budget && x.d[5] <= S.flightMax);
+    const ordered = S.sort === 'price' ? visible.slice().sort((a, b) => a.pkg - b.pkg)
+      : S.sort === 'flight' ? visible.slice().sort((a, b) => a.d[5] - b.d[5]) : visible;
+
+    const matches = ordered.map(x => {
+      const missed = posTags.filter(tg => x.hit.indexOf(tg) === -1).slice(0, 1);
+      const cheapDeal = HOTELS[x.d[0]].reduce((m, h) => Math.max(m, h[2]), 0);
+      return {
+        name: x.d[1], country: x.d[2], blurb: x.d[6], slot: x.d[7],
+        pct: x.pct + '%', matched: x.hit.slice(0, 4), missed,
+        flightLabel: x.d[5] + 'h flight',
+        priceLabel: money(x.pkg) + ' est.',
+        deal: cheapDeal >= 15 ? 'PRICE DROP ' + cheapDeal + '%' : null,
+        go: () => this.setState({ destId: x.d[0], screen: 'dest', tab: 'stay', hotelId: null, flightIdx: 0, acts: [], swap: null, booked: false })
+      };
+    });
+
+    const why = destEntry.hit.slice(0, 5).map(tg => ({
+      tag: tg, pctW: Math.round(100 * prof[tg] / maxW) + '%',
+      src: prof[tg] >= 2 ? 'board' : 'saved'
+    }));
+
+    const dest = {
+      name: destEntry.d[1], country: destEntry.d[2], code: destEntry.d[3],
+      blurb: destEntry.d[6], slot: destEntry.d[7], pct: destEntry.pct + '%',
+      flightLabel: destEntry.d[5] + 'h', why
+    };
+
+    const hotelsRaw = HOTELS[dId].map((h, i) => ({ h, i, pct: this.hotelPct(dId, h, destEntry.pct) }));
+    const hotelsSorted = S.hotelSort === 'price' ? hotelsRaw.slice().sort((a, b) => a.h[1] - b.h[1])
+      : S.hotelSort === 'deal' ? hotelsRaw.slice().sort((a, b) => b.h[2] - a.h[2])
+      : hotelsRaw.slice().sort((a, b) => b.pct - a.pct);
+
+    const hotels = hotelsSorted.map(x => ({
+      name: x.h[0], meta: x.h[4], tags: x.h[3], slot: 'stay / ' + x.h[0].toLowerCase(),
+      pct: x.pct + '%', pctW: x.pct + '%',
+      deal: x.h[2] ? '−' + x.h[2] + '% vs 30-day avg' : null,
+      was: x.h[2] ? money(x.h[1] / (1 - x.h[2] / 100)) : null,
+      priceLabel: money(x.h[1]),
+      totalLabel: money(x.h[1] * this.nights),
+      source: 'Best of 7 sites · free cancellation',
+      cta: (S.hotelId === x.i ? 'Locked in ✓' : 'Make a Move'),
+      pick: () => this.setState({ hotelId: x.i, screen: 'trip', swap: null })
+    }));
+
+    const activities = ACTS[dId].map((a, i) => ({
+      name: a[0], dur: a[2], note: a[3], slot: 'do / ' + a[0].toLowerCase().slice(0, 22),
+      priceLabel: a[1] ? money(a[1]) : 'Free',
+      pct: Math.max(58, destEntry.pct - i * 5) + '%',
+      cta: S.acts.indexOf(i) > -1 ? 'Remove' : 'Make a Move',
+      toggle: () => this.setState(st => {
+        const base = st.acts.length ? st.acts : [0, 1];
+        return { acts: base.indexOf(i) > -1 ? base.filter(x => x !== i) : base.concat(i) };
+      })
+    }));
+
+    const flights = FLIGHTS[dId].map((f, i) => ({
+      airline: f[0], out: f[1], back: f[2], dur: f[5],
+      stops: f[3] === 0 ? 'Nonstop' : f[3] + ' stop',
+      priceLabel: money(f[4]),
+      cta: S.flightIdx === i ? 'Selected ✓' : 'Select',
+      pick: () => this.setState({ flightIdx: i, screen: 'trip', swap: null })
+    }));
+
+    const kindMap = { flight: 'Flights', hotel: 'Stay', act: 'Activity' };
+    const tripRows = [{
+      kindLabel: 'Flights', title: p.flight[0] + ' · ' + this.originCode + ' → ' + destEntry.d[3],
+      meta: p.flight[1] + ' out / ' + p.flight[2] + ' back · ' + p.flight[5] + ' · ' + (p.flight[3] ? p.flight[3] + ' stop' : 'Nonstop'),
+      badge: null, priceLabel: money(p.flight[4] * this.party),
+      swapLabel: 'Swap flight', swap: () => this.set('swap', 'flight')
+    }, {
+      kindLabel: 'Stay', title: p.hotel[0],
+      meta: p.hotel[4] + ' · ' + this.nights + ' nights · ' + money(p.hotel[1]) + '/night',
+      badge: p.hotel[2] ? '−' + p.hotel[2] + '% price drop' : null,
+      priceLabel: money(p.hotel[1] * this.nights),
+      swapLabel: 'Swap stay', swap: () => this.set('swap', 'hotel')
+    }].concat(p.acts.map(i => {
+      const a = ACTS[p.id][i];
+      return {
+        kindLabel: 'Activity', title: a[0], meta: a[2] + ' · ' + this.party + ' people',
+        badge: null, priceLabel: a[1] ? money(a[1] * this.party) : 'Free',
+        swapLabel: 'Swap activity', swap: () => this.set('swap', 'act:' + i)
+      };
+    }));
+
+    let swapOptions = [], swapTitle = '';
+    if (S.swap === 'flight') {
+      swapTitle = 'Other flights to ' + destEntry.d[1];
+      swapOptions = FLIGHTS[dId].map((f, i) => ({
+        title: f[0], meta: f[1] + ' → ' + f[2] + ' · ' + f[5] + ' · ' + (f[3] ? f[3] + ' stop' : 'Nonstop'),
+        priceLabel: money(f[4] * this.party),
+        delta: f[4] === p.flight[4] ? 'current' : (f[4] > p.flight[4] ? '+' : '−') + money(Math.abs(f[4] - p.flight[4]) * this.party),
+        pick: () => this.setState({ flightIdx: i, swap: null })
+      }));
+    } else if (S.swap === 'hotel') {
+      swapTitle = 'Other stays in ' + destEntry.d[1];
+      swapOptions = HOTELS[dId].map((h, i) => ({
+        title: h[0], meta: h[4] + ' · ' + this.hotelPct(dId, h, destEntry.pct) + '% vibe match',
+        priceLabel: money(h[1] * this.nights),
+        delta: h[1] === p.hotel[1] ? 'current' : (h[1] > p.hotel[1] ? '+' : '−') + money(Math.abs(h[1] - p.hotel[1]) * this.nights),
+        pick: () => this.setState({ hotelId: i, swap: null })
+      }));
+    } else if (S.swap && S.swap.indexOf('act:') === 0) {
+      const cur = +S.swap.split(':')[1];
+      swapTitle = 'Swap “' + ACTS[dId][cur][0] + '”';
+      swapOptions = ACTS[dId].map((a, i) => ({
+        title: a[0], meta: a[2] + ' · ' + a[3],
+        priceLabel: a[1] ? money(a[1] * this.party) : 'Free',
+        delta: i === cur ? 'current' : 'swap in',
+        pick: () => this.setState(st => {
+          const base = st.acts.length ? st.acts : [0, 1];
+          if (base.indexOf(i) > -1 && i !== cur) return { swap: null };
+          return { acts: base.map(x => (x === cur ? i : x)), swap: null };
+        })
+      }));
+    }
+
+    const dayNotes = [
+      ['Day 1', 'First Date — arrive + check in', p.flight[2] + ' landing, taxi, nothing else planned.'],
+      ['Day 2', ACTS[p.id][p.acts[0]][0], ACTS[p.id][p.acts[0]][2] + ' · booked'],
+      ['Day 3', 'Open', 'Walk, eat, swim. Deliberately empty.'],
+      ['Day 4', p.acts[1] != null ? ACTS[p.id][p.acts[1]][0] : 'Open', p.acts[1] != null ? ACTS[p.id][p.acts[1]][2] + ' · booked' : 'Add something from Things to do.'],
+      ['Day 5', 'Open', 'Local market morning; late lunch.'],
+      ['Day 6', 'Fly home', p.flight[0] + ' · departs ' + p.flight[1] + '.']
+    ].slice(0, Math.max(3, Math.min(8, this.nights))).map(d => ({ num: d[0], title: d[1], note: d[2] }));
+
+    return {
+      steps, boards,
+      originLabel: this.origin, originCode: this.originCode,
+      nightsLabel: this.nights + ' nights', partyLabel: this.party + ' travellers',
+      isVibe: S.screen === 'vibe', isSwipe: S.screen === 'swipe',
+      isMatches: S.screen === 'matches', isDest: S.screen === 'dest', isTrip: S.screen === 'trip',
+      vibeCta: S.picked.length ? 'Refine with ' + SWIPES.length + ' photos →' : 'Pick at least one board',
+      vibeHint: S.picked.length ? S.picked.length + ' board(s) in your profile · ' + posTags.length + ' signals read' : 'Boards set the starting signals.',
+      goVibe: () => this.set('screen', 'vibe'),
+      goSwipe: () => { if (S.picked.length) this.setState({ screen: 'swipe', swipeIdx: 0, likes: {} }); },
+      goMatches: () => this.set('screen', 'matches'),
+      goDest: () => this.set('screen', 'dest'),
+      goTrip: () => this.set('screen', 'trip'),
+      swipeCard, swipeDone: !card,
+      swipeProgress: 'Photo ' + Math.min(S.swipeIdx + 1, SWIPES.length) + ' of ' + SWIPES.length,
+      swipeYes: () => advance(true), swipeNo: () => advance(false),
+      profileRows,
+      profileSummary: 'Strongest signals: ' + posTags.slice(0, 3).join(', ') + '. We weighted ' + posTags.length + ' in total.',
+      budget: S.budget, budgetLabel: money(S.budget),
+      setBudget: e => this.set('budget', +e.target.value),
+      flightMax: S.flightMax, flightLabel: S.flightMax + 'h',
+      setFlightMax: e => this.set('flightMax', +e.target.value),
+      months: MONTHS, month: S.month, setMonth: e => this.set('month', e.target.value),
+      sorts: [['match', 'Vibe match'], ['price', 'Package price'], ['flight', 'Flight time']].map(s => ({
+        name: s[1], on: S.sort === s[0], go: () => this.set('sort', s[0])
+      })),
+      activeBoardNames: S.picked.map(id => (BOARDS.find(b => b[0] === id) || [])[1]).filter(Boolean),
+      matchCountLabel: matches.length + ' places share your look',
+      matches, noMatches: matches.length === 0,
+      dest,
+      tabs: [['stay', 'Stay', HOTELS[dId].length + ' hotels'], ['do', 'Interests', ACTS[dId].length + ' activities'], ['fly', 'Fly', FLIGHTS[dId].length + ' fares']].map(x => ({
+        name: x[1], meta: x[2], on: S.tab === x[0], go: () => this.set('tab', x[0])
+      })),
+      isStay: S.tab === 'stay', isDo: S.tab === 'do', isFly: S.tab === 'fly',
+      hotelSorts: [['match', 'Vibe match'], ['price', 'Cheapest'], ['deal', 'Biggest drop']].map(s => ({
+        label: s[1], go: () => this.set('hotelSort', s[0])
+      })),
+      hotels, activities, flights,
+      tripTitle: this.nights + ' nights in ' + destEntry.d[1],
+      tripRows,
+      swapOpen: !!S.swap, swapTitle, swapOptions, closeSwap: () => this.set('swap', null),
+      days: dayNotes,
+      totals: [
+        { label: 'Flights × ' + this.party, value: money(t.air) },
+        { label: 'Stay × ' + this.nights + ' nights', value: money(t.stay) },
+        { label: 'Activities', value: t.doing ? money(t.doing) : '—' },
+        { label: 'Taxes & fees', value: 'included' }
+      ],
+      tripTotalLabel: money(t.total),
+      budgetVerdict: t.total <= S.budget
+        ? money(S.budget - t.total) + ' under your ' + money(S.budget) + ' ceiling.'
+        : money(t.total - S.budget) + ' over your ceiling — swap the stay or the fare.',
+      book: () => this.set('booked', true),
+      bookLabel: S.booked ? 'Official ✓' : 'Make It Official',
+      booked: S.booked,
+      bookingRef: 'LK-' + (4200 + Math.round(t.total % 700))
+    };
+  }
+}
+
+</script>
+</body>
+</html>
