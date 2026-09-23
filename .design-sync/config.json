@@ -1,6 +1,7 @@
 {
   "pkg": "roamance",
   "globalName": "Roamance",
+  "projectId": "9f0ea579-753e-43cc-b667-a3d60746be45",
   "shape": "package",
   "srcDir": "src",
   "cssEntry": "src/index.css",
