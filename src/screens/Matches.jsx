@@ -24,10 +24,12 @@ export default function Matches({ state, dispatch }) {
     return rankTrips(trips, profile, constraints);
   }, [state.picks, state.likes, constraints]);
 
+  const seenAll = state.deckIndex >= ranked.length;
   const cursor = Math.min(state.deckIndex, ranked.length - 1);
   const featured = ranked[cursor];
-  const rest = ranked.filter((_, i) => i !== cursor);
-  const seenAll = state.deckIndex >= ranked.length;
+  // Once the deck is spent there is no featured card, so nothing is excluded —
+  // otherwise the last trip you looked at disappears from the ranking entirely.
+  const rest = seenAll ? ranked : ranked.filter((_, i) => i !== cursor);
 
   return (
     <div className="screen screen--wide stack stack--lg">

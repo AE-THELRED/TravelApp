@@ -92,6 +92,21 @@ check(nums.every((n, i) => i === 0 || nums[i - 1] >= n), `scores descend: ${nums
 const cities = await p.locator(".mini strong").allInnerTexts();
 check(new Set(cities).size === cities.length, "no duplicate trips in the deck");
 
+// Exhaust the deck: the ranking must still account for all ten trips, not
+// nine. The featured card is gone at that point, so nothing may be excluded.
+console.log("\n— exhausted deck —");
+for (let i = 0; i < 12; i++) {
+  const pass = p.getByRole("button", { name: /not for us/i });
+  if (!(await pass.count())) break;
+  await pass.click();
+  await p.waitForTimeout(40);
+}
+check(/that.s the whole deck/i.test(await txt()), "deck exhausts to its end state");
+const leftover = await p.locator(".mini").count();
+check(leftover === 10, `all 10 trips still listed after the deck is spent (got ${leftover})`);
+await p.getByRole("button", { name: /start the deck over/i }).click();
+await p.waitForTimeout(200);
+
 console.log("\n— true cost + hack stack —");
 await p.getByRole("button", { name: /see the real cost/i }).click();
 await p.waitForTimeout(200);
