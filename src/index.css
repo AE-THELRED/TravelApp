@@ -289,6 +289,18 @@ button {
   color: var(--ink-3);
   letter-spacing: 0.01em;
 }
+/* A chip and the estimate badge are pills sized to their content. Dropped
+   straight into a flex COLUMN (.stack, .card__body) the default
+   align-items: stretch widens them to the full column, which reads as a
+   filled bar rather than a label. Rows are left alone — they centre on
+   purpose. */
+.stack > .chip,
+.stack > .estimate-badge,
+.card__body > .chip,
+.card__body > .estimate-badge {
+  align-self: flex-start;
+}
+
 .estimate-badge::before {
   content: "";
   width: 6px;
@@ -306,6 +318,15 @@ button {
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-card);
   overflow: hidden;
+}
+
+/* The padded region under a card's art. Separate from .card because .card
+   clips its children, so art can run edge to edge at the top. */
+.card__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4);
 }
 
 .muted {

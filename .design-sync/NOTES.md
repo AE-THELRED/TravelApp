@@ -77,6 +77,18 @@ new; anything outside this list is.
   Sans 400 face reports `loaded`. "Inter" appears only as a fallback-stack
   entry in `--font`; nothing renders in it.
 
+## A bug the render check caught
+
+`.chip` and `.estimate-badge` are `inline-flex`, which sizes them to their
+content — until they are a direct child of a flex COLUMN. `.stack` and
+`.card__body` are both columns, and their default `align-items: stretch`
+widened a chip to the full column, so a 97% match score rendered as a coral
+bar across the whole card.
+
+Fixed with an `align-self: flex-start` rule scoped to those two containers.
+Rows are deliberately excluded — `.row` centres on purpose and the rule would
+break that. Only visible by looking at a render; no check flags it.
+
 ## Verification status of this run
 
 - Driver verdict `ok: true`, all four stages green (build, diff, validate,

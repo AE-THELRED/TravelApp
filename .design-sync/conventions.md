@@ -4,10 +4,14 @@ Roamance is a trip-matching app with an argument: booking sites advertise a
 saving and hide what it costs you, so every saving here is shown beside its
 tradeoff. Designs should feel warm and editorial — never like a spreadsheet.
 
-**This design system is mostly CSS classes, not components.** Only two pieces
-ship as React (`Art`, `EstimateBadge`). Everything else — buttons, chips, cards,
-forms — is global CSS applied through `className`. Use the class vocabulary
-below rather than inventing one.
+**Build with the components; fall back to the classes for layout.** Eight
+components ship: `Button`, `Chip`, `Card` + `CardBody`, `Field`, `Segmented`,
+`Art`, `EstimateBadge`. Use them — they carry the sanctioned variants and the
+bookkeeping (a `Segmented` owns its `aria-pressed`; a `Button` defaults to
+`type="button"` so it cannot accidentally submit a form).
+
+Layout and text are still plain classes, listed below. Use those names rather
+than inventing parallel ones.
 
 ### Setup
 
@@ -15,16 +19,22 @@ No provider, no theme context, no wrapper. Link `styles.css` and the classes
 work. Light and dark both come from `prefers-color-scheme` automatically — do
 not build a theme toggle.
 
-### The class vocabulary
+### The components
+
+| Component | Notes |
+|---|---|
+| `Button` | `variant="primary"` (solid coral, at most one per screen), `"ghost"`, or default. `block` for full width. Already defaults to `type="button"`. |
+| `Chip` | `tone="match"` is the coral % score, one per card. `tone="risk"` is gold and names what a saving costs — never decorative. Default tone carries match reasons. |
+| `Card` + `CardBody` | `Card` is unpadded so `Art` can run to its edges; put content in `CardBody`. |
+| `Field` | Wraps a **native** `<input>` or `<select>` — those are styled globally, so there is no `TextInput` to reach for. |
+| `Segmented` | 2–4 mutually exclusive options. Past four, use a `<select>` in a `Field`. |
+| `Art` | Every image slot. Draws SVG from `{ sky, accent, motif }`; `caption` names the photo it stands in for. |
+| `EstimateBadge` | Required beside every price. |
+
+### Layout and text classes
 
 | Purpose | Classes |
 |---|---|
-| Actions | `.btn`, plus `.btn--primary` (solid coral, one per screen), `.btn--ghost`, `.btn--block` |
-| Switches | `.segmented` wrapping `<button aria-pressed="true\|false">` |
-| Labels | `.chip`; `.chip--match` (coral, the % score); `.chip--risk` (gold, what a saving costs) |
-| Honesty | `.estimate-badge` — required beside every price |
-| Surface | `.card` |
-| Forms | `<label class="field">` wrapping a native `<input>` or `<select>` |
 | Layout | `.screen`, `.screen--wide`, `.stack`, `.stack--sm`, `.stack--lg`, `.row`, `.grid-2`, `.topbar`, `.topbar__actions` |
 | Text | `.muted`, `.dim`, `.eyebrow`, `.tabular` (use on every price — stops digits jittering as a cost updates) |
 | Brand | `.wordmark` |
@@ -62,26 +72,26 @@ and takes a `caption` naming the photo it stands in for.
 ### An idiomatic snippet
 
 ```jsx
-import { Art, EstimateBadge } from "roamance";
+import { Art, Card, CardBody, Chip, EstimateBadge } from "roamance";
 
-<article className="card">
+<Card>
   <Art
     art={{ sky: "#2A1B3D", accent: "#E8B44A", motif: "brass" }}
     caption="board / trumpet under a bar sign"
     className="art--wide"
   />
-  <div className="stack" style={{ padding: "var(--space-4)" }}>
-    <div className="row">
+  <CardBody>
+    <div className="row" style={{ justifyContent: "space-between" }}>
       <strong>New Orleans</strong>
-      <span className="chip chip--match">97%</span>
+      <Chip tone="match">97%</Chip>
     </div>
     <div className="row">
-      <span className="chip">food-forward</span>
-      <span className="chip">stays up late</span>
+      <Chip>food-forward</Chip>
+      <Chip>stays up late</Chip>
     </div>
     <p className="tabular">$1,870 <span className="muted">· $468 per person</span></p>
-    <span className="chip chip--risk">carry-on only</span>
+    <Chip tone="risk">carry-on only</Chip>
     <EstimateBadge />
-  </div>
-</article>
+  </CardBody>
+</Card>
 ```
