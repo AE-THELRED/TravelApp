@@ -90,7 +90,7 @@ and for humans.
 - [docs/THEME.md](docs/THEME.md) — retheme the app from one file
 - [design-system/readme.md](design-system/readme.md) — the importable design system
 - [docs/WORKFLOW.md](docs/WORKFLOW.md) — phases, branching, review, integration
-- [docs/VERCEL.md](docs/VERCEL.md) — deployment and build triage
+- [docs/DEPLOY.md](docs/DEPLOY.md) — GitHub Pages deployment and build triage
 - [docs/RESEARCH-LOG.md](docs/RESEARCH-LOG.md) — AI-assisted research decisions
 
 ## Design

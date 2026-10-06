@@ -1,0 +1,63 @@
+# Builds the prototype and publishes it to GitHub Pages on every push to main.
+#
+# Pages rather than Vercel because this repo needs no account linking: the
+# whole thing is a static `dist/` folder, and the app has no backend, no
+# environment variables and no secrets to configure.
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Never let two deploys race; the newer commit always wins.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      # playwright is a devDependency for `npm run smoke`. It ships no browser
+      # on install today, but pin that so a future version cannot start
+      # pulling ~200MB into every deploy.
+      PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "1"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - run: npm ci
+
+      # Lint before build: a deploy that ships a lint failure is a deploy
+      # nobody reviewed.
+      - run: npm run lint
+
+      - run: npm run build
+        env:
+          GITHUB_PAGES: "true"
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

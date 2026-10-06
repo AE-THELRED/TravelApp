@@ -81,7 +81,7 @@ design-system/             the importable design system (generated from src/inde
 | [docs/THEME.md](docs/THEME.md) | Any visual change. |
 | [design-system/readme.md](design-system/readme.md) | The design system itself — tokens, component previews, adherence rules. |
 | [docs/WORKFLOW.md](docs/WORKFLOW.md) | Who owns what, branching, integration. |
-| [docs/VERCEL.md](docs/VERCEL.md) | Deploying. |
+| [docs/DEPLOY.md](docs/DEPLOY.md) | Deploying. |
 | [docs/RESEARCH-LOG.md](docs/RESEARCH-LOG.md) | Append when AI research drives a decision. |
 
 ## The rule that matters most

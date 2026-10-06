@@ -1,5 +1,40 @@
 # Deployment
 
+**This repo deploys to GitHub Pages**, automatically, on every push to `main`
+— see [`.github/workflows/deploy.yml`](../.github/workflows/deploy.yml).
+
+```
+https://ae-thelred.github.io/TravelApp/
+```
+
+Pages rather than Vercel because the whole app is a static `dist/` folder with
+no backend, no environment variables and no secrets, so there is nothing an
+account link would buy. The Vercel instructions below still work if you ever
+want preview URLs per branch, which Pages does not give you.
+
+## How the Pages build differs
+
+One thing only: `vite.config.js` reads `GITHUB_PAGES` and sets `base` to
+`/TravelApp/`, because Pages serves the repo under a path rather than at a
+domain root. Without it every asset 404s against a blank page.
+
+It is gated on that env var on purpose — setting `base` unconditionally would
+move `npm run dev` and `npm run preview` to `/TravelApp/` too, which silently
+breaks `npm run smoke`.
+
+The workflow also runs `npm run lint` before building, so a deploy cannot ship
+a lint failure.
+
+## Triage, Pages
+
+| Symptom | Cause |
+|---|---|
+| Blank page, console 404s on `/assets/...` | `base` not applied — the workflow did not set `GITHUB_PAGES` |
+| Workflow fails at "Deploy to GitHub Pages" | Pages source is not set to **GitHub Actions** in repo settings |
+| Old version still live | A newer run cancelled it (`concurrency: pages`) or the run failed — check Actions |
+
+## Vercel (alternative)
+
 ## Why deploy at all
 
 Every branch push gets its own preview URL, so each phase is reviewable on a
